@@ -16,12 +16,14 @@ interface JsonRpcResponse {
 }
 
 export const initializeWebSocket = (request: Request) => {
+  console.log("initializeWebSocket", request);
   const { socket, response } = Deno.upgradeWebSocket(request);
 
   // Store files in memory (for this example)
   const fileSystem = new Map<string, string>();
 
   socket.onmessage = async (event) => {
+    console.log("onmessage", event);
     try {
       // Parse the incoming message
       const rpcRequest = JSON.parse(event.data) as JsonRpcRequest;
