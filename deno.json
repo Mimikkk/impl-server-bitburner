@@ -1,0 +1,35 @@
+{
+  "fmt": {
+    "options": {
+      "indentWidth": 2,
+      "lineWidth": 120,
+      "proseWrap": "always",
+      "semiColons": true,
+      "singleQuote": false,
+      "useTabs": false
+    }
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-namespace", "no-explicit-any", "no-empty-interface"]
+    }
+  },
+  "tasks": {
+    "server": {
+      "description": "Run the server by bitburner on port 8080",
+      "command": "deno run --allow-net --allow-read --allow-write --watch ./src/server/server.ts"
+    },
+    "test": {
+      "description": "Run the tests",
+      "command": "deno test -A"
+    }
+  },
+  "imports": {
+    "@server/": "./src/server/",
+    "@client/": "./src/client/",
+    "@shared/": "./src/shared/",
+    "@cliffy/ansi": "jsr:@cliffy/ansi@1.0.0-rc.7",
+    "@std/testing": "jsr:@std/testing",
+    "@std/expect": "jsr:@std/expect"
+  }
+}

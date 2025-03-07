@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Bitburner API Documentation and Connection Instructions">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API - Bitburner</title>
+    <style>
+      :root {
+        --background-color: #0a0f0a;
+        --foreground-color: #121812;
+        --text-color: #e0e0e0;
+        --accent-color: #4caf50;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+
+        line-height: 1.7;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 800px;
+        padding: 3rem;
+        background: var(--foreground-color);
+        border-radius: 4px;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--accent-color);
+      }
+
+      h2 {
+        font-weight: 500;
+        color: var(--accent-color);
+      }
+
+      p {
+        color: #a0a0a0;
+      }
+
+      ol {
+        margin-left: 2rem;
+      }
+
+      li {
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+
+      li:hover {
+        background-color: color-mix(in srgb, var(--accent-color) 20%, transparent);
+      }
+
+      @media (max-width: 800px) {
+        .container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.25rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container" role="main">
+      <h1>API - Bitburner</h1>
+      <p>
+        This is the API for the Bitburner server. If you are able to see this page, the server is running.
+      </p>
+      <h2>Connecting to the server</h2>
+      <ol>
+        <li>Go to ingame settings and enable "use wss".</li>
+        <li>Enter the hostname of the server in the "Hostname" field.</li>
+        <li>Enter the port of the server in the "Port" field.</li>
+        <li>Click "Connect".</li>
+      </ol>
+      <p>You should now see "connected" as the status.</p>
+    </main>
+  </body>
+</html>
