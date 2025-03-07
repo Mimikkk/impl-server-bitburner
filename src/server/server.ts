@@ -21,7 +21,6 @@ const ServerConfiguration: Deno.ServeTcpOptions = {
 };
 
 Deno.serve(ServerConfiguration, (request) => {
-  console.log("request", request);
   if (request.headers.get("upgrade") === "websocket") {
     return initializeWebSocket(request);
   }
