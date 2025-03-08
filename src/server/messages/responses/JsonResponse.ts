@@ -1,4 +1,4 @@
-import { createJsonResource, JsonResourceOptions } from "@server/resources/JsonResource.ts";
+import { createJsonResource, JsonResourceOptions } from "@server/messages/resources/JsonResource.ts";
 import { Nil } from "@shared/types/common.ts";
 
 export interface JsonResponseOptions {

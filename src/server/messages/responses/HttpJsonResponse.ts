@@ -1,6 +1,6 @@
-import { createJsonResponse, JsonResponseOptions } from "@server/responses/JsonResponse.ts";
+import { createJsonResponse, JsonResponseOptions } from "@server/messages/responses/JsonResponse.ts";
 
-export namespace JsonHttpResponse {
+export namespace HttpJsonResponse {
   export const success = <T>(data: T, options?: JsonResponseOptions) =>
     createJsonResponse(data, JsonResponseOptions.merge({ status: 200 }, options));
 
