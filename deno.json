@@ -16,8 +16,8 @@
   },
   "tasks": {
     "server": {
-      "description": "Run the server by bitburner on port 8080",
-      "command": "deno run --allow-net --allow-read --allow-write --watch ./src/server/server.ts"
+      "description": "Run the server",
+      "command": "deno run --allow-net --allow-read --allow-write --allow-env --env-file=.env --watch ./src/server/server.ts"
     },
     "test": {
       "description": "Run the tests",
