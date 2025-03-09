@@ -1,4 +1,4 @@
 import { ServerConfiguration } from "@server/server.config.ts";
-import { ApiRouter } from "@server/routing/routes/api.routes.ts";
+import { RouteDispatcher } from "./routing/RouteDispatcher.ts";
 
-Deno.serve(ServerConfiguration, ApiRouter.dispatch);
+Deno.serve(ServerConfiguration, RouteDispatcher.dispatch);

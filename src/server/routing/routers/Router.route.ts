@@ -1,5 +1,5 @@
 import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControlFn } from "@server/routing/router/ControlFn.ts";
+import { ControlFn } from "../../controllers/controller.types.ts";
 
 type PathSegmentLiteral = { type: "literal"; value: string };
 type PathSegmentParameter = { type: "parameter" };

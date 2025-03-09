@@ -1,5 +1,5 @@
 import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControlFn } from "@server/routing/router/ControlFn.ts";
+import { ControlFn } from "../../../controllers/controller.types.ts";
 import { WsRoute } from "@server/routing/router/ws/WsRouter.route.ts";
 import { WsRouter } from "@server/routing/router/ws/WsRouter.ts";
 import { Route } from "@server/routing/router/Router.route.ts";

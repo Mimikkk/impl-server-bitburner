@@ -20,7 +20,7 @@ export namespace WebsocketController {
       const response = JSON.parse(event.data) as RpcJsonResponse<unknown>;
 
       if (RpcJsonResponse.isError(response)) {
-        Log.error("Failed with error", response.error);
+        Log.error("Failed with error:", response.error);
       } else if (RpcJsonResponse.isOk(response)) {
         console.log("result", response.result);
       }
