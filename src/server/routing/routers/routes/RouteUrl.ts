@@ -45,7 +45,7 @@ export class RouteUrl {
 
   static fromRoutePath(path: string): RouteUrl {
     const pathname = path.trim().replace(/\/$/, "");
-    const segments = pathname.split("/").map(RouteSegment.fromUrlPart);
+    const segments = pathname.split("/").filter(Boolean).map(RouteSegment.fromUrlPart);
 
     return RouteUrl.create(pathname, segments);
   }

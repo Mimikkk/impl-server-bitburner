@@ -9,8 +9,8 @@ export class RequestUrl {
   ) {}
 
   static fromUrl(url: URL): RequestUrl {
-    const pathname = url.pathname.trim();
-    const parts = pathname.split("/");
+    const pathname = url.pathname.trim().replace(/\/$/, "");
+    const parts = pathname.split("/").filter(Boolean);
 
     return RequestUrl.create(pathname, parts);
   }

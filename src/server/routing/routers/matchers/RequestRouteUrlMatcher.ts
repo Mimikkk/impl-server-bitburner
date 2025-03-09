@@ -10,9 +10,14 @@ export class RequestRouteUrlMatcher implements RequestMatcher {
   private constructor(public readonly url: RouteUrl) {}
 
   matches(request: RequestContext): boolean {
-    for (let i = 0, it = this.url.segments.length; i < it; ++i) {
-      const segment = this.url.segments[i];
-      const part = request.url.parts[i];
+    const parts = request.url.parts;
+    const segments = this.url.segments;
+
+    if (segments.length !== parts.length) return false;
+
+    for (let i = 0, it = segments.length; i < it; ++i) {
+      const segment = segments[i];
+      const part = parts[i];
 
       if (segment.type === RouteSegment.Type.Parameter) continue;
       if (segment.part !== part) return false;

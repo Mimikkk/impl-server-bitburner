@@ -5,7 +5,7 @@ import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
 export const http = HttpRouterBuilder.create()
   .add(HttpMethod.Get, "/", HttpInstructionController, "index")
-  .add(HttpMethod.Get, "/api/connections", HttpConnectionController, "index")
-  .add(HttpMethod.Get, "/api/connections/{id}", HttpConnectionController, "show")
-  .add(HttpMethod.Post, "/api/connections/{id}/commands/{command}", HttpConnectionController, "commands")
+  .add(HttpMethod.Get, "/connections", HttpConnectionController, "index")
+  .add(HttpMethod.Get, "/connections/{id}", HttpConnectionController, "show")
+  .add(HttpMethod.Post, "/connections/{id}/commands/{command}", HttpConnectionController, "commands")
   .build();
