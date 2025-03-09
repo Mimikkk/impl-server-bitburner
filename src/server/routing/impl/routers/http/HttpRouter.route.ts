@@ -1,5 +1,5 @@
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
-import { Route } from "@server/routing/router/Router.route.ts";
+import { Route } from "@server/routing/impl/routers/Router.route.ts";
 
 export class HttpRoute<
   M extends HttpMethod = any,

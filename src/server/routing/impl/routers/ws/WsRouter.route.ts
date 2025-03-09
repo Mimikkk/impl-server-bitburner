@@ -1,4 +1,4 @@
-import { Route } from "@server/routing/router/Router.route.ts";
+import { Route } from "@server/routing/impl/routers/Router.route.ts";
 
 export class WsRoute<R extends Route = Route> {
   static create = <R extends Route>(

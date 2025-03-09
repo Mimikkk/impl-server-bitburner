@@ -1,8 +1,8 @@
 import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControlFn } from "../../../controllers/controller.types.ts";
-import { HttpRoute } from "@server/routing/router/http/HttpRouter.route.ts";
-import { HttpRouter } from "@server/routing/router/http/HttpRouter.ts";
-import { Route } from "@server/routing/router/Router.route.ts";
+import { ControlFn } from "@server/controllers/controller.types.ts";
+import { HttpRoute } from "@server/routing/impl/routers/http/HttpRouter.route.ts";
+import { HttpRouter } from "@server/routing/impl/routers/http/HttpRouter.ts";
+import { Route } from "@server/routing/impl/routers/Router.route.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
 export class HttpRouterBuilder<R extends HttpRoute[] = HttpRoute[]> {

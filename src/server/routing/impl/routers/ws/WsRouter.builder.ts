@@ -1,8 +1,8 @@
 import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControlFn } from "../../../controllers/controller.types.ts";
-import { WsRoute } from "@server/routing/router/ws/WsRouter.route.ts";
-import { WsRouter } from "@server/routing/router/ws/WsRouter.ts";
-import { Route } from "@server/routing/router/Router.route.ts";
+import { ControlFn } from "@server/controllers/controller.types.ts";
+import { WsRoute } from "@server/routing/impl/routers/ws/WsRouter.route.ts";
+import { WsRouter } from "@server/routing/impl/routers/ws/WsRouter.ts";
+import { Route } from "@server/routing/impl/routers/Router.route.ts";
 
 export class WsRouterBuilder<R extends WsRoute[] = WsRoute[]> {
   static create(): WsRouterBuilder<[]> {

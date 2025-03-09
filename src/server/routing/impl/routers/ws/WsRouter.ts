@@ -1,4 +1,4 @@
-import { WsRoute } from "@server/routing/router/ws/WsRouter.route.ts";
+import { WsRoute } from "@server/routing/impl/routers/ws/WsRouter.route.ts";
 import { HttpJsonResponseCommon } from "@server/messages/responses/HttpJsonResponse.common.ts";
 
 export class WsRouter<R extends WsRoute[] = WsRoute[]> {

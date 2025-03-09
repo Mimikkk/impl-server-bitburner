@@ -1,4 +1,4 @@
-import { HttpRoute } from "@server/routing/router/http/HttpRouter.route.ts";
+import { HttpRoute } from "@server/routing/impl/routers/http/HttpRouter.route.ts";
 import { HttpJsonResponseCommon } from "@server/messages/responses/HttpJsonResponse.common.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
