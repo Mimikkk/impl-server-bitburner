@@ -6,6 +6,7 @@ import { RouteUrl } from "@server/routing/routers/routes/RouteUrl.ts";
 import { Route } from "@server/routing/routers/routes/Route.ts";
 import { Router } from "@server/routing/routers/Router.ts";
 import { HttpRouteMatcher } from "@server/routing/protocols/http/HttpRouteMatcher.ts";
+import { ControllerRegistry } from "@server/routing/routers/Router.controllers.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create(): HttpRouterBuilder<[]> {
@@ -17,15 +18,17 @@ export class HttpRouterBuilder<R extends Route[] = Route[]> {
   add<
     M extends HttpMethod,
     P extends `/${string}`,
-    C extends { [key in H]: ControlFn },
-    H extends TypeKey<C, ControlFn>,
+    C extends { create(): { [key in H]: ControlFn } },
+    H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
   >(
     method: M,
     path: P,
-    controller: C,
+    Controller: C,
     handler: H,
   ): HttpRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
+
+    const controller = ControllerRegistry.resolve(Controller);
 
     const route = Route.create(
       url,

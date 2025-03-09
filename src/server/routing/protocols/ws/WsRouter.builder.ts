@@ -5,6 +5,7 @@ import { RouteUrl } from "@server/routing/routers/routes/RouteUrl.ts";
 import { Router } from "@server/routing/routers/Router.ts";
 import { Route } from "@server/routing/routers/routes/Route.ts";
 import { WsRouteMatcher } from "@server/routing/protocols/ws/WsRouteMatcher.ts";
+import { ControllerRegistry } from "@server/routing/routers/Router.controllers.ts";
 
 export class WsRouterBuilder<R extends Route[] = Route[]> {
   static create(): WsRouterBuilder<[]> {
@@ -15,14 +16,16 @@ export class WsRouterBuilder<R extends Route[] = Route[]> {
 
   ws<
     P extends `/${string}`,
-    C extends { [key in H]: ControlFn },
-    H extends TypeKey<C, ControlFn>,
+    C extends { create(): { [key in H]: ControlFn } },
+    H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
   >(
     path: P,
-    controller: C,
+    Controller: C,
     handler: H,
   ): WsRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
+
+    const controller = ControllerRegistry.resolve(Controller);
 
     const route = Route.create(
       url,

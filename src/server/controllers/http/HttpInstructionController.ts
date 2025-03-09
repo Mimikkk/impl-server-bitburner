@@ -4,8 +4,14 @@ import { FileService } from "@server/services/files/file.service.ts";
 import { TemplateService } from "@server/services/templates/template.service.ts";
 import { Template } from "@server/services/templates/template.enum.ts";
 
-export namespace HttpInstructionController {
-  export const index = async () => {
+export class HttpInstructionController {
+  static create() {
+    return new HttpInstructionController();
+  }
+
+  private constructor() {}
+
+  public async index() {
     const template = TemplateService.path(Template.Instruction);
     const result = await FileService.read(template);
 
@@ -14,5 +20,5 @@ export namespace HttpInstructionController {
     }
 
     return HttpHtmlResponse.success(result);
-  };
+  }
 }

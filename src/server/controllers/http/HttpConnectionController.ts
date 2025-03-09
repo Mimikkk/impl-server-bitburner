@@ -1,10 +1,20 @@
 import { HttpJsonResponse } from "@server/messages/responses/HttpJsonResponse.ts";
-import { CommandSocketService } from "@server/services/commands/CommandSocketService.ts";
+import { ConnectionService } from "../../services/connections/ConnectionService.ts";
 
-export namespace HttpConnectionController {
-  export const index = () =>
-    HttpJsonResponse.success({
-      sockets: Array.from(CommandSocketService.queues.entries()).map(([socket]) => ({
+export class HttpConnectionController {
+  static create(
+    connections: ConnectionService = ConnectionService.create(),
+  ) {
+    return new HttpConnectionController(connections);
+  }
+
+  private constructor(
+    private readonly connections: ConnectionService,
+  ) {}
+
+  public index() {
+    return HttpJsonResponse.success({
+      sockets: Array.from(this.connections.managers.entries()).map(([socket]) => ({
         readyState: socket.readyState,
         protocol: socket.protocol,
         extensions: socket.extensions,
@@ -12,14 +22,14 @@ export namespace HttpConnectionController {
         url: socket.url,
       })),
     });
-
-  export const show = (request: Request) => {
+  }
+  public show(request: Request) {
     console.log("set command");
     return HttpJsonResponse.unimplemented();
-  };
+  }
 
-  export const commands = (request: Request) => {
+  public commands(request: Request) {
     console.log("set command");
     return HttpJsonResponse.unimplemented();
-  };
+  }
 }
