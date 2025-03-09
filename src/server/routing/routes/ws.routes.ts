@@ -1,6 +1,6 @@
-import { WebsocketController } from "@server/controllers/ws/WebsocketController.ts";
-import { WsRouterBuilder } from "@server/routing/impl/routers/ws/WsRouter.builder.ts";
+import { WsConnectionController } from "@server/controllers/ws/WsConnectionController.ts";
+import { WsRouterBuilder } from "@server/routing/protocols/ws/WsRouter.builder.ts";
 
 export const ws = WsRouterBuilder.create()
-  .ws("/", WebsocketController, "index")
+  .ws("/", WsConnectionController, "index")
   .build();

@@ -3,13 +3,13 @@ import { RpcJsonResponse } from "@server/messages/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 import { CommandSocketService } from "@server/services/commands/CommandSocketService.ts";
 
-export namespace WebsocketController {
+export namespace WsConnectionController {
   export const index = (request: Request) => {
     const { socket, response } = Deno.upgradeWebSocket(request);
 
     const queue = CommandSocketService.manage(socket);
     socket.addEventListener("open", () => {
-      const request = Command.list();
+      const request = Command.list({ server: "n00dles" });
 
       queue.wait(request);
 

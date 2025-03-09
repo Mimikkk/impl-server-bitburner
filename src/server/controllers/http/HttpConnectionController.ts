@@ -1,7 +1,7 @@
 import { HttpJsonResponse } from "@server/messages/responses/HttpJsonResponse.ts";
 import { CommandSocketService } from "@server/services/commands/CommandSocketService.ts";
 
-export namespace SocketConnectionController {
+export namespace HttpConnectionController {
   export const index = () =>
     HttpJsonResponse.success({
       sockets: Array.from(CommandSocketService.queues.entries()).map(([socket]) => ({

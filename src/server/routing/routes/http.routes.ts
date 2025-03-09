@@ -1,10 +1,11 @@
-import { InstructionController } from "@server/controllers/http/InstructionController.ts";
-import { HttpRouterBuilder } from "@server/routing/impl/routers/http/HttpRouter.builder.ts";
-import { SocketConnectionController } from "@server/controllers/http/SocketConnectionController.ts";
+import { HttpInstructionController } from "@server/controllers/http/HttpInstructionController.ts";
+import { HttpRouterBuilder } from "@server/routing/protocols/http/HttpRouter.builder.ts";
+import { HttpConnectionController } from "@server/controllers/http/HttpConnectionController.ts";
+import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
 export const http = HttpRouterBuilder.create()
-  .get("/", InstructionController, "index")
-  .get("/api/connections", SocketConnectionController, "index")
-  .get("/api/connections/{id}", SocketConnectionController, "show")
-  .post("/api/connections/{id}/commands/{command}", SocketConnectionController, "commands")
+  .add(HttpMethod.Get, "/", HttpInstructionController, "index")
+  .add(HttpMethod.Get, "/api/connections", HttpConnectionController, "index")
+  .add(HttpMethod.Get, "/api/connections/{id}", HttpConnectionController, "show")
+  .add(HttpMethod.Post, "/api/connections/{id}/commands/{command}", HttpConnectionController, "commands")
   .build();
