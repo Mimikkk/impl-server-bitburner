@@ -1,7 +1,7 @@
 import { CommandQueue } from "@server/services/commands/CommandQueue.ts";
 
 export namespace CommandSocketService {
-  export const queues = new WeakMap<WebSocket, CommandQueue>();
+  export const queues = new Map<WebSocket, CommandQueue>();
 
   export const manage = (socket: WebSocket) => {
     const queue = CommandQueue.create(socket);

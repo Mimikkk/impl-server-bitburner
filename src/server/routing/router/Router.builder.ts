@@ -1,10 +1,10 @@
 import { TypeKey } from "@shared/types/typedKey.ts";
 import { ControlFn } from "@server/routing/router/ControlFn.ts";
 import { Route } from "@server/routing/router/Router.route.ts";
-import { Router } from "@server/routing/router/Router.ts";
+import { Router } from "@server/routing/router/RRouter.ts";
 
-export class RouterBuilder<R extends Route<any, any, any>[]> {
-  static create() {
+export class RouterBuilder<R extends Route[] = Route[]> {
+  static create(): RouterBuilder<[]> {
     return new RouterBuilder([]);
   }
 
@@ -20,11 +20,10 @@ export class RouterBuilder<R extends Route<any, any, any>[]> {
     return this as unknown as RouterBuilder<[...R, Route<P, C, H>]>;
   }
 
-  build() {
+  build(): Router<R> {
     return Router.create(this.routes);
   }
 }
-type ValidPath<R extends Router<any>, P extends `/${string}`> = [P] extends [R["routes"][number]["route"]["path"]]
-  ? false
+type ValidPath<R extends Router, P extends `/${string}`> = [P] extends [R["routes"][number]["route"]["path"]] ? false
   : true;
 type PathError = "this path already exists";

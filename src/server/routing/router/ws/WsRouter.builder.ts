@@ -4,8 +4,8 @@ import { WsRoute } from "@server/routing/router/ws/WsRouter.route.ts";
 import { WsRouter } from "@server/routing/router/ws/WsRouter.ts";
 import { Route } from "@server/routing/router/Router.route.ts";
 
-export class WsRouterBuilder<R extends WsRoute<any>[]> {
-  static create() {
+export class WsRouterBuilder<R extends WsRoute[] = WsRoute[]> {
+  static create(): WsRouterBuilder<[]> {
     return new WsRouterBuilder([]);
   }
 
@@ -21,12 +21,12 @@ export class WsRouterBuilder<R extends WsRoute<any>[]> {
     return this as unknown as WsRouterBuilder<[...R, WsRoute<Route<P, C, H>>]>;
   }
 
-  build() {
+  build(): WsRouter<R> {
     return WsRouter.create(this.routes);
   }
 }
-type ValidPath<R extends WsRouterBuilder<any>, P extends `/${string}`> = [P] extends
-  [R["routes"][number]["route"]["path"]] ? false
+type ValidPath<R extends WsRouterBuilder, P extends `/${string}`> = [P] extends [R["routes"][number]["route"]["path"]]
+  ? false
   : true;
 
 type PathError = "this path already exists";

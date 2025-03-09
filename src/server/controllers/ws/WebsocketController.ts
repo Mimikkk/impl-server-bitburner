@@ -9,17 +9,15 @@ export namespace WebsocketController {
 
     const queue = CommandSocketService.manage(socket);
     socket.addEventListener("open", () => {
-      const request = Command.list({ server: "127.0.0.1" });
+      const request = Command.list();
 
       queue.wait(request);
 
       socket.send(JSON.stringify(request));
     });
 
-    socket.addEventListener("message", async (event) => {
+    socket.addEventListener("message", (event) => {
       const response = JSON.parse(event.data) as RpcJsonResponse<unknown>;
-
-      response.id;
 
       if (RpcJsonResponse.isError(response)) {
         Log.error("Failed with error", response.error);

@@ -1,7 +1,7 @@
 import { Route } from "@server/routing/router/Router.route.ts";
 
-export class WsRoute<R extends Route<any, any, any>> {
-  static create = <R extends Route<any, any, any>>(
+export class WsRoute<R extends Route = Route> {
+  static create = <R extends Route>(
     route: R,
   ) => new WsRoute(route);
 
@@ -9,8 +9,8 @@ export class WsRoute<R extends Route<any, any, any>> {
     public readonly route: R,
   ) {}
 
-  matches(request: Request): boolean {
-    return request.url.endsWith(this.route.path);
+  matches(pathname: string): boolean {
+    return pathname === this.route.path;
   }
 
   handle(request: Request): Promise<Response> | Response {

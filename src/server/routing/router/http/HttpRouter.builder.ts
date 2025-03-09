@@ -5,7 +5,7 @@ import { HttpRouter } from "@server/routing/router/http/HttpRouter.ts";
 import { Route } from "@server/routing/router/Router.route.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
-export class HttpRouterBuilder<R extends HttpRoute<any, any>[]> {
+export class HttpRouterBuilder<R extends HttpRoute[] = HttpRoute[]> {
   static create(): HttpRouterBuilder<[]> {
     return new HttpRouterBuilder([]);
   }
@@ -94,7 +94,7 @@ export class HttpRouterBuilder<R extends HttpRoute<any, any>[]> {
 }
 
 type ValidMethodPath<
-  Router extends HttpRouterBuilder<any>,
+  Router extends HttpRouterBuilder,
   Method extends HttpMethod,
   Path extends `/${string}`,
 > = [Method, Path] extends [Router["routes"][number]["method"], Router["routes"][number]["route"]["path"]] ? false
