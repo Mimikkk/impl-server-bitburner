@@ -55,3 +55,7 @@ You can modify the server configuration in `src/server/server.config.ts` or .env
 SERVER_PORT=8080
 SERVER_HOST=127.0.0.1
 ```
+
+###### Notes
+
+🔮🪄 Its enterprise grade™ for the fun of it. 🪄🔮
