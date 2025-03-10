@@ -1,4 +1,4 @@
-import { ConnectionManager } from "./core/ConnectionManager.ts";
+import { ConnectionManager } from "@server/modules/core/services/connections/SocketConnection.manager.ts";
 import { RpcJsonResponse } from "@server/messages/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 
@@ -12,12 +12,8 @@ export class ConnectionService {
     private id: number,
   ) {}
 
-  private incrementId(): number {
-    return ++this.id;
-  }
-
   public manage(socket: WebSocket) {
-    const manager = ConnectionManager.create(socket, this.incrementId());
+    const manager = ConnectionManager.create(this.id++, socket);
 
     this.managers.set(socket, manager);
 

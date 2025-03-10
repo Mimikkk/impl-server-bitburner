@@ -1,5 +1,5 @@
 import { HttpInstructionController } from "@server/controllers/http/HttpInstructionController.ts";
-import { HttpRouterBuilder } from "@server/routing/protocols/http/HttpRouter.builder.ts";
+import { HttpRouterBuilder } from "@server/routing/routers/protocols/http/HttpRouter.builder.ts";
 import { HttpConnectionController } from "@server/controllers/http/HttpConnectionController.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 

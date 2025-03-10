@@ -1,19 +1,19 @@
 import { HttpHtmlResponse } from "@server/messages/responses/HttpHtmlResponse.ts";
 import { HttpJsonResponseCommon } from "@server/messages/responses/HttpJsonResponse.common.ts";
-import { FileService } from "@server/services/files/file.service.ts";
-import { TemplateService } from "@server/services/templates/template.service.ts";
-import { Template } from "@server/services/templates/template.enum.ts";
+import { TemplateService } from "@server/modules/templates/Template.service.ts";
+import { Template } from "@server/modules/templates/Template.enum.ts";
 
 export class HttpInstructionController {
   static create() {
     return new HttpInstructionController();
   }
 
-  private constructor() {}
+  private constructor(
+    private readonly templates = TemplateService.create(),
+  ) {}
 
   public async index() {
-    const template = TemplateService.path(Template.Instruction);
-    const result = await FileService.read(template);
+    const result = await this.templates.file(Template.Instruction);
 
     if (result === undefined) {
       return HttpJsonResponseCommon.nofile({ path: template });

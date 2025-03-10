@@ -2,22 +2,23 @@ import { RpcJsonResponse } from "@server/messages/responses/RpcJsonResponse.ts";
 import { RpcJsonRequest } from "@server/messages/requests/RpcJsonRequest.ts";
 
 export class ConnectionManager {
-  public static create = (socket: WebSocket, id: number) => new ConnectionManager(socket, new Map(), id);
+  public static create(id: number, socket: WebSocket) {
+    return new ConnectionManager(id, socket, new Map());
+  }
 
   private constructor(
+    public readonly id: number,
     public readonly socket: WebSocket,
     public readonly map: Map<number, RpcJsonRequest>,
-    public readonly id: number,
   ) {}
 
   wait(request: RpcJsonRequest) {
     this.map.set(request.id, request);
   }
 
-  resolve({ id }: RpcJsonResponse): RpcJsonRequest | undefined {
-    const request = this.map.get(id);
-    if (request) this.map.delete(id);
+  resolve(response: RpcJsonResponse): void {
+    const request = this.map.get(response.id);
 
-    return request;
+    if (request) this.map.delete(response.id);
   }
 }

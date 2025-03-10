@@ -1,4 +1,4 @@
-import { ConnectionService } from "@server/services/connections/ConnectionService.ts";
+import { ConnectionService } from "@server/modules/core/services/connections/SocketConnection.service.ts";
 
 export class WsConnectionController {
   static create(

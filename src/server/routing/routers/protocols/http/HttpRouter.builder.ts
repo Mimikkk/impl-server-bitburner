@@ -5,7 +5,7 @@ import { RequestControllerHandler } from "@server/routing/routers/handlers/Reque
 import { RouteUrl } from "@server/routing/routers/routes/RouteUrl.ts";
 import { Route } from "@server/routing/routers/routes/Route.ts";
 import { Router } from "@server/routing/routers/Router.ts";
-import { HttpRouteMatcher } from "@server/routing/protocols/http/HttpRouteMatcher.ts";
+import { HttpRouteMatcher } from "./HttpRouteMatcher.ts";
 import { ControllerRegistry } from "@server/routing/routers/Router.controllers.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {

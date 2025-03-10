@@ -11,7 +11,7 @@
   },
   "lint": {
     "rules": {
-      "exclude": ["no-namespace", "no-explicit-any", "no-empty-interface"]
+      "exclude": ["no-namespace", "no-explicit-any", "no-empty-interface", "no-empty", "ban-types"]
     }
   },
   "tasks": {

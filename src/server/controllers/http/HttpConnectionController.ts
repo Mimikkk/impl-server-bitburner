@@ -1,5 +1,5 @@
 import { HttpJsonResponse } from "@server/messages/responses/HttpJsonResponse.ts";
-import { ConnectionService } from "../../services/connections/ConnectionService.ts";
+import { ConnectionService } from "@server/modules/core/services/connections/SocketConnection.service.ts";
 
 export class HttpConnectionController {
   static create(

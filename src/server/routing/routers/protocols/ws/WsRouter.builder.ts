@@ -4,7 +4,7 @@ import { RequestControllerHandler } from "@server/routing/routers/handlers/Reque
 import { RouteUrl } from "@server/routing/routers/routes/RouteUrl.ts";
 import { Router } from "@server/routing/routers/Router.ts";
 import { Route } from "@server/routing/routers/routes/Route.ts";
-import { WsRouteMatcher } from "@server/routing/protocols/ws/WsRouteMatcher.ts";
+import { WsRouteMatcher } from "./WsRouteMatcher.ts";
 import { ControllerRegistry } from "@server/routing/routers/Router.controllers.ts";
 
 export class WsRouterBuilder<R extends Route[] = Route[]> {
