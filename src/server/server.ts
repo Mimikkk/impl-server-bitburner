@@ -1,4 +1,4 @@
+import { RouteDispatcher } from "@server/infrastructure/routing/RouteDispatcher.ts";
 import { ServerConfiguration } from "@server/server.config.ts";
-import { RouteDispatcher } from "@server/routing/RouteDispatcher.ts";
 
 Deno.serve(ServerConfiguration, RouteDispatcher.dispatch);

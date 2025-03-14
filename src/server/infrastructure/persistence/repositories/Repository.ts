@@ -1,0 +1,15 @@
+import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
+
+export interface Repository<E extends Entity> {
+  find(id: E["id"]): E | undefined;
+
+  has(id: E["id"]): boolean;
+
+  keys(): IterableIterator<E["id"]>;
+
+  list(): IterableIterator<E>;
+
+  persist(value: E["resource"]): E;
+
+  delete(id: E["id"]): boolean;
+}
