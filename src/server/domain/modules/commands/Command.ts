@@ -1,5 +1,5 @@
-import { RpcJsonRequest } from "@server/infrastructure/messaging/requests/RpcJsonRequest.ts";
 import { CommandHandler } from "@server/domain/modules/commands/Command.handler.ts";
+import { RpcJsonRequest } from "@server/infrastructure/messaging/requests/RpcJsonRequest.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 
 export class Command<M extends PropertyKey = PropertyKey, P = any, T = any> {

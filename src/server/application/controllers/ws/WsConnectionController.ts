@@ -1,9 +1,7 @@
 import { ConnectionService } from "@server/application/services/Connection.service.ts";
 
 export class WsConnectionController {
-  static create(
-    connections: ConnectionService = ConnectionService.create(),
-  ) {
+  static create(connections: ConnectionService = ConnectionService.create()) {
     return new WsConnectionController(connections);
   }
 
@@ -11,10 +9,10 @@ export class WsConnectionController {
     private readonly connections: ConnectionService,
   ) {}
 
-  public index(request: Request) {
+  public index(request: Request): Response {
     const { socket, response } = Deno.upgradeWebSocket(request);
 
-    this.connections.manage(socket);
+    this.connections.attach(socket);
 
     return response;
   }

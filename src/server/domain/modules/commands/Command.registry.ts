@@ -1,6 +1,6 @@
+import { CommandGetter } from "@server/domain/modules/commands/Command.getter.ts";
 import { Command } from "@server/domain/modules/commands/Command.ts";
 import { KeyBy } from "@shared/types/common.ts";
-import { CommandGetter } from "@server/domain/modules/commands/Command.getter.ts";
 
 export class CommandRegistry<
   Cs extends Record<PropertyKey, Command> = {},

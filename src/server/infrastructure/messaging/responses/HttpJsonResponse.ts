@@ -7,7 +7,7 @@ export namespace HttpJsonResponse {
   export const created = <T>(data?: T, options?: JsonResponseOptions) =>
     createJsonResponse(data, JsonResponseOptions.merge({ status: 201 }, options));
 
-  export const invalid = <T>(data?: T, options?: JsonResponseOptions) =>
+  export const failure = <T>(data?: T, options?: JsonResponseOptions) =>
     createJsonResponse(data, JsonResponseOptions.merge({ status: 400 }, options));
 
   export const missing = <T>(data?: T, options?: JsonResponseOptions) =>

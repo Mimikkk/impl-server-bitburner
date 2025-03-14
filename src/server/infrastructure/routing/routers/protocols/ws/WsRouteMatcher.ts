@@ -1,7 +1,7 @@
-import { RequestMatcher } from "../../matchers/RequestMatcher.ts";
-import { RequestRouteUrlMatcher } from "../../matchers/RequestRouteUrlMatcher.ts";
-import { RequestContext } from "../../requests/RequestContext.ts";
-import { RouteUrl } from "../../routes/RouteUrl.ts";
+import { RequestMatcher } from "@server/infrastructure/routing/routers/matchers/RequestMatcher.ts";
+import { RequestRouteUrlMatcher } from "@server/infrastructure/routing/routers/matchers/RequestRouteUrlMatcher.ts";
+import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 
 export class WsRouteMatcher implements RequestMatcher {
   static create(url: RouteUrl): WsRouteMatcher {

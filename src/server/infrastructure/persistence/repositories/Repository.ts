@@ -9,7 +9,7 @@ export interface Repository<E extends Entity> {
 
   list(): IterableIterator<E>;
 
-  persist(value: E["resource"]): E;
+  persist(value: E["value"]): E;
 
   delete(id: E["id"]): boolean;
 }

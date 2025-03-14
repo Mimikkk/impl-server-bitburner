@@ -10,8 +10,12 @@ export class VolatileRepository<E extends Entity> implements Repository<E> {
 
   private constructor(
     private readonly store: VolatileStore<E["id"], E>,
-    private readonly entities: EntityFactory<E>,
+    private readonly factory: EntityFactory<E>,
   ) {}
+
+  delete(id: E["id"]): boolean {
+    return this.store.delete(id);
+  }
 
   has(id: E["id"]): boolean {
     return this.store.has(id);
@@ -29,19 +33,15 @@ export class VolatileRepository<E extends Entity> implements Repository<E> {
     return this.store.list();
   }
 
-  persist(value: E["resource"]): E {
-    const entity = this.entities.create(value);
+  persist(value: E["value"]): E {
+    const entity = this.factory.create(value);
 
     this.store.set(entity.id, entity);
 
     return entity;
   }
 
-  createMany(values: E["resource"][]): E[] {
-    return values.map((value) => this.persist(value));
-  }
-
-  delete(id: E["id"]): boolean {
+  remove(id: E["id"]): boolean {
     return this.store.delete(id);
   }
 }

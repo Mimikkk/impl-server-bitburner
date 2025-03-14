@@ -1,5 +1,5 @@
-import { WsConnectionController } from "../../../application/controllers/ws/WsConnectionController.ts";
-import { WsRouterBuilder } from "../routers/protocols/ws/WsRouter.builder.ts";
+import { WsConnectionController } from "@server/application/controllers/ws/WsConnectionController.ts";
+import { WsRouterBuilder } from "@server/infrastructure/routing/routers/protocols/ws/WsRouter.builder.ts";
 
 export const ws = WsRouterBuilder.create()
   .ws("/", WsConnectionController, "index")

@@ -1,9 +1,9 @@
-import { RequestContext } from "../../requests/RequestContext.ts";
-import { RequestMatcher } from "../../matchers/RequestMatcher.ts";
+import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import { RequestMatcher } from "@server/infrastructure/routing/routers/matchers/RequestMatcher.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
-import { RouteUrl } from "../../routes/RouteUrl.ts";
-import { RequestRouteUrlMatcher } from "../../matchers/RequestRouteUrlMatcher.ts";
-import { RequestMethodMatcher } from "../../matchers/RequestMethodMatcher.ts";
+import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
+import { RequestRouteUrlMatcher } from "@server/infrastructure/routing/routers/matchers/RequestRouteUrlMatcher.ts";
+import { RequestMethodMatcher } from "@server/infrastructure/routing/routers/matchers/RequestMethodMatcher.ts";
 
 export class HttpRouteMatcher implements RequestMatcher {
   static create(method: HttpMethod, url: RouteUrl): HttpRouteMatcher {

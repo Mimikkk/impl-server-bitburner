@@ -13,7 +13,7 @@ export class IntEntityFactory<E extends Entity<number, any>> implements EntityFa
     private readonly identifiers: IdentifierGenerator<number>,
   ) {}
 
-  create(value: E["resource"]): E {
-    return { id: this.identifiers.generate(), resource: value } as E;
+  create(value: E["value"]): E {
+    return { id: this.identifiers.generate(), value: value } as E;
   }
 }

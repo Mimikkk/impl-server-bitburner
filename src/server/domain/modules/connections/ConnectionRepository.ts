@@ -5,7 +5,9 @@ import { IntGenerator } from "@server/infrastructure/persistence/identifiers/Int
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
 
-export class ConnectionRepository {
+export type ConnectionEntity = Entity<number, Connection>;
+
+export class ConnectionRepository implements Repository<ConnectionEntity> {
   static instance = ConnectionRepository.create();
 
   static create() {
@@ -15,22 +17,34 @@ export class ConnectionRepository {
   }
 
   private constructor(
-    private readonly repository: Repository<Entity<number, Connection>>,
+    private readonly entities: Repository<ConnectionEntity>,
   ) {}
 
-  create(socket: WebSocket): Connection {
-    const connection = Connection.create(socket);
-
-    this.repository.persist(connection);
-
-    return connection;
+  has(id: number): boolean {
+    return this.entities.has(id);
   }
 
-  read(id: number): Connection | undefined {
-    return this.repository.find(id)?.resource;
+  persist(value: Connection): ConnectionEntity {
+    return this.entities.persist(value);
   }
 
-  list(): Entity<number, Connection>[] {
-    return Array.from(this.repository.list());
+  delete(id: number): boolean {
+    return this.entities.delete(id);
+  }
+
+  keys(): IterableIterator<number> {
+    return this.entities.keys();
+  }
+
+  find(id: number): ConnectionEntity | undefined {
+    return this.entities.find(id);
+  }
+
+  list(): IterableIterator<ConnectionEntity> {
+    return this.entities.list();
+  }
+
+  persistSocket(socket: WebSocket): ConnectionEntity {
+    return this.entities.persist(Connection.create(socket));
   }
 }

@@ -1,12 +1,12 @@
-import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControlFn } from "../../../../../application/controllers/controller.types.ts";
+import { ControlFn } from "@server/application/controllers/controller.types.ts";
+import { RequestControllerHandler } from "@server/infrastructure/routing/routers/handlers/RequestControllerHandler.ts";
+import { HttpRouteMatcher } from "@server/infrastructure/routing/routers/protocols/http/HttpRouteMatcher.ts";
+import { ControllerRegistry } from "@server/infrastructure/routing/routers/Router.controllers.ts";
+import { Router } from "@server/infrastructure/routing/routers/Router.ts";
+import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
+import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
-import { RequestControllerHandler } from "../../handlers/RequestControllerHandler.ts";
-import { RouteUrl } from "../../routes/RouteUrl.ts";
-import { Route } from "../../routes/Route.ts";
-import { Router } from "../../Router.ts";
-import { HttpRouteMatcher } from "./HttpRouteMatcher.ts";
-import { ControllerRegistry } from "../../Router.controllers.ts";
+import { TypeKey } from "@shared/types/typedKey.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create(): HttpRouterBuilder<[]> {
