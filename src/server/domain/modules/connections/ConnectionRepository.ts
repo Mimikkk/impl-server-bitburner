@@ -10,10 +10,12 @@ export type ConnectionEntity = Entity<number, Connection>;
 export class ConnectionRepository implements Repository<ConnectionEntity> {
   static instance = ConnectionRepository.create();
 
-  static create() {
-    return new ConnectionRepository(
-      VolatileRepository.create(IntEntityFactory.create(IntGenerator.create())),
-    );
+  static create(
+    repository: Repository<ConnectionEntity> = VolatileRepository.create(
+      IntEntityFactory.create(IntGenerator.create()),
+    ),
+  ) {
+    return new ConnectionRepository(repository);
   }
 
   private constructor(

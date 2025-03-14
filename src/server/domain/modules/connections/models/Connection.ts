@@ -7,8 +7,8 @@ export class Connection {
   }
 
   private constructor(
-    public readonly socket: WebSocket,
-    public readonly requests: Map<number, RpcJsonRequest>,
+    private readonly socket: WebSocket,
+    private readonly requests: Map<number, RpcJsonRequest>,
   ) {}
 
   request(request: RpcJsonRequest) {

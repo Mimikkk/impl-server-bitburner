@@ -1,6 +1,7 @@
+import { Awaitable } from "@shared/types/common.ts";
 import { ControlFn, ControlKey } from "../../../../application/controllers/controller.types.ts";
-import { RequestHandler } from "./RequestHandler.ts";
 import { RouteRequestContext } from "../routes/requests/RouteRequestContext.ts";
+import { RequestHandler } from "./RequestHandler.ts";
 
 export class RequestControllerHandler<C extends { [key in H]: ControlFn }, H extends ControlKey<C>>
   implements RequestHandler {
@@ -16,7 +17,7 @@ export class RequestControllerHandler<C extends { [key in H]: ControlFn }, H ext
     public readonly handler: H,
   ) {}
 
-  handle(request: Request, context: RouteRequestContext): Promise<Response> | Response {
+  handle(request: Request, context: RouteRequestContext): Awaitable<Response> {
     return this.controller[this.handler](request, context);
   }
 }

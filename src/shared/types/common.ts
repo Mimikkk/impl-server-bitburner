@@ -16,3 +16,5 @@ export type KeyBy<
   I extends Record<K, PropertyKey>[],
   K extends PropertyKey,
 > = KeyByInner<I, K, {}>;
+
+export type Awaitable<T> = T | Promise<T>;
