@@ -1,6 +1,6 @@
 import { Awaitable } from "@shared/types/common.ts";
-import { ControlFn, ControlKey } from "../../../../application/controllers/controller.types.ts";
 import { RouteRequestContext } from "../routes/requests/RouteRequestContext.ts";
+import { ControlFn, ControlKey } from "./ControllerType.ts";
 import { RequestHandler } from "./RequestHandler.ts";
 
 export class RequestControllerHandler<C extends { [key in H]: ControlFn }, H extends ControlKey<C>>

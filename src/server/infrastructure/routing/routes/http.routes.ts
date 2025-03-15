@@ -1,8 +1,8 @@
-import { HttpBitburnerConnectionCommandController } from "@server/application/controllers/http/HttpBitburnerConnectionCommandController.ts";
-import { HttpBitburnerConnectionController } from "@server/application/controllers/http/HttpBitburnerConnectionController.ts";
-import { HttpTemplateController } from "@server/application/controllers/http/HttpTemplateController.ts";
 import { HttpRouterBuilder } from "@server/infrastructure/routing/routers/protocols/http/HttpRouter.builder.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
+import { HttpBitburnerConnectionCommandController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerConnectionCommandController.ts";
+import { HttpBitburnerConnectionController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerConnectionController.ts";
+import { HttpTemplateController } from "../../../modules/templates/application/controllers/http/HttpTemplateController.ts";
 
 export const http = HttpRouterBuilder.create()
   .add(HttpMethod.Get, "/", HttpTemplateController, "index")

@@ -1,4 +1,3 @@
-import { ControlFn } from "@server/application/controllers/controller.types.ts";
 import { RequestControllerHandler } from "@server/infrastructure/routing/routers/handlers/RequestControllerHandler.ts";
 import { HttpRouteMatcher } from "@server/infrastructure/routing/routers/protocols/http/HttpRouteMatcher.ts";
 import { ControllerRegistry } from "@server/infrastructure/routing/routers/Router.controllers.ts";
@@ -7,6 +6,7 @@ import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 import { TypeKey } from "@shared/types/typedKey.ts";
+import { ControlFn } from "../../handlers/ControllerType.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create(): HttpRouterBuilder<[]> {

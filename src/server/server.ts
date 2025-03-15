@@ -1,5 +1,5 @@
+import { ServerConfiguration } from "@server/infrastructure/configurations/ServerConfiguration.ts";
 import { RouteDispatcher } from "@server/infrastructure/routing/RouteDispatcher.ts";
-import { ServerConfiguration } from "@server/server.config.ts";
 
 const dispatcher = RouteDispatcher.create();
 
