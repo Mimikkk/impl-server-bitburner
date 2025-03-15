@@ -24,6 +24,7 @@ export class VolatileConnectionCommandRequestRepository implements ConnectionCom
     if (entity === undefined) return;
 
     entity.listeners.notify(response);
+    this.delete(entity.id);
 
     return entity;
   }

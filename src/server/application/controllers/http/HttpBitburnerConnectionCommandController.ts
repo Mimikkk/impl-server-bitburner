@@ -31,11 +31,14 @@ export class HttpBitburnerConnectionCommandController {
     return HttpJsonResponse.success({ command });
   }
 
-  queue(
-    { parameters: { values: { connectionId, method } } }: RouteRequestContext<
+  async queue(
+    {
+      request: request,
+      parameters: { values: { connectionId, method } },
+    }: RouteRequestContext<
       { connectionId: number; method: BitburnerMethod }
     >,
-  ): Response {
+  ): Promise<Response> {
     const connection = this.connections.find(connectionId);
 
     if (connection === undefined) {
@@ -48,9 +51,11 @@ export class HttpBitburnerConnectionCommandController {
       return HttpJsonResponse.missing({ method, message: "Command not found" });
     }
 
-    const request = command.request({});
+    const body = await request.request.json();
 
-    connection.value.request(request.value);
+    const commandRequest = command.request(body);
+
+    connection.value.request(commandRequest.value);
 
     return HttpJsonResponse.success({ message: "Command queued" });
   }

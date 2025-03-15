@@ -1,7 +1,7 @@
-import { BitburnerFileResource } from "@server/domain/modules/bitburner/resources/BitburnerFileResource.ts";
 import { ConnectionCommandBuilder } from "../../connections/ConnectionCommandBuilder.ts";
 import { ConnectionCommandHandler } from "../../connections/ConnectionCommandHandler.ts";
 import { ConnectionCommandRegistry } from "../../connections/ConnectionCommandRegistry.ts";
+import { ConnectionCommandValidator } from "../../connections/ConnectionCommandValidator.ts";
 
 export enum BitburnerMethod {
   Update = "pushFile",
@@ -15,38 +15,87 @@ export enum BitburnerMethod {
 
 export namespace BitburnerCommandRegistry {
   export const update = ConnectionCommandBuilder
-    .create(BitburnerMethod.Update, ConnectionCommandHandler.logger())
-    .withParams<{ filename: string; content: string; server: string }>()
+    .create()
+    .withName("update")
+    .withDescription("Update a file on a server")
+    .withMethod(BitburnerMethod.Update)
+    .withValidator(
+      ConnectionCommandValidator.create(
+        ({ filename, content, server }: { filename: string; content: string; server: string }) =>
+          typeof filename === "string" && typeof content === "string" && typeof server === "string",
+      ),
+    )
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const remove = ConnectionCommandBuilder
-    .create(BitburnerMethod.Remove, ConnectionCommandHandler.logger())
-    .withParams<{ filename: string; server: string }>()
+    .create()
+    .withName("remove")
+    .withDescription("Remove a file from a server")
+    .withMethod(BitburnerMethod.Remove)
+    .withValidator(
+      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
+        typeof filename === "string" && typeof server === "string"
+      ),
+    )
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const read = ConnectionCommandBuilder
-    .create(BitburnerMethod.Read, ConnectionCommandHandler.logger<BitburnerFileResource>())
-    .withParams<{ filename: string; server: string }>()
+    .create()
+    .withName("read")
+    .withDescription("Read a file from a server")
+    .withMethod(BitburnerMethod.Read)
+    .withValidator(
+      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
+        typeof filename === "string" && typeof server === "string"
+      ),
+    )
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const list = ConnectionCommandBuilder
-    .create(BitburnerMethod.List, ConnectionCommandHandler.logger<BitburnerFileResource[]>())
-    .withParams<{ server: string }>()
+    .create()
+    .withName("list")
+    .withDescription("List all files on a server")
+    .withMethod(BitburnerMethod.List)
+    .withValidator(ConnectionCommandValidator.create(({ server }: { server: string }) => typeof server === "string"))
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const names = ConnectionCommandBuilder
-    .create(BitburnerMethod.Names, ConnectionCommandHandler.logger<string[]>())
-    .withParams<{ server: string }>()
+    .create()
+    .withName("names")
+    .withDescription("List all file names on a server")
+    .withMethod(BitburnerMethod.Names)
+    .withValidator(ConnectionCommandValidator.create(({ server }: { server: string }) => typeof server === "string"))
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const ram = ConnectionCommandBuilder
-    .create(BitburnerMethod.Ram, ConnectionCommandHandler.logger<number>())
-    .withParams<{ filename: string; server: string }>()
+    .create()
+    .withName("ram")
+    .withDescription("Calculate the RAM usage of a file on a server")
+    .withMethod(BitburnerMethod.Ram)
+    .withValidator(
+      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
+        typeof filename === "string" && typeof server === "string"
+      ),
+    )
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const definition = ConnectionCommandBuilder
-    .create(BitburnerMethod.Definition, ConnectionCommandHandler.logger<string>())
-    .withParams<{ filename: string; server: string }>()
+    .create()
+    .withName("definition")
+    .withDescription("Get the definition of a file on a server")
+    .withMethod(BitburnerMethod.Definition)
+    .withValidator(
+      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
+        typeof filename === "string" && typeof server === "string"
+      ),
+    )
+    .withHandler(ConnectionCommandHandler.logger())
     .build();
 
   export const all = ConnectionCommandRegistry.fromArray([

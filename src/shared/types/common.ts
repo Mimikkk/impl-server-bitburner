@@ -18,3 +18,9 @@ export type KeyBy<
 > = KeyByInner<I, K, {}>;
 
 export type Awaitable<T> = T | Promise<T>;
+
+export type Some<T extends any[], V> = T extends [infer H, ...infer R] ? [H] extends [V] ? true : Some<R, V>
+  : false;
+
+export type Every<T extends any[], V> = T extends [infer H, ...infer R] ? [H] extends [V] ? Every<R, V> : false
+  : true;
