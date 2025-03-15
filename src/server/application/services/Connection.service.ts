@@ -27,14 +27,14 @@ export class ConnectionService {
 
   private attachListeners(socket: WebSocket, connection: ConnectionEntity): void {
     socket.addEventListener("open", () => {
-      Log.info("socket opened for connection");
+      Log.info("socket opened for connection", connection.id);
     });
 
     socket.addEventListener("message", (event) => {
       const response = RpcJsonResponse.tryFrom(event.data);
 
       if (response === undefined) {
-        Log.error("failed to parse message data", event);
+        Log.error("failed to parse message data from connection", connection.id, event);
         return;
       }
 
@@ -42,11 +42,11 @@ export class ConnectionService {
     });
 
     socket.addEventListener("error", (event) => {
-      Log.error("socket provided an error", event);
+      Log.error("socket provided an error from connection", connection.id, event);
     });
 
     socket.addEventListener("close", () => {
-      Log.info("socket closed for connection");
+      Log.info("socket closed for connection", connection.id);
       this.connections.delete(connection.id);
     });
   }
