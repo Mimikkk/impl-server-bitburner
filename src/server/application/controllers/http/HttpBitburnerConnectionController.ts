@@ -1,14 +1,17 @@
-import { ConnectionService } from "@server/application/services/Connection.service.ts";
+import { BitburnerConnectionService } from "@server/application/services/BitburnerConnection.service.ts";
+import { ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
 
-export class HttpConnectionController {
-  static create(connections: ConnectionService = ConnectionService.create()) {
-    return new HttpConnectionController(connections);
+export class HttpBitburnerConnectionController {
+  static create(
+    connections: BitburnerConnectionService = BitburnerConnectionService.create(ConnectionRepository.instance),
+  ) {
+    return new HttpBitburnerConnectionController(connections);
   }
 
   private constructor(
-    private readonly connections: ConnectionService,
+    private readonly connections: BitburnerConnectionService,
   ) {}
 
   index(): Response {
@@ -25,5 +28,11 @@ export class HttpConnectionController {
     }
 
     return HttpJsonResponse.success({ id, connection });
+  }
+
+  commands(): Response {
+    const commands = Array.from(this.connections.list());
+
+    return HttpJsonResponse.success({ commands });
   }
 }

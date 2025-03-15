@@ -23,6 +23,10 @@ export class CommandRegistry<
     return this.commands.get(method) as Cs[K];
   }
 
+  list(): IterableIterator<Command> {
+    return this.commands.values();
+  }
+
   register<K extends keyof Cs>(method: K, command: Cs[K]): CommandRegistry<Cs> {
     const self = this as unknown as CommandRegistry<Cs>;
     self.commands.set(method, command);

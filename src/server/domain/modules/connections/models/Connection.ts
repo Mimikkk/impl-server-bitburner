@@ -17,10 +17,14 @@ export class Connection {
     this.socket.send(JSON.stringify(request));
   }
 
-  resolve(response: RpcJsonResponse): void {
+  resolve(response: RpcJsonResponse): RpcJsonRequest | undefined {
     const request = this.requests.get(response.id);
 
-    if (request) this.requests.delete(response.id);
+    if (request === undefined) return;
+
+    this.requests.delete(response.id);
+
+    return request;
   }
 
   close(): void {
