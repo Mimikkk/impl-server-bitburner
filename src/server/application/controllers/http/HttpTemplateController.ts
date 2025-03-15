@@ -3,9 +3,9 @@ import { Template } from "@server/domain/modules/templates/Template.enum.ts";
 import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/HttpHtmlResponse.ts";
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
 
-export class HttpInstructionController {
+export class HttpTemplateController {
   static create(templates: TemplateService = TemplateService.create()) {
-    return new HttpInstructionController(templates);
+    return new HttpTemplateController(templates);
   }
 
   private constructor(
@@ -13,12 +13,12 @@ export class HttpInstructionController {
   ) {}
 
   async index() {
-    const result = await this.templates.read(Template.Instruction);
+    const template = await this.templates.read(Template.Instruction);
 
-    if (result === undefined) {
+    if (template === undefined) {
       return HttpJsonResponse.failure({ path: Template.Instruction, message: "Template not found" });
     }
 
-    return HttpHtmlResponse.success(result);
+    return HttpHtmlResponse.success(template);
   }
 }

@@ -24,6 +24,6 @@ export class HttpConnectionController {
       return HttpJsonResponse.missing({ id, message: "Connection not found" });
     }
 
-    return HttpJsonResponse.success({ id });
+    return HttpJsonResponse.success({ id, connection });
   }
 }
