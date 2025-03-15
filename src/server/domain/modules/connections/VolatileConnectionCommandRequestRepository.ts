@@ -1,11 +1,11 @@
-import { ConnectionCommandRequestEntityFactory } from "@server/domain/modules/connections/ConnectionCommandRequestEntityFactory.ts";
 import { ConnectionCommandRequestRepository } from "@server/domain/modules/connections/ConnectionCommandRequestRepository.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
-import { ConnectionCommandRequest } from "./ConnectionCommandRequest.ts";
-import { ConnectionCommandRequestEntity } from "./ConnectionCommandRequestEntity.ts";
-import { ConnectionCommandResponse } from "./ConnectionCommandResponse.ts";
+import { ConnectionCommandRequestEntity } from "./entities/ConnectionCommandRequestEntity.ts";
+import { ConnectionCommandRequestEntityFactory } from "./factories/ConnectionCommandRequestEntityFactory.ts";
+import { ConnectionCommandRequest } from "./messaging/ConnectionCommandRequest.ts";
+import { ConnectionCommandResponse } from "./messaging/ConnectionCommandResponse.ts";
 
 export class VolatileConnectionCommandRequestRepository implements ConnectionCommandRequestRepository {
   static create(

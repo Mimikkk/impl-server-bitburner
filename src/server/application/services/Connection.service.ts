@@ -1,7 +1,7 @@
-import { ConnectionCommand } from "@server/domain/modules/connections/ConnectionCommand.ts";
-import { ConnectionCommandRegistry } from "@server/domain/modules/connections/ConnectionCommandRegistry.ts";
-import { ConnectionEntity } from "@server/domain/modules/connections/ConnectionEntity.ts";
+import { ConnectionCommandRegistry } from "@server/domain/modules/connections/commands/ConnectionCommandRegistry.ts";
 import { ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
+import { ConnectionEntity } from "@server/domain/modules/connections/entities/ConnectionEntity.ts";
+import { ConnectionCommand } from "@server/domain/modules/connections/models/ConnectionCommand.ts";
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 

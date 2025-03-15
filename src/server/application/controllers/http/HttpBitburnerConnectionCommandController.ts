@@ -33,11 +33,9 @@ export class HttpBitburnerConnectionCommandController {
 
   async queue(
     {
-      request: request,
+      request: { original },
       parameters: { values: { connectionId, method } },
-    }: RouteRequestContext<
-      { connectionId: number; method: BitburnerMethod }
-    >,
+    }: RouteRequestContext<{ connectionId: number; method: BitburnerMethod }>,
   ): Promise<Response> {
     const connection = this.connections.find(connectionId);
 
@@ -51,7 +49,13 @@ export class HttpBitburnerConnectionCommandController {
       return HttpJsonResponse.missing({ method, message: "Command not found" });
     }
 
-    const body = await request.request.json();
+    const body = await original.json();
+
+    const errors = command.validator.validate(body);
+
+    if (errors.length > 0) {
+      return HttpJsonResponse.failure({ message: "Invalid command parameters", errors });
+    }
 
     const commandRequest = command.request(body);
 

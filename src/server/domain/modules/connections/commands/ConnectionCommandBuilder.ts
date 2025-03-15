@@ -1,7 +1,7 @@
 import { ConnectionCommand } from "@server/domain/modules/connections/ConnectionCommand.ts";
 import { ConnectionCommandHandler } from "@server/domain/modules/connections/ConnectionCommandHandler.ts";
-import { ConnectionCommandValidator } from "@server/domain/modules/connections/ConnectionCommandValidator.ts";
 import { Some } from "@shared/types/common.ts";
+import { Validator } from "../../../infrastructure/validators/Validator.ts";
 
 export class ConnectionCommandBuilder<N, D, M, P, T> {
   static create(): ValidatedBuilder<ConnectionCommandBuilder<null, null, null, null, null>> {
@@ -12,7 +12,7 @@ export class ConnectionCommandBuilder<N, D, M, P, T> {
     private name: N | null = null,
     private description: D | null = null,
     private method: M | null = null,
-    private validator: ConnectionCommandValidator<P> | null = null,
+    private validator: Validator<P> | null = null,
     private handler: ConnectionCommandHandler<T> | null = null,
   ) {}
 
@@ -32,9 +32,9 @@ export class ConnectionCommandBuilder<N, D, M, P, T> {
   }
 
   withValidator<NP>(
-    validator: ConnectionCommandValidator<NP>,
+    validator: Validator<NP>,
   ): ValidatedBuilder<ConnectionCommandBuilder<N, D, M, NP, T>> {
-    this.validator = validator as unknown as ConnectionCommandValidator<P>;
+    this.validator = validator as unknown as Validator<P>;
     return this as unknown as ConnectionCommandBuilder<N, D, M, NP, T>;
   }
 
@@ -48,7 +48,7 @@ export class ConnectionCommandBuilder<N, D, M, P, T> {
       this.name as N & string,
       this.description as D & string,
       this.method as M & string,
-      this.validator as ConnectionCommandValidator<P>,
+      this.validator as Validator<P>,
       this.handler as ConnectionCommandHandler<T>,
     );
   }

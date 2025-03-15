@@ -1,6 +1,6 @@
 import { RpcJsonRequest } from "@server/infrastructure/messaging/requests/RpcJsonRequest.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
-import { ConnectionCommandRequest } from "./ConnectionCommandRequest.ts";
+import { ConnectionCommandRequest } from "../messaging/ConnectionCommandRequest.ts";
 
 export class ConnectionCommandRequestFactory {
   static instance = ConnectionCommandRequestFactory.create();

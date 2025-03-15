@@ -1,5 +1,5 @@
 import { KeyBy } from "@shared/types/common.ts";
-import { ConnectionCommand } from "./ConnectionCommand.ts";
+import { ConnectionCommand } from "../models/ConnectionCommand.ts";
 
 export class ConnectionCommandRegistry<Cs extends Record<PropertyKey, ConnectionCommand> = {}> {
   declare type: Cs;

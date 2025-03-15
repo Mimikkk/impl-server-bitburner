@@ -15,8 +15,8 @@ export class WsBitburnerConnectionController {
     private readonly connections: BitburnerConnectionService,
   ) {}
 
-  index({ request: { request } }: RouteRequestContext): Response {
-    const { socket, response } = Deno.upgradeWebSocket(request);
+  index({ request: { original } }: RouteRequestContext): Response {
+    const { socket, response } = Deno.upgradeWebSocket(original);
 
     this.connections.attach(socket);
 

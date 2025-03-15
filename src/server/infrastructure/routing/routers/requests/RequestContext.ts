@@ -1,4 +1,4 @@
-import { RequestUrl } from "./RequestUrl.ts";
+import { RequestUrl } from "@server/infrastructure/routing/routers/requests/RequestUrl.ts";
 import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 
 export class RequestContext {
@@ -7,7 +7,7 @@ export class RequestContext {
   }
 
   private constructor(
-    public readonly request: Request,
+    public readonly original: Request,
     public readonly method: HttpMethod,
     public readonly url: RequestUrl,
   ) {}

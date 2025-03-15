@@ -1,7 +1,8 @@
-import { ConnectionCommandBuilder } from "../../connections/ConnectionCommandBuilder.ts";
-import { ConnectionCommandHandler } from "../../connections/ConnectionCommandHandler.ts";
-import { ConnectionCommandRegistry } from "../../connections/ConnectionCommandRegistry.ts";
-import { ConnectionCommandValidator } from "../../connections/ConnectionCommandValidator.ts";
+import { BodyValidator } from "../../../../infrastructure/validators/BodyValidator.ts";
+import { Validators } from "../../../../infrastructure/validators/Validators.ts";
+import { ConnectionCommandBuilder } from "../../connections/commands/ConnectionCommandBuilder.ts";
+import { ConnectionCommandHandler } from "../../connections/commands/ConnectionCommandHandler.ts";
+import { ConnectionCommandRegistry } from "../../connections/commands/ConnectionCommandRegistry.ts";
 
 export enum BitburnerMethod {
   Update = "pushFile",
@@ -20,10 +21,11 @@ export namespace BitburnerCommandRegistry {
     .withDescription("Update a file on a server")
     .withMethod(BitburnerMethod.Update)
     .withValidator(
-      ConnectionCommandValidator.create(
-        ({ filename, content, server }: { filename: string; content: string; server: string }) =>
-          typeof filename === "string" && typeof content === "string" && typeof server === "string",
-      ),
+      BodyValidator.create<{ filename: string; content: string; server: string }>({
+        filename: Validators.string(),
+        content: Validators.string(),
+        server: Validators.string(),
+      }),
     )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
@@ -34,9 +36,10 @@ export namespace BitburnerCommandRegistry {
     .withDescription("Remove a file from a server")
     .withMethod(BitburnerMethod.Remove)
     .withValidator(
-      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
-        typeof filename === "string" && typeof server === "string"
-      ),
+      BodyValidator.create<{ filename: string; server: string }>({
+        filename: Validators.string(),
+        server: Validators.string(),
+      }),
     )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
@@ -47,9 +50,10 @@ export namespace BitburnerCommandRegistry {
     .withDescription("Read a file from a server")
     .withMethod(BitburnerMethod.Read)
     .withValidator(
-      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
-        typeof filename === "string" && typeof server === "string"
-      ),
+      BodyValidator.create<{ filename: string; server: string }>({
+        filename: Validators.string(),
+        server: Validators.string(),
+      }),
     )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
@@ -59,7 +63,11 @@ export namespace BitburnerCommandRegistry {
     .withName("list")
     .withDescription("List all files on a server")
     .withMethod(BitburnerMethod.List)
-    .withValidator(ConnectionCommandValidator.create(({ server }: { server: string }) => typeof server === "string"))
+    .withValidator(
+      BodyValidator.create<{ server: string }>({
+        server: Validators.string(),
+      }),
+    )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
 
@@ -68,7 +76,11 @@ export namespace BitburnerCommandRegistry {
     .withName("names")
     .withDescription("List all file names on a server")
     .withMethod(BitburnerMethod.Names)
-    .withValidator(ConnectionCommandValidator.create(({ server }: { server: string }) => typeof server === "string"))
+    .withValidator(
+      BodyValidator.create<{ server: string }>({
+        server: Validators.string(),
+      }),
+    )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
 
@@ -78,9 +90,10 @@ export namespace BitburnerCommandRegistry {
     .withDescription("Calculate the RAM usage of a file on a server")
     .withMethod(BitburnerMethod.Ram)
     .withValidator(
-      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
-        typeof filename === "string" && typeof server === "string"
-      ),
+      BodyValidator.create<{ filename: string; server: string }>({
+        filename: Validators.string(),
+        server: Validators.string(),
+      }),
     )
     .withHandler(ConnectionCommandHandler.logger())
     .build();
@@ -91,9 +104,10 @@ export namespace BitburnerCommandRegistry {
     .withDescription("Get the definition of a file on a server")
     .withMethod(BitburnerMethod.Definition)
     .withValidator(
-      ConnectionCommandValidator.create(({ filename, server }: { filename: string; server: string }) =>
-        typeof filename === "string" && typeof server === "string"
-      ),
+      BodyValidator.create<{ filename: string; server: string }>({
+        filename: Validators.string(),
+        server: Validators.string(),
+      }),
     )
     .withHandler(ConnectionCommandHandler.logger())
     .build();

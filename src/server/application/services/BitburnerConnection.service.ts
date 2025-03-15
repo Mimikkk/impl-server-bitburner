@@ -1,8 +1,8 @@
 import { ConnectionService } from "@server/application/services/Connection.service.ts";
 import { BitburnerCommandRegistry } from "@server/domain/modules/bitburner/commands/BitburnerCommandRegistry.ts";
-import { ConnectionCommand } from "@server/domain/modules/connections/ConnectionCommand.ts";
-import { ConnectionEntity } from "@server/domain/modules/connections/ConnectionEntity.ts";
 import { ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
+import { ConnectionEntity } from "@server/domain/modules/connections/entities/ConnectionEntity.ts";
+import { ConnectionCommand } from "@server/domain/modules/connections/models/ConnectionCommand.ts";
 
 export class BitburnerConnectionService {
   static create(connections: ConnectionRepository) {

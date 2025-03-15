@@ -1,18 +1,18 @@
-import { ConnectionCommandHandler } from "@server/domain/modules/connections/ConnectionCommandHandler.ts";
-import { ConnectionCommandRequestEntity } from "@server/domain/modules/connections/ConnectionCommandRequestEntity.ts";
-import { ConnectionCommandRequestFactory } from "@server/domain/modules/connections/ConnectionCommandRequestFactory.ts";
+import { ConnectionCommandHandler } from "@server/domain/modules/connections/commands/ConnectionCommandHandler.ts";
 import { ConnectionCommandRequestRepository } from "@server/domain/modules/connections/ConnectionCommandRequestRepository.ts";
-import { ConnectionCommandResponse } from "@server/domain/modules/connections/ConnectionCommandResponse.ts";
-import { ConnectionCommandValidator } from "@server/domain/modules/connections/ConnectionCommandValidator.ts";
 import { VolatileConnectionCommandRequestRepository } from "@server/domain/modules/connections/VolatileConnectionCommandRequestRepository.ts";
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
+import { Validator } from "../../../../infrastructure/validators/Validator.ts";
+import { ConnectionCommandRequestEntity } from "../entities/ConnectionCommandRequestEntity.ts";
+import { ConnectionCommandRequestFactory } from "../factories/ConnectionCommandRequestFactory.ts";
+import { ConnectionCommandResponse } from "../messaging/ConnectionCommandResponse.ts";
 
 export class ConnectionCommand<M extends PropertyKey = PropertyKey, P = any, T = any> {
   static create<M extends PropertyKey, P, T>(
     name: string,
     description: string,
     method: M,
-    validator: ConnectionCommandValidator<P>,
+    validator: Validator<P>,
     handler: ConnectionCommandHandler<T>,
     requests: ConnectionCommandRequestRepository = VolatileConnectionCommandRequestRepository.create(),
     factory: ConnectionCommandRequestFactory = ConnectionCommandRequestFactory.instance,
@@ -24,7 +24,7 @@ export class ConnectionCommand<M extends PropertyKey = PropertyKey, P = any, T =
     public readonly name: string,
     public readonly description: string,
     public readonly method: M,
-    public readonly validator: ConnectionCommandValidator<P>,
+    public readonly validator: Validator<P>,
     public readonly handler: ConnectionCommandHandler<T>,
     public readonly requests: ConnectionCommandRequestRepository,
     private readonly factory: ConnectionCommandRequestFactory,

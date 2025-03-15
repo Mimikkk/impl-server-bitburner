@@ -1,7 +1,7 @@
 import { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
-import { ConnectionCommandRequest } from "./ConnectionCommandRequest.ts";
-import { ConnectionCommandRequestEntity } from "./ConnectionCommandRequestEntity.ts";
+import { ConnectionCommandRequestEntity } from "../entities/ConnectionCommandRequestEntity.ts";
+import { ConnectionCommandRequest } from "../messaging/ConnectionCommandRequest.ts";
 
 export class ConnectionCommandRequestEntityFactory implements EntityFactory<ConnectionCommandRequestEntity> {
   static create(identifiers: IntGenerator = IntGenerator.create()): ConnectionCommandRequestEntityFactory {

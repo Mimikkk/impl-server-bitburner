@@ -2,9 +2,8 @@ import { IntEntityFactory } from "@server/infrastructure/persistence/entities/fa
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
-import { Connection } from "./Connection.ts";
-import { ConnectionEntity } from "./ConnectionEntity.ts";
-
+import { ConnectionEntity } from "./entities/ConnectionEntity.ts";
+import { Connection } from "./models/Connection.ts";
 export class ConnectionRepository implements Repository<ConnectionEntity> {
   static instance = ConnectionRepository.create();
 
