@@ -1,11 +1,12 @@
 import { ConnectionService } from "@server/application/services/Connection.service.ts";
-import { BitburnerCommands } from "@server/domain/modules/bitburner/commands/BitburnerCommand.enum.ts";
-import { Command } from "@server/domain/modules/commands/Command.ts";
-import { ConnectionEntity, ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
+import { BitburnerCommandRegistry } from "@server/domain/modules/bitburner/commands/BitburnerCommandRegistry.ts";
+import { ConnectionCommand } from "@server/domain/modules/connections/ConnectionCommand.ts";
+import { ConnectionEntity } from "@server/domain/modules/connections/ConnectionEntity.ts";
+import { ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
 
 export class BitburnerConnectionService {
   static create(connections: ConnectionRepository) {
-    return new BitburnerConnectionService(ConnectionService.create(connections, BitburnerCommands.registry));
+    return new BitburnerConnectionService(ConnectionService.create(connections, BitburnerCommandRegistry.all));
   }
 
   private constructor(
@@ -24,7 +25,11 @@ export class BitburnerConnectionService {
     this.connections.attach(socket);
   }
 
-  listCommands(): IterableIterator<Command> {
+  listCommands(): IterableIterator<ConnectionCommand> {
     return this.connections.listCommands();
+  }
+
+  findCommand(method: string): ConnectionCommand | undefined {
+    return this.connections.findCommand(method);
   }
 }

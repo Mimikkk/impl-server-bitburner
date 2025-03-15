@@ -1,5 +1,6 @@
 import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
-import { EntityFactory } from "@server/infrastructure/persistence/entities/EntityFactory.ts";
+import { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
+import { IntEntity } from "@server/infrastructure/persistence/entities/IntEntity.ts";
 import { IdentifierGenerator } from "@server/infrastructure/persistence/identifiers/IdentifierGenerator.ts";
 
 export class IntEntityFactory<E extends Entity<number, any>> implements EntityFactory<E> {
@@ -14,6 +15,6 @@ export class IntEntityFactory<E extends Entity<number, any>> implements EntityFa
   ) {}
 
   create(value: E["value"]): E {
-    return { id: this.identifiers.generate(), value: value } as E;
+    return IntEntity.create(this.identifiers.generate(), value) as E;
   }
 }

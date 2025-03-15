@@ -20,19 +20,15 @@ export class HttpBitburnerConnectionController {
     return HttpJsonResponse.success({ connections });
   }
 
-  show({ parameters: { values: { id } } }: RouteRequestContext<{ id: number }>): Response {
-    const connection = this.connections.find(id);
+  show({ parameters: { values: { connectionId } } }: RouteRequestContext<{ connectionId: number }>): Response {
+    const connection = this.connections.find(connectionId);
+
+    console.log(this.connections);
 
     if (connection === undefined) {
-      return HttpJsonResponse.missing({ id, message: "Connection not found" });
+      return HttpJsonResponse.missing({ connectionId, message: "Connection not found" });
     }
 
-    return HttpJsonResponse.success({ id, connection });
-  }
-
-  commands(): Response {
-    const commands = Array.from(this.connections.list());
-
-    return HttpJsonResponse.success({ commands });
+    return HttpJsonResponse.success({ connectionId, connection });
   }
 }

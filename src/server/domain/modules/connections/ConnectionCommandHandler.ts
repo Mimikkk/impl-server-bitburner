@@ -1,11 +1,11 @@
 import { Log } from "@shared/logging/log.ts";
 
-export class CommandHandler<T> {
+export class ConnectionCommandHandler<T> {
   public static create<T>(
     onError: (error: unknown) => void,
     onSuccess: (response: T) => void,
-  ): CommandHandler<T> {
-    return new CommandHandler(onError, onSuccess);
+  ): ConnectionCommandHandler<T> {
+    return new ConnectionCommandHandler(onError, onSuccess);
   }
 
   private constructor(
@@ -13,8 +13,8 @@ export class CommandHandler<T> {
     public readonly onSuccess: (response: T) => void,
   ) {}
 
-  static logger<T>(): CommandHandler<T> {
-    return CommandHandler.create<T>(
+  static logger<T>(): ConnectionCommandHandler<T> {
+    return ConnectionCommandHandler.create<T>(
       (error: unknown) => {
         Log.error("Command failed", error);
       },

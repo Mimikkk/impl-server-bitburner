@@ -1,25 +1,30 @@
-import { CommandRegistry } from "@server/domain/modules/commands/Command.registry.ts";
-import { Command } from "@server/domain/modules/commands/Command.ts";
-import { ConnectionEntity, ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
+import { ConnectionCommand } from "@server/domain/modules/connections/ConnectionCommand.ts";
+import { ConnectionCommandRegistry } from "@server/domain/modules/connections/ConnectionCommandRegistry.ts";
+import { ConnectionEntity } from "@server/domain/modules/connections/ConnectionEntity.ts";
+import { ConnectionRepository } from "@server/domain/modules/connections/ConnectionRepository.ts";
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 
 export class ConnectionService {
-  static create(connections: ConnectionRepository, commands: CommandRegistry) {
+  static create(connections: ConnectionRepository, commands: ConnectionCommandRegistry) {
     return new ConnectionService(connections, commands);
   }
 
   private constructor(
     private readonly connections: ConnectionRepository,
-    private readonly commands: CommandRegistry,
+    private readonly commands: ConnectionCommandRegistry,
   ) {}
 
   list(): IterableIterator<ConnectionEntity> {
     return this.connections.list();
   }
 
-  listCommands(): IterableIterator<Command> {
+  listCommands(): IterableIterator<ConnectionCommand> {
     return this.commands.list();
+  }
+
+  findCommand(method: string): ConnectionCommand | undefined {
+    return this.commands.get(method as never);
   }
 
   find(id: number): ConnectionEntity | undefined {
@@ -52,7 +57,7 @@ export class ConnectionService {
         return;
       }
 
-      const command = this.commands.get(request.method as keyof typeof this.commands.type) as Command;
+      const command = this.commands.get(request.method as keyof typeof this.commands.type) as ConnectionCommand;
 
       if (command === undefined) {
         Log.error("Command not found", request.method);
