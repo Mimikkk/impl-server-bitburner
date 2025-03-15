@@ -1,5 +1,5 @@
+import { HttpMethod } from "../../../../../shared/enums/HttpMethod.ts";
 import { RequestContext } from "../requests/RequestContext.ts";
-import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
 import { RequestMatcher } from "./RequestMatcher.ts";
 
 export class RequestMethodMatcher implements RequestMatcher {

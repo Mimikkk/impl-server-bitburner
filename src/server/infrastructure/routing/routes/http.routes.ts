@@ -1,5 +1,5 @@
 import { HttpRouterBuilder } from "@server/infrastructure/routing/routers/protocols/http/HttpRouter.builder.ts";
-import { HttpMethod } from "@shared/enums/HttpMethod.enum.ts";
+import { HttpMethod } from "../../../../shared/enums/HttpMethod.ts";
 import { HttpBitburnerConnectionCommandController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerConnectionCommandController.ts";
 import { HttpBitburnerConnectionController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerConnectionController.ts";
 import { HttpTemplateController } from "../../../modules/templates/application/controllers/http/HttpTemplateController.ts";
