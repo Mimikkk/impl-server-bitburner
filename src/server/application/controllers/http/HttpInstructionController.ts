@@ -12,11 +12,11 @@ export class HttpInstructionController {
     private readonly templates: TemplateService,
   ) {}
 
-  public async index() {
+  async index() {
     const result = await this.templates.read(Template.Instruction);
 
     if (result === undefined) {
-      return HttpJsonResponse.failure({ path: Template.Instruction });
+      return HttpJsonResponse.failure({ path: Template.Instruction, message: "Template not found" });
     }
 
     return HttpHtmlResponse.success(result);

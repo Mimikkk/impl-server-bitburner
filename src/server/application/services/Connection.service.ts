@@ -3,7 +3,7 @@ import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJ
 import { Log } from "@shared/logging/log.ts";
 
 export class ConnectionService {
-  public static create() {
+  static create() {
     return new ConnectionService(ConnectionRepository.instance);
   }
 
@@ -13,6 +13,10 @@ export class ConnectionService {
 
   list(): IterableIterator<ConnectionEntity> {
     return this.connections.list();
+  }
+
+  find(id: number): ConnectionEntity | undefined {
+    return this.connections.find(id);
   }
 
   attach(socket: WebSocket): void {

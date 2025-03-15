@@ -1,27 +1,33 @@
-import { RouteSegment, RouteUrl } from "../RouteUrl.ts";
-import { RequestUrl } from "../../requests/RequestUrl.ts";
+import { RequestUrl } from "@server/infrastructure/routing/routers/requests/RequestUrl.ts";
+import { RouteSegment, RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
+import { RouteRequestParameterParser } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestParameterParser.ts";
 
-export class RouteRequestParameters {
-  static create(parameters: string[]): RouteRequestParameters {
+export class RouteRequestParameters<P extends Record<string, any>> {
+  static create<P extends Record<string, any>>(parameters: P): RouteRequestParameters<P> {
     return new RouteRequestParameters(parameters);
   }
 
   private constructor(
-    public readonly values: string[],
+    public readonly values: P,
   ) {}
 
-  static fromUrls(routeUrl: RouteUrl, requestUrl: RequestUrl): RouteRequestParameters {
+  static fromUrls<P extends Record<string, any>>(
+    routeUrl: RouteUrl,
+    requestUrl: RequestUrl,
+  ): RouteRequestParameters<P> {
     const segments = routeUrl.segments;
     const parts = requestUrl.parts;
 
-    const parameters: string[] = [];
+    const parameters: P = {} as P;
 
-    for (let index = 0, it = segments.length; index < it; index++) {
+    for (let index = 0, it = segments.length; index < it; ++index) {
       const segment = segments[index];
 
-      if (segment.type === RouteSegment.Type.Parameter) {
-        parameters.push(parts[index]);
-      }
+      if (segment.variant !== RouteSegment.Variant.Parameter) continue;
+
+      const value = RouteRequestParameterParser.parse(segment.type, parts[index]);
+
+      parameters[segment.value as keyof P] = value as P[keyof P];
     }
 
     return RouteRequestParameters.create(parameters);

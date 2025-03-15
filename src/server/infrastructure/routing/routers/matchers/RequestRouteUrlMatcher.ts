@@ -1,6 +1,6 @@
 import { RequestContext } from "../requests/RequestContext.ts";
-import { RequestMatcher } from "./RequestMatcher.ts";
 import { RouteSegment, RouteUrl } from "../routes/RouteUrl.ts";
+import { RequestMatcher } from "./RequestMatcher.ts";
 
 export class RequestRouteUrlMatcher implements RequestMatcher {
   static create(url: RouteUrl): RequestRouteUrlMatcher {
@@ -19,7 +19,7 @@ export class RequestRouteUrlMatcher implements RequestMatcher {
       const segment = segments[i];
       const part = parts[i];
 
-      if (segment.type === RouteSegment.Type.Parameter) continue;
+      if (segment.variant === RouteSegment.Variant.Parameter) continue;
       if (segment.part !== part) return false;
     }
 

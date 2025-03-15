@@ -2,7 +2,7 @@ import { RpcJsonRequest } from "@server/infrastructure/messaging/requests/RpcJso
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 
 export class Connection {
-  public static create(socket: WebSocket) {
+  static create(socket: WebSocket) {
     return new Connection(socket, new Map());
   }
 

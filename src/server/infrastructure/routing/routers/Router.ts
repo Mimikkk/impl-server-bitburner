@@ -20,6 +20,6 @@ export class Router<R extends Route[] = Route[]> {
       return HttpJsonResponseCommon.noroute({ path: context.url.pathname, method: context.method });
     }
 
-    return route.handler.handle(request, RouteRequestContext.fromRequestRoute(context, route));
+    return route.handler.handle(RouteRequestContext.fromRequestRoute(context, route));
   }
 }

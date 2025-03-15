@@ -17,7 +17,7 @@ export class RequestControllerHandler<C extends { [key in H]: ControlFn }, H ext
     public readonly handler: H,
   ) {}
 
-  handle(request: Request, context: RouteRequestContext): Awaitable<Response> {
-    return this.controller[this.handler](request, context);
+  handle(context: RouteRequestContext): Awaitable<Response> {
+    return this.controller[this.handler](context);
   }
 }

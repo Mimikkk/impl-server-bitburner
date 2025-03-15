@@ -1,4 +1,5 @@
 import { ConnectionService } from "@server/application/services/Connection.service.ts";
+import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
 
 export class WsConnectionController {
   static create(connections: ConnectionService = ConnectionService.create()) {
@@ -9,7 +10,7 @@ export class WsConnectionController {
     private readonly connections: ConnectionService,
   ) {}
 
-  public index(request: Request): Response {
+  index({ request: { request } }: RouteRequestContext): Response {
     const { socket, response } = Deno.upgradeWebSocket(request);
 
     this.connections.attach(socket);

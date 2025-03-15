@@ -1,25 +1,29 @@
+export type ParameterType = "number" | "string";
+
 export class RouteSegment {
-  static create(part: string, value: string, type: RouteSegment.Type): RouteSegment {
-    return new RouteSegment(part, value, type);
+  static create(part: string, value: string, variant: RouteSegment.Variant, type: ParameterType): RouteSegment {
+    return new RouteSegment(part, value, variant, type);
   }
 
   private constructor(
     public readonly part: string,
     public readonly value: string,
-    public readonly type: RouteSegment.Type,
+    public readonly variant: RouteSegment.Variant,
+    public readonly type: ParameterType,
   ) {}
 
   static literal(part: string): RouteSegment {
-    return RouteSegment.create(part, part, RouteSegment.Type.Literal);
+    return RouteSegment.create(part, part, RouteSegment.Variant.Literal, "string");
   }
 
-  static parameter(part: string): RouteSegment {
-    return RouteSegment.create(part, part.substring(1, part.length - 1), RouteSegment.Type.Parameter);
+  static parameter(part: string, value: string, type: ParameterType): RouteSegment {
+    return RouteSegment.create(part, value, RouteSegment.Variant.Parameter, type);
   }
 
   static fromUrlPart(part: string): RouteSegment {
     if (part.startsWith("{") && part.endsWith("}")) {
-      return RouteSegment.parameter(part);
+      const [value, type] = part.substring(1, part.length - 1).split(":");
+      return RouteSegment.parameter(part, value, (type ?? "string") as ParameterType);
     }
 
     return RouteSegment.literal(part);
@@ -27,7 +31,7 @@ export class RouteSegment {
 }
 
 export namespace RouteSegment {
-  export enum Type {
+  export enum Variant {
     Literal = "literal",
     Parameter = "parameter",
   }

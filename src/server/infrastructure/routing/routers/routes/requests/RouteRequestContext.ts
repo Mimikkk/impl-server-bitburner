@@ -1,15 +1,15 @@
-import { RequestContext } from "../../requests/RequestContext.ts";
-import { RouteRequestParameters } from "./RouteRequestParameters.ts";
-import { Route } from "../Route.ts";
+import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
+import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
+import { RouteRequestParameters } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestParameters.ts";
 
-export class RouteRequestContext {
-  static create(request: RequestContext, parameters: RouteRequestParameters) {
+export class RouteRequestContext<P extends Record<string, any> = Record<string, any>> {
+  static create<P extends Record<string, any>>(request: RequestContext, parameters: RouteRequestParameters<P>) {
     return new RouteRequestContext(request, parameters);
   }
 
   private constructor(
     public readonly request: RequestContext,
-    public readonly parameters: RouteRequestParameters,
+    public readonly parameters: RouteRequestParameters<P>,
   ) {}
 
   static fromRequestRoute(request: RequestContext, route: Route) {
