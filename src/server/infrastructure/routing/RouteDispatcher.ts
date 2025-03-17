@@ -1,6 +1,6 @@
-import { http } from "@server/infrastructure/routing/routes/http.routes.ts";
-import { ws } from "@server/infrastructure/routing/routes/ws.routes.ts";
 import { Awaitable } from "@shared/types/common.ts";
+import { HttpRoutes } from "./routes/HttpRoutes.ts";
+import { WsRoutes } from "./routes/WsRoutes.ts";
 
 export type Middleware = (request: Request) => Awaitable<Response | undefined>;
 
@@ -13,10 +13,10 @@ export class RouteDispatcher {
 
   dispatch(request: Request) {
     if (request.headers.get("upgrade") === "websocket") {
-      return ws.dispatch(request);
+      return WsRoutes.dispatch(request);
     }
 
-    return http.dispatch(request);
+    return HttpRoutes.dispatch(request);
   }
 
   handler(): Middleware {

@@ -4,7 +4,7 @@ import { HttpBitburnerConnectionController } from "../../../modules/bitburner/ap
 import { HttpTemplateController } from "../../../modules/templates/application/controllers/http/HttpTemplateController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 
-export const http = HttpRouterBuilder.create()
+export const HttpRoutes = HttpRouterBuilder.create()
   .add({
     method: HttpMethod.Get,
     path: "/",
