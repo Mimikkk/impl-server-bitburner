@@ -1,16 +1,16 @@
-import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileStore } from "@server/infrastructure/persistence/stores/VolatileStore.ts";
-import { EntityFactory } from "../entities/factories/EntityFactory.ts";
+import { ModelFactory } from "../models/factories/ModelFactory.ts";
+import { Model } from "../models/Model.ts";
 
-export class VolatileRepository<E extends Entity> implements Repository<E> {
-  static create<E extends Entity>(entities: EntityFactory<E>): VolatileRepository<E> {
+export class VolatileRepository<E extends Model> implements Repository<E> {
+  static create<E extends Model>(entities: ModelFactory<E>): VolatileRepository<E> {
     return new VolatileRepository<E>(VolatileStore.create(), entities);
   }
 
   private constructor(
     private readonly store: VolatileStore<E["id"], E>,
-    private readonly factory: EntityFactory<E>,
+    private readonly factory: ModelFactory<E>,
   ) {}
 
   delete(id: E["id"]): boolean {
@@ -34,11 +34,11 @@ export class VolatileRepository<E extends Entity> implements Repository<E> {
   }
 
   persist(value: E["value"]): E {
-    const entity = this.factory.create(value);
+    const model = this.factory.create(value);
 
-    this.store.set(entity.id, entity);
+    this.store.set(model.id, model);
 
-    return entity;
+    return model;
   }
 
   remove(id: E["id"]): boolean {

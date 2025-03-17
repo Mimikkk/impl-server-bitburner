@@ -1,5 +1,6 @@
-export type ValidatorError = { field: string; path: string; errors: string[] };
+import { Schema } from "@server/infrastructure/validators/Schema.ts";
+import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 
-export interface Validator<P> {
-  validate(params: P): P | ValidatorError[];
+export interface Validator<P extends Schema> {
+  validate(values: unknown): P | ValidationError[];
 }

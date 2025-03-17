@@ -2,5 +2,9 @@ import { WsRouterBuilder } from "@server/infrastructure/routing/routers/protocol
 import { WsBitburnerConnectionController } from "../../../modules/bitburner/application/controllers/ws/WsBitburnerConnectionController.ts";
 
 export const ws = WsRouterBuilder.create()
-  .ws("/", WsBitburnerConnectionController, "index")
+  .ws({
+    path: "/",
+    Controller: WsBitburnerConnectionController,
+    handler: "index",
+  })
   .build();

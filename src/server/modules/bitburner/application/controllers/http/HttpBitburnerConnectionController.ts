@@ -15,7 +15,7 @@ export class HttpBitburnerConnectionController {
   ) {}
 
   index(): Response {
-    const connections = Array.from(this.connections.list());
+    const connections = Array.from(this.connections.all());
 
     return HttpJsonResponse.success({ connections });
   }
@@ -23,12 +23,10 @@ export class HttpBitburnerConnectionController {
   show({ parameters: { values: { connectionId } } }: RouteRequestContext<{ connectionId: number }>): Response {
     const connection = this.connections.find(connectionId);
 
-    console.log(this.connections);
-
     if (connection === undefined) {
       return HttpJsonResponse.missing({ connectionId, message: "Connection not found" });
     }
 
-    return HttpJsonResponse.success({ connectionId, connection });
+    return HttpJsonResponse.success({ connection });
   }
 }

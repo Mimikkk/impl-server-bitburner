@@ -21,10 +21,7 @@ export class HttpRouterBuilder<R extends Route[] = Route[]> {
     C extends { create(): { [key in H]: ControlFn } },
     H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
   >(
-    method: M,
-    path: P,
-    Controller: C,
-    handler: H,
+    { method, path, Controller, handler }: { method: M; path: P; Controller: C; handler: H },
   ): HttpRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
 

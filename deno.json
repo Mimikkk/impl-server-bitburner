@@ -32,5 +32,8 @@
     "@std/testing": "jsr:@std/testing",
     "@std/expect": "jsr:@std/expect",
     "@std/path": "jsr:@std/path"
+  },
+  "compilerOptions": {
+    "types": ["./declarations"]
   }
 }

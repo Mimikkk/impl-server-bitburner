@@ -1,6 +1,6 @@
-import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
+import { Model } from "../models/Model.ts";
 
-export interface Repository<E extends Entity> {
+export interface Repository<E extends Model> {
   find(id: E["id"]): E | undefined;
 
   has(id: E["id"]): boolean;

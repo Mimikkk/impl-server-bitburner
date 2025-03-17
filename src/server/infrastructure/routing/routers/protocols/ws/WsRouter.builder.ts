@@ -18,11 +18,7 @@ export class WsRouterBuilder<R extends Route[] = Route[]> {
     P extends `/${string}`,
     C extends { create(): { [key in H]: ControlFn } },
     H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
-  >(
-    path: P,
-    Controller: C,
-    handler: H,
-  ): WsRouterBuilder<[...R, Route]> {
+  >({ path, Controller, handler }: { path: P; Controller: C; handler: H }): WsRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
 
     const controller = ControllerRegistry.resolve(Controller);

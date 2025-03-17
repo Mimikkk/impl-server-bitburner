@@ -1,33 +1,22 @@
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { Log } from "@shared/logging/log.ts";
-import { ConnectionCommandRegistry } from "../../domain/commands/ConnectionCommandRegistry.ts";
-import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
-import { ConnectionCommand } from "../../domain/models/ConnectionCommand.ts";
+import { ConnectionModel } from "../../domain/models/ConnectionModel.ts";
 
 export class ConnectionService {
-  static create(connections: ConnectionRepository, commands: ConnectionCommandRegistry) {
-    return new ConnectionService(connections, commands);
+  static create(connections: ConnectionRepository) {
+    return new ConnectionService(connections);
   }
 
   private constructor(
     private readonly connections: ConnectionRepository,
-    private readonly commands: ConnectionCommandRegistry,
   ) {}
 
-  list(): IterableIterator<ConnectionEntity> {
+  list(): IterableIterator<ConnectionModel> {
     return this.connections.list();
   }
 
-  listCommands(): IterableIterator<ConnectionCommand> {
-    return this.commands.list();
-  }
-
-  findCommand(method: string): ConnectionCommand | undefined {
-    return this.commands.get(method as never);
-  }
-
-  find(id: number): ConnectionEntity | undefined {
+  find(id: number): ConnectionModel | undefined {
     return this.connections.find(id);
   }
 
@@ -37,7 +26,7 @@ export class ConnectionService {
     this.attachListeners(socket, connection);
   }
 
-  private attachListeners(socket: WebSocket, { value: connection, id }: ConnectionEntity): void {
+  private attachListeners(socket: WebSocket, { value: connection, id }: ConnectionModel): void {
     socket.addEventListener("open", () => {
       Log.info("socket opened for connection", id);
     });
@@ -50,21 +39,14 @@ export class ConnectionService {
         return;
       }
 
-      const request = connection.resolve(response);
+      const request = connection.receive(response);
 
       if (request === undefined) {
         Log.error("failed to resolve message data from connection", id, event);
         return;
       }
 
-      const command = this.commands.get(request.method as keyof typeof this.commands.type) as ConnectionCommand;
-
-      if (command === undefined) {
-        Log.error("Command not found", request.method);
-        return;
-      }
-
-      command.handle(response);
+      request.listeners.notify(response);
     });
 
     socket.addEventListener("error", (event) => {
