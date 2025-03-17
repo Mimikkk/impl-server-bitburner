@@ -1,8 +1,8 @@
-import { HttpRouterBuilder } from "@server/infrastructure/routing/routers/protocols/http/HttpRouter.builder.ts";
 import { HttpMethod } from "../../../../shared/enums/HttpMethod.ts";
 import { HttpBitburnerCommandController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerCommandController.ts";
 import { HttpBitburnerConnectionController } from "../../../modules/bitburner/application/controllers/http/HttpBitburnerConnectionController.ts";
 import { HttpTemplateController } from "../../../modules/templates/application/controllers/http/HttpTemplateController.ts";
+import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 
 export const http = HttpRouterBuilder.create()
   .add({
