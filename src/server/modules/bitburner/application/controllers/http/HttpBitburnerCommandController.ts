@@ -1,5 +1,6 @@
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
+import { CommandResource } from "@server/modules/bitburner/application/resources/CommandResource.ts";
 import { BitburnerCommandService } from "../../services/BitburnerCommandService.ts";
 
 export class HttpBitburnerCommandController {
@@ -16,7 +17,7 @@ export class HttpBitburnerCommandController {
   index(): Response {
     const commands = Array.from(this.commands.list());
 
-    return HttpJsonResponse.success({ commands });
+    return HttpJsonResponse.success({ commands: CommandResource.fromCommands(commands) });
   }
 
   show({ parameters: { values: { name } } }: RouteRequestContext<{ name: string }>): Response {
@@ -26,6 +27,6 @@ export class HttpBitburnerCommandController {
       return HttpJsonResponse.missing({ name, message: "Command not found" });
     }
 
-    return HttpJsonResponse.success({ command });
+    return HttpJsonResponse.success({ command: CommandResource.fromCommand(command) });
   }
 }
