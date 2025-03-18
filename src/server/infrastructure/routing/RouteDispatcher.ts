@@ -18,8 +18,4 @@ export class RouteDispatcher {
 
     return HttpRoutes.dispatch(request);
   }
-
-  handler(): Middleware {
-    return (request) => this.dispatch(request);
-  }
 }

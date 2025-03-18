@@ -35,4 +35,16 @@ export const HttpRoutes = HttpRouterBuilder.create()
     Controller: HttpBitburnerCommandController,
     handler: "show",
   })
+  .add({
+    method: HttpMethod.Get,
+    path: "/docs",
+    Controller: HttpTemplateController,
+    handler: "docs",
+  })
+  .add({
+    method: HttpMethod.Get,
+    path: "/docs/openapi-spec.json",
+    Controller: HttpTemplateController,
+    handler: "spec",
+  })
   .build();
