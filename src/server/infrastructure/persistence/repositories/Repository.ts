@@ -7,7 +7,7 @@ export interface Repository<E extends Model> {
 
   keys(): IterableIterator<E["id"]>;
 
-  list(): IterableIterator<E>;
+  values(): IterableIterator<E>;
 
   persist(value: E["value"]): E;
 

@@ -3,29 +3,31 @@ import { HttpRouteMatcher } from "@server/infrastructure/routing/routers/protoco
 import { Router } from "@server/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
-import { TypeKey } from "@shared/types/typedKey.ts";
 import { HttpMethod } from "../../../../../../shared/enums/HttpMethod.ts";
-import { ControllerRegistry } from "../../ControllerRegistry.ts";
-import { ControlFn } from "../../handlers/ControllerType.ts";
+import { ControllerStore } from "../../../controllers/ControllerStore.ts";
+import { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
 
 export class HttpRouterBuilder<R extends Route[] = Route[]> {
   static create(): HttpRouterBuilder<[]> {
-    return new HttpRouterBuilder([]);
+    return new HttpRouterBuilder([], ControllerStore.instance);
   }
 
-  private constructor(public readonly routes: R) {}
+  private constructor(
+    private readonly routes: R,
+    private readonly controllers: ControllerStore,
+  ) {}
 
   add<
     M extends HttpMethod,
     P extends `/${string}`,
-    C extends { create(): { [key in H]: ControlFn } },
-    H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
+    C extends ControllerClass,
+    H extends ControllerKey<Controller<C>>,
   >(
     { method, path, Controller, handler }: { method: M; path: P; Controller: C; handler: H },
   ): HttpRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
 
-    const controller = ControllerRegistry.resolve(Controller);
+    const controller = this.controllers.get(Controller);
 
     const route = Route.create(
       url,

@@ -29,8 +29,8 @@ export class VolatileRepository<E extends Model> implements Repository<E> {
     return this.store.keys();
   }
 
-  list(): IterableIterator<E> {
-    return this.store.list();
+  values(): IterableIterator<E> {
+    return this.store.values();
   }
 
   persist(value: E["value"]): E {

@@ -41,8 +41,8 @@ export class VolatileCommandRequestRepository implements CommandRequestRepositor
     return this.models.find(id);
   }
 
-  list(): IterableIterator<CommandRequestModel> {
-    return this.models.list();
+  values(): IterableIterator<CommandRequestModel> {
+    return this.models.values();
   }
 
   has(id: number): boolean {

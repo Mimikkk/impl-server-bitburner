@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
-import { HttpJsonResponseCommon } from "@server/infrastructure/messaging/responses/HttpJsonResponse.common.ts";
 import { Log } from "@shared/logging/log.ts";
+import { HttpJsonResponseCommon } from "../messaging/responses/HttpJsonResponseCommon.ts";
 import { EnvironmentConfiguration } from "./EnvironmentConfiguration.ts";
 
 export const ServerConfiguration: Deno.ServeTcpOptions = {

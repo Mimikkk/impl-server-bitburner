@@ -1,5 +1,5 @@
 import { Awaitable } from "@shared/types/common.ts";
-import { HttpJsonResponseCommon } from "../../messaging/responses/HttpJsonResponse.common.ts";
+import { HttpJsonResponseCommon } from "../../messaging/responses/HttpJsonResponseCommon.ts";
 import { RequestContext } from "./requests/RequestContext.ts";
 import { RouteRequestContext } from "./routes/requests/RouteRequestContext.ts";
 import { Route } from "./routes/Route.ts";

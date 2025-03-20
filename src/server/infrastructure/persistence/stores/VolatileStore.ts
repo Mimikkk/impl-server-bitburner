@@ -21,7 +21,7 @@ export class VolatileStore<K, V> implements Store<K, V> {
     return this.map.keys();
   }
 
-  list(): IterableIterator<V> {
+  values(): IterableIterator<V> {
     return this.map.values();
   }
 

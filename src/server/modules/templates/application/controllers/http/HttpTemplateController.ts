@@ -1,35 +1,43 @@
 import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/HttpHtmlResponse.ts";
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
-import { ControllerRegistry } from "@server/infrastructure/routing/routers/ControllerRegistry.ts";
+import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
+import { OpenApiGenerator } from "@server/infrastructure/openapi/OpenApiGenerator.ts";
+import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { TemplateService } from "@server/modules/templates/application/services/TemplateService.ts";
 import { TemplateUrl } from "@server/modules/templates/domain/constants/TemplateUrl.ts";
-import { OpenApiBuilder } from "openapi3-ts/oas31";
-export interface ControllerOptions {
-  type: "http" | "ws";
-}
-function OpenApiController({ type }: ControllerOptions) {
-  return function (target: any) {
-    target.openapi = { type };
-  };
-}
 
-function HttpRoute({ path }: { path: string }) {
-  return function (target: any) {
-    target.openapi = { path };
-  };
-}
-
-@OpenApiController({ type: "http" })
+@OpenApiNs.controller({ name: "Templates", type: "http" })
 export class HttpTemplateController {
-  static create(templates: TemplateService = TemplateService.create()) {
-    return new HttpTemplateController(templates);
+  static create(
+    templates: TemplateService = TemplateService.create(),
+    openApi: OpenApiGenerator = OpenApiGenerator.create(),
+  ) {
+    return new HttpTemplateController(templates, openApi);
   }
 
   private constructor(
     private readonly templates: TemplateService,
+    private readonly openApi: OpenApiGenerator,
   ) {}
 
-  @HttpRoute({ path: "/" })
+  @RouteNs.get("/")
+  @OpenApiNs.route({
+    summary: "Get the template",
+    description: "Get the template",
+    tags: [OpenApiTag.Template],
+    responses: {
+      200: { description: "OK", content: { "text/html": { schema: { type: "string" } } } },
+      404: {
+        description: "Not Found",
+        content: {
+          "application/json": {
+            schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
+          },
+        },
+      },
+    },
+  })
   async index() {
     const template = await this.templates.read(TemplateUrl.Instruction);
 
@@ -40,7 +48,23 @@ export class HttpTemplateController {
     return HttpHtmlResponse.success(template);
   }
 
-  @HttpRoute({ path: "/docs" })
+  @RouteNs.get("/docs")
+  @OpenApiNs.route({
+    summary: "Get the docs",
+    description: "Get the docs",
+    tags: [OpenApiTag.Template],
+    responses: {
+      200: { description: "OK", content: { "text/html": { schema: { type: "string" } } } },
+      404: {
+        description: "Not Found",
+        content: {
+          "application/json": {
+            schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
+          },
+        },
+      },
+    },
+  })
   async docs() {
     const template = await this.templates.read(TemplateUrl.OpenApi);
 
@@ -51,30 +75,31 @@ export class HttpTemplateController {
     return HttpHtmlResponse.success(template);
   }
 
-  @HttpRoute({ path: "/docs/openapi-spec.json" })
-  spec() {
-    const builder = OpenApiBuilder.create({
-      openapi: "3.0.0",
-      info: {
-        title: "API Documentation",
-        version: "1.0.0",
-        description: "API documentation for the Bitburner server",
+  @RouteNs.get("/docs/openapi-spec.json")
+  @OpenApiNs.route({
+    summary: "Get the openapi spec",
+    description: "Get the openapi spec",
+    tags: [OpenApiTag.Template],
+    responses: {
+      200: {
+        description: "OK",
+        content: {
+          "application/json": {
+            schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
+          },
+        },
       },
-      servers: [
-        {
-          url: "http://localhost:8080",
-          description: "Local development server",
+      404: {
+        description: "Not Found",
+        content: {
+          "application/json": {
+            schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
+          },
         },
-        {
-          url: "http://127.0.0.1:8080",
-          description: "Local development server (IP)",
-        },
-      ],
-    });
-
-    const http = ControllerRegistry.controllers.values().filter((c) => c.openapi?.type === "http");
-    const ws = ControllerRegistry.controllers.values().filter((c) => c.openapi?.type === "ws");
-
-    return HttpJsonResponse.success(builder.rootDoc);
+      },
+    },
+  })
+  spec() {
+    return HttpJsonResponse.success(this.openApi.generate());
   }
 }

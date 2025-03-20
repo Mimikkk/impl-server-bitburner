@@ -3,25 +3,27 @@ import { WsRouteMatcher } from "@server/infrastructure/routing/routers/protocols
 import { Router } from "@server/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
-import { TypeKey } from "@shared/types/typedKey.ts";
-import { ControllerRegistry } from "../../ControllerRegistry.ts";
-import { ControlFn } from "../../handlers/ControllerType.ts";
+import { ControllerStore } from "../../../controllers/ControllerStore.ts";
+import { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
 
 export class WsRouterBuilder<R extends Route[] = Route[]> {
   static create(): WsRouterBuilder<[]> {
-    return new WsRouterBuilder([]);
+    return new WsRouterBuilder([], ControllerStore.instance);
   }
 
-  private constructor(public readonly routes: R) {}
+  private constructor(
+    private readonly routes: R,
+    private readonly controllers: ControllerStore,
+  ) {}
 
   ws<
     P extends `/${string}`,
-    C extends { create(): { [key in H]: ControlFn } },
-    H extends TypeKey<ReturnType<C["create"]>, ControlFn>,
+    C extends ControllerClass,
+    H extends ControllerKey<Controller<C>>,
   >({ path, Controller, handler }: { path: P; Controller: C; handler: H }): WsRouterBuilder<[...R, Route]> {
     const url = RouteUrl.fromRoutePath(path);
 
-    const controller = ControllerRegistry.resolve(Controller);
+    const controller = this.controllers.get(Controller);
 
     const route = Route.create(
       url,

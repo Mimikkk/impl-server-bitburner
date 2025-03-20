@@ -13,7 +13,7 @@ export class ConnectionService {
   ) {}
 
   list(): IterableIterator<ConnectionModel> {
-    return this.connections.list();
+    return this.connections.values();
   }
 
   find(id: number): ConnectionModel | undefined {

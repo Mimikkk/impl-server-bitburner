@@ -3,7 +3,7 @@ export interface Store<K, V> {
 
   keys(): IterableIterator<K>;
 
-  list(): IterableIterator<V>;
+  values(): IterableIterator<V>;
 
   has(id: K): boolean;
 

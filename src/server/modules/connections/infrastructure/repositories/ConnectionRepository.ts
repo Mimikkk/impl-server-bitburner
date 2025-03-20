@@ -37,8 +37,8 @@ export class ConnectionRepository implements Repository<ConnectionModel> {
     return this.entities.find(id);
   }
 
-  list(): IterableIterator<ConnectionModel> {
-    return this.entities.list();
+  values(): IterableIterator<ConnectionModel> {
+    return this.entities.values();
   }
 
   persistSocket(socket: WebSocket): ConnectionModel {
