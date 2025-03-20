@@ -1,7 +1,9 @@
 import { ServerConfiguration } from "@server/infrastructure/configurations/ServerConfiguration.ts";
 import { OpenApiControllerNs } from "@server/infrastructure/openapi/decorators/OpenApiControllerNs.ts";
-import { OpenApiTag, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
-import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts/oas31";
+import { OpenApiRouteNs } from "@server/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
+import { OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
+import { OpenApiBuilder, OpenAPIObject, ResponseObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../routing/controllers/ControllerStore.ts";
 
 export class OpenApiGenerator {
@@ -17,7 +19,7 @@ export class OpenApiGenerator {
     const builder = OpenApiBuilder.create({
       openapi: "3.1.1",
       info: {
-        title: "API Documentation",
+        title: "Bitburner API Documentation",
         version: "1.0.0",
         description: "API documentation for the Bitburner server",
         license: {
@@ -33,24 +35,13 @@ export class OpenApiGenerator {
         },
       ],
       tags: OpenApiTags,
-      paths: {
-        "/": {
-          get: {
-            tags: [OpenApiTag.Template],
-            summary: "Get the template",
-            responses: {
-              200: {
-                description: "OK",
-                content: { "text/html": { schema: { type: "string" } } },
-              },
-              404: {
-                description: "Not Found",
-                content: {
-                  "application/json": {
-                    schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
-                  },
-                },
-              },
+      components: {
+        links: {},
+        responses: {
+          "200": {
+            description: "OK",
+            content: {
+              "text/html": { schema: { type: "string" } },
             },
           },
         },
@@ -61,7 +52,38 @@ export class OpenApiGenerator {
       .from(this.controllers.keys())
       .filter(OpenApiControllerNs.is) as unknown as OpenApiControllerNs.Controller[];
 
-    const _http = controllers.filter((c) => c.openapi.type === "http");
+    const http = controllers.filter((c) => c.openapi.type === "http");
+
+    for (const { prototype } of http) {
+      const names = Object.getOwnPropertyNames(prototype);
+      const methods = names.map((m) => prototype[m]);
+      const routes = methods.filter((m) => OpenApiRouteNs.is(m) && RouteNs.is(m));
+
+      for (const { openapi, route } of routes) {
+        builder.addPath(route.path, {
+          [route.method.toLowerCase() as "get"]: {
+            tags: openapi.tags,
+            summary: openapi.summary,
+            deprecated: openapi.deprecated,
+            description: openapi.description,
+            responses: {
+              200: {
+                description: "OK",
+                content: { "text/html": { schema: { type: "string" } } },
+                headers: {
+                  "Content-Type": {
+                    description: "The MIME type of the body of the response",
+                    example: "text/html",
+                    schema: { type: "string", example: "text/html" },
+                  },
+                },
+              } satisfies ResponseObject,
+            },
+          },
+        });
+      }
+    }
+
     const _ws = controllers.filter((c) => c.openapi.type === "ws");
 
     return builder.getSpec();

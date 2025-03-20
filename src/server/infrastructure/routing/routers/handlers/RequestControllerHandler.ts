@@ -21,7 +21,6 @@ export class RequestControllerHandler<
 
   handle(context: RouteRequestContext): Awaitable<Response> {
     const method = this.controller[this.handler] as ControllerFn;
-
-    return method(context);
+    return method.bind(this.controller)(context);
   }
 }

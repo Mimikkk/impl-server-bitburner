@@ -4,4 +4,8 @@ export enum HttpMethod {
   Put = "PUT",
   Patch = "PATCH",
   Delete = "DELETE",
+  Options = "OPTIONS",
+  Head = "HEAD",
+  Trace = "TRACE",
+  Connect = "CONNECT",
 }

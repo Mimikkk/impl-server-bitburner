@@ -1,14 +1,16 @@
+import { ContentObject } from "openapi3-ts/oas31";
+
 export namespace OpenApiResponseNs {
   export interface Options {
     status: number;
     description: string;
-    content: Record<string, unknown>;
+    content: ContentObject;
   }
 
   export interface Spec {
     status: number;
     description: string;
-    content: Record<string, unknown>;
+    content: ContentObject;
   }
 
   export interface Response extends Record<any, any> {

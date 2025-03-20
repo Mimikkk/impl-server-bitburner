@@ -1,6 +1,5 @@
-import { HtmlResponse, HtmlResponseOptions } from "./HtmlResponse.ts";
+import { HtmlSuccessResponse } from "@server/infrastructure/messaging/responses/HtmlResponse.ts";
 
 export namespace HttpHtmlResponse {
-  export const success = (html: string, options?: HtmlResponseOptions) =>
-    HtmlResponse.create(html, HtmlResponseOptions.merge({ status: 200 }, options)).toResponse();
+  export const success = (html: string) => HtmlSuccessResponse.create(html).toResponse();
 }

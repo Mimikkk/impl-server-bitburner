@@ -27,7 +27,12 @@ export class HttpTemplateController {
     description: "Get the template",
     tags: [OpenApiTag.Template],
     responses: {
-      200: { description: "OK", content: { "text/html": { schema: { type: "string" } } } },
+      200: {
+        description: "OK",
+        content: {
+          "text/html": { schema: { type: "string" } },
+        },
+      },
       404: {
         description: "Not Found",
         content: {
@@ -51,7 +56,7 @@ export class HttpTemplateController {
   @RouteNs.get("/docs")
   @OpenApiNs.route({
     summary: "Get the docs",
-    description: "Get the docs",
+    description: "documentation for the api",
     tags: [OpenApiTag.Template],
     responses: {
       200: { description: "OK", content: { "text/html": { schema: { type: "string" } } } },
