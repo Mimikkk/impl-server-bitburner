@@ -83,8 +83,6 @@ export class OpenApiGenerator {
 
     // const _ws = controllers.filter((c) => c.openapi.type === "ws");
 
-    console.log("ABC");
-
     return builder.getSpec();
   }
 }

@@ -9,7 +9,12 @@ export class RequestUrl {
   ) {}
 
   static fromUrl(url: URL): RequestUrl {
-    const pathname = url.pathname.trim().replace(/\/$/, "");
+    let pathname = url.pathname.trim().replace(/\/$/, "");
+
+    if (pathname.startsWith("/static/")) {
+      pathname = `/static/${pathname.slice(8).replace("/", ":")}`;
+    }
+
     const parts = pathname.split("/").filter(Boolean);
 
     return RequestUrl.create(pathname, parts);

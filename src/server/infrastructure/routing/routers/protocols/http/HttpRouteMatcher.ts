@@ -15,12 +15,12 @@ export class HttpRouteMatcher implements RequestMatcher {
 
   private constructor(
     public readonly methodMatcher: RequestMethodMatcher,
-    public readonly urlMatcher: RequestRouteUrlMatcher,
+    public readonly routeUrlMatcher: RequestRouteUrlMatcher,
   ) {}
 
   matches(request: RequestContext): boolean {
     if (!this.methodMatcher.matches(request)) return false;
-    if (!this.urlMatcher.matches(request)) return false;
+    if (!this.routeUrlMatcher.matches(request)) return false;
     return true;
   }
 }

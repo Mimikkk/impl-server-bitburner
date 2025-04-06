@@ -1,4 +1,4 @@
-import { FileReader } from "@server/infrastructure/files/FileReader.ts";
+import { StaticService } from "@server/modules/static/application/services/StaticService.ts";
 import { resolve } from "@std/path/resolve";
 import { InstructionResourceUrl } from "./InstructionResourceUrl.ts";
 
@@ -8,17 +8,17 @@ export class InstructionResourceProvider {
   }
 
   private constructor(
-    private readonly files = FileReader.create(),
+    private readonly staticService = StaticService.create(),
   ) {}
 
-  async read(template: InstructionResourceUrl): Promise<string | undefined> {
-    return await this.files.read(this.path(template));
+  read<Url extends InstructionResourceUrl>(url: Url) {
+    return this.staticService.read(this.fromUrl(url));
   }
 
-  private path(template: InstructionResourceUrl): string {
-    return resolve(this.directory, "resources", template);
+  private fromUrl<Url extends InstructionResourceUrl>(url: Url): Url {
+    return resolve(this.directory, "resources", url) as Url;
   }
 
   private readonly url = new URL(import.meta.dirname!);
-  private readonly directory = this.url.pathname.replace("index.ts", "");
+  private readonly directory = this.url.pathname;
 }

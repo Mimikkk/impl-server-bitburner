@@ -1,11 +1,8 @@
-import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/HttpHtmlResponse.ts";
-import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
-import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
-import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { InstructionService } from "@server/modules/instruction/application/services/InstructionService.ts";
 import { InstructionResourceUrl } from "@server/modules/instruction/infrastructure/InstructionResourceUrl.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/infrastructure/messaging/responses/HttpStaticFileResponse.ts";
+import { InstructionService } from "../../services/InstructionService.ts";
 
 @ControllerNs.controller({ name: "Instruction" })
 export class HttpInstructionController {
@@ -14,33 +11,17 @@ export class HttpInstructionController {
   }
 
   private constructor(
-    private readonly instruction: InstructionService,
+    private readonly service: InstructionService,
   ) {}
 
   @RouteNs.get("")
-  @OpenApiNs.route({
-    summary: "Get the template",
-    description: "Get the template",
-    tags: [OpenApiTag.Template],
-    responses: {
-      200: { description: "OK", content: { "text/html": { schema: { type: "string" } } } },
-      404: {
-        description: "Not Found",
-        content: {
-          "application/json": {
-            schema: { type: "object", properties: { path: { type: "string" }, message: { type: "string" } } },
-          },
-        },
-      },
-    },
-  })
   async index() {
-    const instruction = await this.instruction.read(InstructionResourceUrl.Index);
+    const file = await this.service.read(InstructionResourceUrl.Index);
 
-    if (instruction === undefined) {
-      return HttpJsonResponse.failure({ path: InstructionResourceUrl.Index, message: "Instruction not found" });
+    if (file === undefined) {
+      return HttpStaticFileResponse.missing(InstructionResourceUrl.Index);
     }
 
-    return HttpHtmlResponse.success(instruction);
+    return HttpStaticFileResponse.found(file);
   }
 }

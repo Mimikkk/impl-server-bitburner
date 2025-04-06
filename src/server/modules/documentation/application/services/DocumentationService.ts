@@ -10,7 +10,7 @@ export class DocumentationService {
     private readonly provider = DocumentationResourceProvider.create(),
   ) {}
 
-  async read(documentation: DocumentationResourceUrl): Promise<string | undefined> {
-    return await this.provider.read(documentation);
+  read<Url extends DocumentationResourceUrl>(url: Url) {
+    return this.provider.read(url);
   }
 }

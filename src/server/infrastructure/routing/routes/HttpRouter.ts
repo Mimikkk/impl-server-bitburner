@@ -3,6 +3,7 @@ import "@server/modules/bitburner/application/controllers/http/HttpBitburnerComm
 import "@server/modules/bitburner/application/controllers/http/HttpBitburnerConnectionController.ts";
 import "@server/modules/documentation/application/controllers/http/HttpDocumentationController.ts";
 import "@server/modules/instruction/application/controllers/http/HttpInstructionController.ts";
+import "@server/modules/static/application/http/HttpStaticController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 
 const builder = HttpRouterBuilder.create();
@@ -13,7 +14,8 @@ for (const Controller of ControllerNs.list) {
   for (const route of routes) {
     if (route.type !== "http") continue;
 
-    const path = route.path.startsWith("/") ? `${group}/${route.path}` : route.path;
+    const path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
+
     builder.add({ Controller, method: route.method, path, handler: route.name });
   }
 }

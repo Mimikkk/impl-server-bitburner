@@ -23,7 +23,7 @@ export namespace ControllerNs {
 
     meta[symbol] = {
       name: options.name,
-      group: options.group ?? "/",
+      group: options.group ?? "",
       routes,
     };
 

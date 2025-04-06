@@ -1,13 +1,12 @@
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
-import { HttpJsonResponseCommon } from "@server/infrastructure/messaging/responses/HttpJsonResponseCommon.ts";
-import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { OpenApiGenerator } from "@server/infrastructure/openapi/OpenApiGenerator.ts";
-import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
+import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { DocumentationService } from "@server/modules/documentation/application/services/DocumentationService.ts";
 import { DocumentationResourceUrl } from "@server/modules/documentation/infrastructure/DocumentationResourceUrl.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/infrastructure/messaging/responses/HttpStaticFileResponse.ts";
 
-@OpenApiNs.controller({ name: "Documentation", type: "http" })
+@ControllerNs.controller({ name: "Documentation", group: "docs" })
 export class HttpDocumentationController {
   static create(
     openApi: OpenApiGenerator = OpenApiGenerator.create(),
@@ -17,48 +16,24 @@ export class HttpDocumentationController {
   }
 
   private constructor(
-    private readonly openApi: OpenApiGenerator,
-    private readonly documentation: DocumentationService,
+    private readonly generator: OpenApiGenerator,
+    private readonly service: DocumentationService,
   ) {}
 
-  @RouteNs.get("/docs")
+  @RouteNs.get("")
   async index() {
     const path = DocumentationResourceUrl.Index;
-    const file = await this.documentation.read(path);
+    const file = await this.service.read(path);
 
     if (file === undefined) {
-      return HttpJsonResponseCommon.nofile({ path });
+      return HttpStaticFileResponse.missing(path);
     }
 
-    return new Response(file, { headers: { "Content-Type": "text/html" } });
+    return HttpStaticFileResponse.found(file);
   }
 
-  @RouteNs.get("/docs/openapi-spec.json")
+  @RouteNs.get("openapi-spec.json")
   spec() {
-    return HttpJsonResponse.success(this.openApi.generate());
-  }
-
-  @RouteNs.get("/favicon.ico")
-  favicon() {
-    return HttpJsonResponse.unimplemented();
-    // return HttpJsonResponse.success({ favicon: "🌐" });
-  }
-
-  @RouteNs.get("/static/swagger-ui/{path:string}")
-  async swaggerUi({ parameters: { values: { path } } }: RouteRequestContext<{ path: string }>) {
-    return HttpJsonResponse.unimplemented();
-    // const file = await this.files.read(`node_modules/swagger-ui-dist/${path}`);
-
-    // if (file === undefined) {
-    //   return HttpJsonResponseCommon.nofile({ path });
-    // }
-
-    // const type = path.endsWith(".js")
-    //   ? "application/javascript"
-    //   : path.endsWith(".css")
-    //   ? "text/css"
-    //   : "application/octet-stream";
-
-    // return new Response(file, { headers: { "Content-Type": type } });
+    return HttpJsonResponse.success(this.generator.generate());
   }
 }
