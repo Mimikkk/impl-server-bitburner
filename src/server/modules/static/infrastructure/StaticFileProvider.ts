@@ -29,7 +29,7 @@ export class StaticFileProvider {
     const content = await this.files.read(path, type);
     if (content === undefined) return undefined;
 
-    const mime = StaticFileNs.MimeMap[extension] ?? "application/octet-stream";
+    const mime = StaticFileNs.MimeMap[extension] ?? StaticFileNs.fallback;
     return { content, mime } as StaticFileNs.FileFromPath<P>;
   }
 

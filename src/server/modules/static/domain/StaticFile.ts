@@ -50,4 +50,6 @@ export namespace StaticFileNs {
     [Extension.Ico]: "image/x-icon",
     [Extension.Json]: "application/json",
   } as const satisfies Record<Extension, string>;
+
+  export const fallback = "application/octet-stream";
 }
