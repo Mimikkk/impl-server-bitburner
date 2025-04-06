@@ -7,18 +7,18 @@ import { CommandRequestRepository } from "../reposiories/CommandRequestRepositor
 
 export class Command<
   M extends PropertyKey = PropertyKey,
-  P extends Schema = Schema,
-  T extends Schema = Schema,
+  RQ extends Schema = Schema,
+  RS extends Schema = Schema,
 > {
-  static create<M extends PropertyKey, P extends Schema, T extends Schema>(
+  static create<M extends PropertyKey, RQ extends Schema, RS extends Schema>(
     name: string,
     description: string,
     method: M,
-    requestValidator: Validator<P>,
-    responseValidator: Validator<T>,
+    requestValidator: Validator<RQ>,
+    responseValidator: Validator<RS>,
     requests: CommandRequestRepository = VolatileCommandRequestRepository.create(),
     factory: CommandRequestFactory = CommandRequestFactory.instance,
-  ): Command<M, P, T> {
+  ): Command<M, RQ, RS> {
     return new Command(
       name,
       description,
@@ -34,13 +34,13 @@ export class Command<
     public readonly name: string,
     public readonly description: string,
     public readonly method: M,
-    public readonly requestValidator: Validator<P>,
-    public readonly responseValidator: Validator<T>,
+    public readonly requestValidator: Validator<RQ>,
+    public readonly responseValidator: Validator<RS>,
     public readonly requests: CommandRequestRepository,
     private readonly factory: CommandRequestFactory,
   ) {}
 
-  request(params: Infer<P>): CommandRequestModel {
+  request(params: Infer<RQ>): CommandRequestModel {
     this.requestValidator.validate(params);
 
     const request = this.factory.create(this.method, params);

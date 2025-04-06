@@ -11,10 +11,4 @@ export namespace JsonResponseOptions {
 }
 
 export const createJsonResponse = <T>(data: T, _options?: JsonResponseOptions) =>
-  new Response(
-    JSON.stringify(data),
-    {
-      headers: { "Content-Type": "application/json" },
-      status: _options?.status,
-    },
-  );
+  Response.json(data, { status: _options?.status });

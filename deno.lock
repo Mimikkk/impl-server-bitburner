@@ -15,7 +15,8 @@
     "jsr:@std/path@*": "1.0.8",
     "jsr:@std/path@^1.0.8": "1.0.8",
     "jsr:@std/testing@*": "1.0.9",
-    "npm:openapi3-ts@4.4.0": "4.4.0"
+    "npm:openapi3-ts@^4.4.0": "4.4.0",
+    "npm:swagger-ui-dist@^5.11.0": "5.20.6"
   },
   "jsr": {
     "@cliffy/ansi@1.0.0-rc.7": {
@@ -83,14 +84,23 @@
     }
   },
   "npm": {
+    "@scarf/scarf@1.4.0": {
+      "integrity": "sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ=="
+    },
     "openapi3-ts@4.4.0": {
       "integrity": "sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==",
       "dependencies": [
         "yaml"
       ]
     },
-    "yaml@2.7.0": {
-      "integrity": "sha512-+hSoy/QHluxmC9kCIJyL/uyFmLmc+e5CFR5Wa+bpIhIj85LVb9ZH2nVnqrHoSvKogwODv0ClqZkmiSSaIH5LTA=="
+    "swagger-ui-dist@5.20.6": {
+      "integrity": "sha512-q/1dwcCOQb+qsNkb+1VWRdGEEVdBtOTH4vv9rICjPwJXOwq/JSRkBbuEMjMe161Oxsp589+8Ff5nE4HTPLWIAw==",
+      "dependencies": [
+        "@scarf/scarf"
+      ]
+    },
+    "yaml@2.7.1": {
+      "integrity": "sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ=="
     }
   },
   "redirects": {
@@ -137,7 +147,8 @@
       "jsr:@std/expect@*",
       "jsr:@std/path@*",
       "jsr:@std/testing@*",
-      "npm:openapi3-ts@4.4.0"
+      "npm:openapi3-ts@^4.4.0",
+      "npm:swagger-ui-dist@^5.11.0"
     ]
   }
 }

@@ -24,6 +24,7 @@
       "command": "deno test -A"
     }
   },
+  "vendor": true,
   "imports": {
     "@server/": "./src/server/",
     "@client/": "./src/client/",
@@ -32,7 +33,8 @@
     "@std/testing": "jsr:@std/testing",
     "@std/expect": "jsr:@std/expect",
     "@std/path": "jsr:@std/path",
-    "openapi3-ts": "npm:openapi3-ts@4.4.0"
+    "openapi3-ts": "npm:openapi3-ts@^4.4.0",
+    "swagger-ui-dist": "npm:swagger-ui-dist@^5.11.0"
   },
   "compilerOptions": {
     "types": ["./declarations"]

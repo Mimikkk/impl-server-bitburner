@@ -2,9 +2,5 @@ import { WsBitburnerConnectionController } from "../../../modules/bitburner/appl
 import { WsRouterBuilder } from "../routers/protocols/ws/WsRouterBuilder.ts";
 
 export const WsRoutes = WsRouterBuilder.create()
-  .ws({
-    path: "/",
-    Controller: WsBitburnerConnectionController,
-    handler: "index",
-  })
+  .ws({ path: "/", Controller: WsBitburnerConnectionController, handler: "index" })
   .build();
