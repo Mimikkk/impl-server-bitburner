@@ -1,27 +1,28 @@
+import { IntEntityFactory } from "@server/infrastructure/persistence/entities/factories/IntEntityFactory.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
-import { IntModelFactory } from "../../../../infrastructure/persistence/models/factories/IntModelFactory.ts";
-import { Connection } from "../../domain/entities/Connection.ts";
-import { ConnectionModel } from "../../domain/models/ConnectionModel.ts";
-export class ConnectionRepository implements Repository<ConnectionModel> {
+import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
+import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
+
+export class ConnectionRepository implements Repository<ConnectionEntity> {
   static instance = ConnectionRepository.create();
 
   static create(
-    repository = VolatileRepository.create(IntModelFactory.create(IntGenerator.create())),
+    repository = VolatileRepository.create(IntEntityFactory.create(IntGenerator.create())),
   ): ConnectionRepository {
     return new ConnectionRepository(repository);
   }
 
   private constructor(
-    public readonly entities: Repository<ConnectionModel>,
+    public readonly entities: Repository<ConnectionEntity>,
   ) {}
 
   has(id: number): boolean {
     return this.entities.has(id);
   }
 
-  persist(value: Connection): ConnectionModel {
+  persist(value: ConnectionModel): ConnectionEntity {
     return this.entities.persist(value);
   }
 
@@ -33,15 +34,15 @@ export class ConnectionRepository implements Repository<ConnectionModel> {
     return this.entities.keys();
   }
 
-  find(id: number): ConnectionModel | undefined {
+  find(id: number): ConnectionEntity | undefined {
     return this.entities.find(id);
   }
 
-  values(): IterableIterator<ConnectionModel> {
+  values(): IterableIterator<ConnectionEntity> {
     return this.entities.values();
   }
 
-  persistSocket(socket: WebSocket): ConnectionModel {
-    return this.entities.persist(Connection.create(socket));
+  persistSocket(socket: WebSocket): ConnectionEntity {
+    return this.entities.persist(ConnectionModel.create(socket));
   }
 }

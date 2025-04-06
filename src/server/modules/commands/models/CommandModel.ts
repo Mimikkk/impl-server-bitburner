@@ -1,11 +1,11 @@
 import { Infer, Schema } from "@server/infrastructure/validators/Schema.ts";
+import { CommandRequestEntity } from "@server/modules/commands/entities/CommandRequestEntity.ts";
 import { CommandRequestFactory } from "@server/modules/commands/infrastructure/factories/CommandRequestFactory.ts";
 import { VolatileCommandRequestRepository } from "@server/modules/commands/reposiories/VolatileCommandRequestRepository.ts";
 import { Validator } from "../../../infrastructure/validators/Validator.ts";
-import { CommandRequestModel } from "../models/CommandRequestModel.ts";
 import { CommandRequestRepository } from "../reposiories/CommandRequestRepository.ts";
 
-export class Command<
+export class CommandModel<
   M extends PropertyKey = PropertyKey,
   RQ extends Schema = Schema,
   RS extends Schema = Schema,
@@ -18,8 +18,8 @@ export class Command<
     responseValidator: Validator<RS>,
     requests: CommandRequestRepository = VolatileCommandRequestRepository.create(),
     factory: CommandRequestFactory = CommandRequestFactory.instance,
-  ): Command<M, RQ, RS> {
-    return new Command(
+  ): CommandModel<M, RQ, RS> {
+    return new CommandModel(
       name,
       description,
       method,
@@ -40,7 +40,7 @@ export class Command<
     private readonly factory: CommandRequestFactory,
   ) {}
 
-  request(params: Infer<RQ>): CommandRequestModel {
+  request(params: Infer<RQ>): CommandRequestEntity {
     this.requestValidator.validate(params);
 
     const request = this.factory.create(this.method, params);

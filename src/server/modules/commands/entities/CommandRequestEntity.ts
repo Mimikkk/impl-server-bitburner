@@ -1,11 +1,11 @@
 import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
+import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
 import { CommandRequest } from "@server/modules/commands/infrastructure/messaging/requests/CommandRequest.ts";
 import { CommandResponse } from "@server/modules/commands/infrastructure/messaging/responses/CommandResponse.ts";
-import { Model } from "../../../infrastructure/persistence/models/Model.ts";
 
-export class CommandRequestModel implements Model<number, CommandRequest> {
-  static create(id: number, request: CommandRequest): CommandRequestModel {
-    return new CommandRequestModel(id, request, ListenerRegistry.create());
+export class CommandRequestEntity implements Entity<number, CommandRequest> {
+  static create(id: number, request: CommandRequest): CommandRequestEntity {
+    return new CommandRequestEntity(id, request, ListenerRegistry.create());
   }
 
   private constructor(

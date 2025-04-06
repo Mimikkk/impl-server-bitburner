@@ -1,6 +1,6 @@
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { ConnectionService } from "../../../connections/application/services/ConnectionService.ts";
-import { ConnectionModel } from "../../../connections/domain/models/ConnectionModel.ts";
+import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
 import { BitburnerCommands } from "../../domain/BitburnerCommands.ts";
 
 export class BitburnerConnectionService {
@@ -16,15 +16,15 @@ export class BitburnerConnectionService {
     this.connections.attach(socket);
   }
 
-  all(): IterableIterator<ConnectionModel> {
+  all(): IterableIterator<ConnectionEntity> {
     return this.connections.list();
   }
 
-  any(): ConnectionModel | undefined {
+  any(): ConnectionEntity | undefined {
     return this.connections.list().next().value;
   }
 
-  find(id: number): ConnectionModel | undefined {
+  find(id: number): ConnectionEntity | undefined {
     return this.connections.find(id);
   }
 

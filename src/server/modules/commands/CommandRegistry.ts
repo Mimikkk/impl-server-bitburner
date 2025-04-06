@@ -1,20 +1,20 @@
 import { KeyBy } from "@shared/types/common.ts";
-import { Command } from "./entities/Command.ts";
+import { CommandModel } from "./models/CommandModel.ts";
 
-export class CommandRegistry<Cs extends Record<PropertyKey, Command> = {}> {
+export class CommandRegistry<Cs extends Record<PropertyKey, CommandModel> = {}> {
   declare type: Cs;
 
   private constructor(
     private readonly commands: Map<any, any>,
   ) {}
 
-  static fromObject<const Cs extends Record<PropertyKey, Command>>(
+  static fromObject<const Cs extends Record<PropertyKey, CommandModel>>(
     commands: Cs,
   ): CommandRegistry<Cs> {
     return new CommandRegistry(new Map(Object.entries(commands)));
   }
 
-  static fromArray<const C extends Command[]>(commands: C): CommandRegistry<CommandsToObject<C>> {
+  static fromArray<const C extends CommandModel[]>(commands: C): CommandRegistry<CommandsToObject<C>> {
     return new CommandRegistry(new Map(commands.map((command) => [command.name, command])));
   }
 
@@ -22,7 +22,7 @@ export class CommandRegistry<Cs extends Record<PropertyKey, Command> = {}> {
     return this.commands.get(method) as Cs[K];
   }
 
-  list(): IterableIterator<Command> {
+  list(): IterableIterator<CommandModel> {
     return this.commands.values();
   }
 
@@ -39,4 +39,4 @@ export class CommandRegistry<Cs extends Record<PropertyKey, Command> = {}> {
   }
 }
 
-type CommandsToObject<Cs extends Command[]> = KeyBy<Cs, "name">;
+type CommandsToObject<Cs extends CommandModel[]> = KeyBy<Cs, "name">;

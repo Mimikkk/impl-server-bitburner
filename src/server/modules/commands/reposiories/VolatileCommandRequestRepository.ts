@@ -1,55 +1,55 @@
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
-import { CommandRequestModelFactory } from "@server/modules/commands/infrastructure/factories/CommandRequestModelFactory.ts";
+import { CommandRequestEntity } from "@server/modules/commands/entities/CommandRequestEntity.ts";
 import { CommandRequest } from "@server/modules/commands/infrastructure/messaging/requests/CommandRequest.ts";
 import { CommandResponse } from "@server/modules/commands/infrastructure/messaging/responses/CommandResponse.ts";
-import { CommandRequestModel } from "../models/CommandRequestModel.ts";
+import { CommandRequestEntityFactory } from "../infrastructure/factories/CommandRequestEntityFactory.ts";
 import { CommandRequestRepository } from "./CommandRequestRepository.ts";
 
 export class VolatileCommandRequestRepository implements CommandRequestRepository {
   static create(
-    repository = VolatileRepository.create(CommandRequestModelFactory.create(IntGenerator.create())),
+    repository = VolatileRepository.create(CommandRequestEntityFactory.create(IntGenerator.create())),
   ): VolatileCommandRequestRepository {
     return new VolatileCommandRequestRepository(repository);
   }
 
   private constructor(
-    public readonly models: Repository<CommandRequestModel>,
+    public readonly entities: Repository<CommandRequestEntity>,
   ) {}
 
-  resolve(response: CommandResponse): CommandRequestModel | undefined {
-    const model = this.models.find(response.id);
+  resolve(response: CommandResponse): CommandRequestEntity | undefined {
+    const entity = this.entities.find(response.id);
 
-    if (model === undefined) return;
+    if (entity === undefined) return;
 
-    model.listeners.notify(response);
-    this.delete(model.id);
+    entity.listeners.notify(response);
+    this.delete(entity.id);
 
-    return model;
+    return entity;
   }
 
-  persist(value: CommandRequest): CommandRequestModel {
-    return this.models.persist(value);
+  persist(value: CommandRequest): CommandRequestEntity {
+    return this.entities.persist(value);
   }
 
   delete(id: number): boolean {
-    return this.models.delete(id);
+    return this.entities.delete(id);
   }
 
-  find(id: number): CommandRequestModel | undefined {
-    return this.models.find(id);
+  find(id: number): CommandRequestEntity | undefined {
+    return this.entities.find(id);
   }
 
-  values(): IterableIterator<CommandRequestModel> {
-    return this.models.values();
+  values(): IterableIterator<CommandRequestEntity> {
+    return this.entities.values();
   }
 
   has(id: number): boolean {
-    return this.models.has(id);
+    return this.entities.has(id);
   }
 
   keys(): IterableIterator<number> {
-    return this.models.keys();
+    return this.entities.keys();
   }
 }

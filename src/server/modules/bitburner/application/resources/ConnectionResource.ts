@@ -1,9 +1,9 @@
-import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
+import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
 
 export namespace ConnectionResource {
-  export const fromConnection = ({ id }: ConnectionModel) => ({
+  export const fromConnection = ({ id }: ConnectionEntity) => ({
     id,
   });
 
-  export const fromConnections = (connections: ConnectionModel[]) => connections.map(fromConnection);
+  export const fromConnections = (connections: ConnectionEntity[]) => connections.map(fromConnection);
 }

@@ -1,4 +1,4 @@
-import { Command } from "../../../commands/entities/Command.ts";
+import { CommandModel } from "../../../commands/models/CommandModel.ts";
 import { BitburnerCommands } from "../../domain/BitburnerCommands.ts";
 
 export class BitburnerCommandService {
@@ -10,11 +10,11 @@ export class BitburnerCommandService {
     private readonly commands = BitburnerCommands.all,
   ) {}
 
-  find(name: string): Command | undefined {
+  find(name: string): CommandModel | undefined {
     return this.commands.find(name);
   }
 
-  list(): IterableIterator<Command> {
+  list(): IterableIterator<CommandModel> {
     return this.commands.list();
   }
 }

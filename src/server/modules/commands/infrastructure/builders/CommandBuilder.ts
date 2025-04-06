@@ -1,7 +1,7 @@
 import { Schema } from "@server/infrastructure/validators/Schema.ts";
 import { ValueValidator } from "@server/infrastructure/validators/ValueValidator.ts";
 import { Some } from "@shared/types/common.ts";
-import { Command } from "../../entities/Command.ts";
+import { CommandModel } from "../../models/CommandModel.ts";
 
 export class CommandBuilder<N, D, M, P, T> {
   static create(): ValidatedBuilder<CommandBuilder<null, null, null, null, null>> {
@@ -42,14 +42,14 @@ export class CommandBuilder<N, D, M, P, T> {
   }
 
   /* @ts-ignore - override type safety */
-  build(): Command<M, P, T> {
-    return Command.create(
+  build(): CommandModel<M, P, T> {
+    return CommandModel.create(
       this.name as N & string,
       this.description as D & string,
       this.method as M & string,
       ValueValidator.create(this.requestSchema as P & Schema),
       ValueValidator.create(this.responseSchema as T & Schema),
-    ) as Command<M & string, P & Schema, T & Schema>;
+    ) as CommandModel<M & string, P & Schema, T & Schema>;
   }
 }
 

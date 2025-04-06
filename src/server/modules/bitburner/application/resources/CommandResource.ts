@@ -1,11 +1,11 @@
-import { Command } from "@server/modules/commands/entities/Command.ts";
+import { CommandModel } from "../../../commands/models/CommandModel.ts";
 
 export namespace CommandResource {
-  export const fromCommand = (command: Command) => ({
+  export const fromCommand = (command: CommandModel) => ({
     name: command.name,
     method: command.method,
     description: command.description,
   });
 
-  export const fromCommands = (commands: Command[]) => commands.map(fromCommand);
+  export const fromCommands = (commands: CommandModel[]) => commands.map(fromCommand);
 }

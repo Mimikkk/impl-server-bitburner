@@ -1,7 +1,7 @@
 import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { Log } from "@shared/logging/log.ts";
-import { ConnectionModel } from "../../domain/models/ConnectionModel.ts";
+import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
 
 export class ConnectionService {
   static create(connections: ConnectionRepository) {
@@ -12,11 +12,11 @@ export class ConnectionService {
     private readonly connections: ConnectionRepository,
   ) {}
 
-  list(): IterableIterator<ConnectionModel> {
+  list(): IterableIterator<ConnectionEntity> {
     return this.connections.values();
   }
 
-  find(id: number): ConnectionModel | undefined {
+  find(id: number): ConnectionEntity | undefined {
     return this.connections.find(id);
   }
 
@@ -26,7 +26,7 @@ export class ConnectionService {
     this.attachListeners(socket, connection);
   }
 
-  private attachListeners(socket: WebSocket, { value: connection, id }: ConnectionModel): void {
+  private attachListeners(socket: WebSocket, { value: connection, id }: ConnectionEntity): void {
     socket.addEventListener("open", () => {
       Log.info("socket opened for connection", id);
     });
