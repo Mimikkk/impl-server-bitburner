@@ -1,7 +1,7 @@
 import { HttpMethod } from "@shared/enums/HttpMethod.ts";
 
 export namespace RouteNs {
-  const symbol = Symbol("RouteMetadata");
+  const symbol = Symbol("RouteMeta");
   export interface Meta {
     [symbol]: Spec;
   }
@@ -46,6 +46,6 @@ export namespace RouteNs {
   export const patch = (path: string) => route({ path, method: HttpMethod.Patch, type: "http" });
   export const ws = (path: string) => route({ path, type: "ws" });
 
-  export const is = (value: any): value is Meta => !!value[symbol];
+  export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
   export const meta = (value: Meta): Spec => value[symbol];
 }

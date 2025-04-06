@@ -1,21 +1,19 @@
 export namespace OpenApiControllerNs {
-  export interface Options {
-    name: string;
-    type: "http" | "ws";
+  const symbol = Symbol("OpenapiControllerMeta");
+  export interface Meta {
+    [symbol]: Spec;
   }
+  export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
+  export const get = (value: Meta): Spec => value[symbol];
 
   export interface Spec {
     name: string;
-    type: "http" | "ws";
   }
 
-  export interface Controller extends Record<any, any> {
-    openapi: Spec;
+  export interface Options {
+    name: string;
   }
-
-  export const decorate = ({ name, type }: Options) => (target: any) => {
-    target.openapi = { name, type } satisfies Spec;
+  export const decorate = ({ name }: Options) => (target: any) => {
+    target[symbol] = { name } satisfies Spec;
   };
-
-  export const is = (value: any): value is Controller => !!value.openapi;
 }

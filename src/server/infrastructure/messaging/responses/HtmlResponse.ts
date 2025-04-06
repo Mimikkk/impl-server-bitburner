@@ -1,39 +1,63 @@
+import { HttpResponse } from "@server/infrastructure/messaging/responses/HttpResponse.ts";
+import { IResponse } from "@server/infrastructure/messaging/responses/IResponse.ts";
 import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 
-export interface IResponse {
-  toResponse(): Response;
-}
+export class HttpHtmlResponse implements IResponse {
+  static headers = { "Content-Type": "text/html" };
 
-export class HtmlResponse implements IResponse {
-  static create(body: string, status: number) {
-    return new HtmlResponse(body, status);
+  static create(content: string, status: number): HttpHtmlResponse {
+    return new HttpHtmlResponse(HttpResponse.create(content, status, HttpHtmlResponse.headers));
+  }
+
+  static custom<const Fn extends (...args: any[]) => string>({
+    content,
+    example,
+    name,
+    description,
+    status,
+  }: {
+    content: Fn;
+    example: string;
+    name: string;
+    description: string;
+    status: number;
+  }) {
+    const response = content instanceof Function ? content : () => content;
+
+    @OpenApiNs.response({
+      status,
+      description,
+      content: { "text/html": { schema: { type: "string" }, example } },
+    })
+    class Class implements IResponse {
+      static create(...params: Parameters<Fn>) {
+        return new Class(HttpHtmlResponse.create(response(...params), status));
+      }
+
+      static toResponse(...params: Parameters<Fn>) {
+        return Class.create(...params).toResponse();
+      }
+
+      private constructor(
+        private readonly response: HttpHtmlResponse,
+      ) {}
+
+      toResponse(): Response {
+        return this.response.toResponse();
+      }
+    }
+
+    Object.defineProperty(Class, "name", { value: name, writable: false });
+
+    return [Class, Class.toResponse] as const;
+  }
+
+  static toResponse(content: string, status: number): Response {
+    return HttpHtmlResponse.create(content, status).toResponse();
   }
 
   private constructor(
-    private readonly html: string,
-    private readonly status: number,
-  ) {}
-
-  toResponse(): Response {
-    return new Response(this.html, {
-      headers: { "Content-Type": "text/html" },
-      status: this.status,
-    });
-  }
-}
-
-@OpenApiNs.response({
-  status: 200,
-  description: "OK",
-  content: { "text/html": { schema: { type: "string" } } },
-})
-export class HtmlSuccessResponse implements IResponse {
-  static create(html: string) {
-    return new HtmlSuccessResponse(HtmlResponse.create(html, 200));
-  }
-
-  private constructor(
-    private readonly response: HtmlResponse,
+    private readonly response: HttpResponse,
   ) {}
 
   toResponse(): Response {

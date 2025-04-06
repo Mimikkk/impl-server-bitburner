@@ -1,11 +1,12 @@
 import { ContentObject } from "openapi3-ts/oas31";
 
 export namespace OpenApiResponseNs {
-  export interface Options {
-    status: number;
-    description: string;
-    content: ContentObject;
+  const symbol = Symbol("OpenapiResponseMeta");
+  export interface Meta {
+    [symbol]: Spec;
   }
+  export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
+  export const get = (value: Meta): Spec => value[symbol];
 
   export interface Spec {
     status: number;
@@ -13,13 +14,17 @@ export namespace OpenApiResponseNs {
     content: ContentObject;
   }
 
-  export interface Response extends Record<any, any> {
-    openapi: Spec;
+  export interface Options {
+    status: number;
+    description: string;
+    content: ContentObject;
   }
 
   export const decorate = ({ status, description, content }: Options) => (target: any) => {
-    target.openapi = { status, description, content } satisfies Spec;
+    target[symbol] = {
+      status,
+      description,
+      content,
+    } satisfies Spec;
   };
-
-  export const is = (value: any): value is Response => !!value.openapi;
 }

@@ -1,24 +1,61 @@
-import { createJsonResponse, JsonResponseOptions } from "./JsonResponse.ts";
+import { HttpResponse } from "@server/infrastructure/messaging/responses/HttpResponse.ts";
+import { IResponse } from "@server/infrastructure/messaging/responses/IResponse.ts";
+import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 
-export namespace HttpJsonResponse {
-  export const success = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 200 }, options));
+export class HttpJsonResponse implements IResponse {
+  static headers = { "Content-Type": "application/json" };
 
-  export const created = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 201 }, options));
+  static create<T>(content: T, status: number): HttpJsonResponse {
+    return new HttpJsonResponse(
+      HttpResponse.create(JSON.stringify(content), status, HttpJsonResponse.headers),
+    );
+  }
 
-  export const failure = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 400 }, options));
+  static custom<const Fn extends (...args: any[]) => any>({
+    content,
+    example,
+    name,
+    description,
+    status,
+  }: {
+    name: string;
+    description: string;
+    content: Fn;
+    example: ReturnType<Fn>;
+    status: number;
+  }) {
+    @OpenApiNs.response({
+      status,
+      description,
+      content: { "application/json": { schema: { type: "object" }, example } },
+    })
+    class Class implements IResponse {
+      static create(...params: Parameters<Fn>) {
+        return new Class(HttpJsonResponse.create(content(...params), status));
+      }
+      static toResponse(...params: Parameters<Fn>) {
+        return Class.create(...params).toResponse();
+      }
 
-  export const missing = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 404 }, options));
+      private constructor(
+        private readonly response: HttpJsonResponse,
+      ) {}
 
-  export const unknown = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 500 }, options));
+      toResponse(): Response {
+        return this.response.toResponse();
+      }
+    }
 
-  export const unimplemented = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 501 }, options));
+    Object.defineProperty(Class, "name", { value: name, writable: false });
 
-  export const unavailable = <T>(data?: T, options?: JsonResponseOptions) =>
-    createJsonResponse(data, JsonResponseOptions.merge({ status: 503 }, options));
+    return [Class, Class.toResponse] as const;
+  }
+
+  private constructor(
+    private readonly response: HttpResponse,
+  ) {}
+
+  toResponse(): Response {
+    return this.response.toResponse();
+  }
 }

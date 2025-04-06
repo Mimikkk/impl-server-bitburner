@@ -1,3 +1,6 @@
+import { HttpHtmlResponseNs } from "@server/infrastructure/messaging/responses/HttpHtmlResponseNs.ts";
+import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { InstructionResourceUrl } from "@server/modules/instruction/infrastructure/InstructionResourceUrl.ts";
@@ -15,6 +18,12 @@ export class HttpInstructionController {
   ) {}
 
   @RouteNs.get("")
+  @OpenApiNs.route({
+    summary: "Get the instruction for the server connection.",
+    description: "Get the instruction for the server connection.",
+    tags: [OpenApiTag.Instruction],
+    responses: [HttpHtmlResponseNs.Data],
+  })
   async index() {
     const file = await this.service.read(InstructionResourceUrl.Index);
 

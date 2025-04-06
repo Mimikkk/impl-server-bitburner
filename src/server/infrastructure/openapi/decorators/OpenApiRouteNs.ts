@@ -1,28 +1,31 @@
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 
 export namespace OpenApiRouteNs {
-  export interface Options {
-    summary: string;
-    description: string;
-    tags: OpenApiTag[];
-    responses: Record<string, unknown>;
-    deprecated?: boolean;
+  const symbol = Symbol("OpenapiRouteMeta");
+  export interface Meta {
+    [symbol]: Spec;
   }
+  export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
+  export const get = (value: Meta): Spec => value[symbol];
 
   export interface Spec {
     summary: string;
     description: string;
     tags: OpenApiTag[];
-    responses: Record<string, unknown>;
+    responses: any[];
     deprecated: boolean;
   }
 
-  export interface Route extends Record<any, any> {
-    openapi: Spec;
+  export interface Options {
+    summary: string;
+    description: string;
+    tags: OpenApiTag[];
+    responses: any[];
+    deprecated?: boolean;
   }
 
   export const decorate = ({ summary, description, tags, responses, deprecated }: Options) => (target: any) => {
-    target.openapi = {
+    target[symbol] = {
       summary,
       description,
       tags,
@@ -30,6 +33,4 @@ export namespace OpenApiRouteNs {
       deprecated: deprecated ?? false,
     } satisfies Spec;
   };
-
-  export const is = (value: any): value is Route => !!value.openapi;
 }

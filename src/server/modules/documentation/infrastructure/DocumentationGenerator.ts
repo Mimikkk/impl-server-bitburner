@@ -1,11 +1,10 @@
-import { ServerConfiguration } from "@server/infrastructure/configurations/ServerConfiguration.ts";
 import { OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts/oas31";
-import { ControllerStore } from "../routing/controllers/ControllerStore.ts";
+import { ControllerStore } from "../../../infrastructure/routing/controllers/ControllerStore.ts";
 
-export class OpenApiGenerator {
+export class DocumentationGenerator {
   static create(controllers: ControllerStore = ControllerStore.instance) {
-    return new OpenApiGenerator(controllers);
+    return new DocumentationGenerator(controllers);
   }
 
   private constructor(
@@ -25,12 +24,6 @@ export class OpenApiGenerator {
           identifier: "MIT",
         },
       },
-      servers: [
-        {
-          url: `http://${ServerConfiguration.hostname}:${ServerConfiguration.port}`,
-          description: "Local development server",
-        },
-      ],
       tags: OpenApiTags,
       // components: {
       //   links: {},

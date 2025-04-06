@@ -2,7 +2,7 @@ import { ControllerClass } from "@server/infrastructure/routing/controllers/Cont
 import { RouteNs } from "./RouteNs.ts";
 
 export namespace ControllerNs {
-  const symbol = Symbol("ControllerMetadata");
+  const symbol = Symbol("ControllerMeta");
   export interface Meta {
     [symbol]: Spec;
   }
@@ -31,6 +31,6 @@ export namespace ControllerNs {
   };
 
   export const list: (ControllerClass & Meta)[] = [];
-  export const is = (value: any): value is Meta => !!value[symbol];
+  export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
   export const meta = (value: Meta): Spec => value[symbol];
 }

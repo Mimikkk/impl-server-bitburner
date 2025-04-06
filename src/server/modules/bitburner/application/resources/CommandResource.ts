@@ -1,11 +1,17 @@
 import { CommandModel } from "../../../commands/models/CommandModel.ts";
 
-export namespace CommandResource {
-  export const fromCommand = (command: CommandModel) => ({
+export type CommandResource = {
+  name: string;
+  method: PropertyKey;
+  description: string;
+};
+
+export namespace CommandResourceNs {
+  export const fromCommand = (command: CommandModel): CommandResource => ({
     name: command.name,
     method: command.method,
     description: command.description,
   });
 
-  export const fromCommands = (commands: CommandModel[]) => commands.map(fromCommand);
+  export const fromCommands = (commands: CommandModel[]): CommandResource[] => commands.map(fromCommand);
 }
