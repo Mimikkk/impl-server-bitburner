@@ -22,6 +22,7 @@ export class HttpStaticController {
 
   @RouteNs.get("{path:string}")
   file({ parameters: { values: { path } } }: RouteRequestContext<{ path: StaticResourceUrl }>) {
+    path = path.replace(/:/g, "/") as StaticResourceUrl;
     return this.read(path);
   }
 

@@ -17,7 +17,7 @@ export namespace StaticFileNs {
   export const enum Extension {
     Html = "html",
     Css = "css",
-    Javascript = "javascript",
+    Javascript = "js",
     Ico = "ico",
     Json = "json",
   }

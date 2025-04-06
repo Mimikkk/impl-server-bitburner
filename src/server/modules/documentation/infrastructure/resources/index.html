@@ -5,24 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="SwaggerUI" />
     <title>API Documentation</title>
-    <link rel="stylesheet" type="text/css" href="/static/swagger-ui/swagger-ui.css" />
+    <link rel="stylesheet" type="text/css" href="/static/node_modules/swagger-ui-dist/swagger-ui.css" />
+    <script src="/static/node_modules/swagger-ui-dist/swagger-ui-bundle.js"></script>
+    <script src="/static/node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
   </head>
-  <body>
+  <body style="margin: 0; padding: 0">
     <div id="openapi-ui"></div>
-    <script src="/static/swagger-ui/swagger-ui-bundle.js"></script>
-    <script src="/static/swagger-ui/swagger-ui-standalone-preset.js"></script>
-    <script>
-      window.onload = () => {
-        window.ui = SwaggerUIBundle({
-          url: "http://127.0.0.1:8080/docs/openapi-spec.json",
-          dom_id: "#openapi-ui",
-          presets: [
-            SwaggerUIBundle.presets.apis,
-            SwaggerUIStandalonePreset,
-          ],
-          layout: "StandaloneLayout",
-        });
-      };
+    <script type="module" defer>
+      window.ui = SwaggerUIBundle({
+        url: "http://127.0.0.1:8080/docs/openapi-spec.json",
+        dom_id: "#openapi-ui",
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset,
+        ],
+        layout: "StandaloneLayout",
+      });
     </script>
   </body>
 </html>
