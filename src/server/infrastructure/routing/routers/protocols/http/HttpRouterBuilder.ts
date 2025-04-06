@@ -19,7 +19,7 @@ export class HttpRouterBuilder<R extends Route[] = Route[]> {
 
   add<
     M extends HttpMethod,
-    P extends `/${string}`,
+    P extends string,
     C extends ControllerClass,
     H extends ControllerKey<Controller<C>>,
   >(

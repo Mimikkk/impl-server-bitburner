@@ -2,11 +2,12 @@ import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/Htt
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/HttpJsonResponse.ts";
 import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { InstructionService } from "@server/modules/instruction/application/services/InstructionService.ts";
 import { InstructionResourceUrl } from "@server/modules/instruction/infrastructure/InstructionResourceUrl.ts";
 
-@OpenApiNs.controller({ name: "Templates", type: "http" })
+@ControllerNs.controller({ name: "Instruction" })
 export class HttpInstructionController {
   static create(instruction: InstructionService = InstructionService.create()) {
     return new HttpInstructionController(instruction);
@@ -16,7 +17,7 @@ export class HttpInstructionController {
     private readonly instruction: InstructionService,
   ) {}
 
-  @RouteNs.get("/")
+  @RouteNs.get("")
   @OpenApiNs.route({
     summary: "Get the template",
     description: "Get the template",

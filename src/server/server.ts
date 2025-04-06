@@ -2,5 +2,4 @@ import { ServerConfiguration } from "@server/infrastructure/configurations/Serve
 import { RouteDispatcher } from "@server/infrastructure/routing/RouteDispatcher.ts";
 
 const dispatcher = RouteDispatcher.create();
-
 Deno.serve(ServerConfiguration, (request) => dispatcher.dispatch(request));

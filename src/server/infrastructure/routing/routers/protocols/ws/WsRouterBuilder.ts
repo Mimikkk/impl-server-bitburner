@@ -17,7 +17,7 @@ export class WsRouterBuilder<R extends Route[] = Route[]> {
   ) {}
 
   ws<
-    P extends `/${string}`,
+    P extends string,
     C extends ControllerClass,
     H extends ControllerKey<Controller<C>>,
   >({ path, Controller, handler }: { path: P; Controller: C; handler: H }): WsRouterBuilder<[...R, Route]> {

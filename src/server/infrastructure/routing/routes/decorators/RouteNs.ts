@@ -1,6 +1,11 @@
 import { HttpMethod } from "@shared/enums/HttpMethod.ts";
 
 export namespace RouteNs {
+  const symbol = Symbol("RouteMetadata");
+  export interface Meta {
+    [symbol]: Spec;
+  }
+
   export type Options =
     & { path: string }
     & (
@@ -15,24 +20,22 @@ export namespace RouteNs {
       | { type: "http"; method: HttpMethod }
     );
 
-  export interface Route {
-    route: Spec;
-  }
-
   export const route = (options: Options) => (target: any, context: ClassMethodDecoratorContext) => {
+    const meta = target as Meta;
+
     if (options.type === "ws") {
-      target.route = {
-        type: options.type,
-        path: options.path,
+      meta[symbol] = {
         name: context.name as string,
-      } satisfies Spec;
+        path: options.path,
+        type: options.type,
+      };
     } else {
-      target.route = {
+      meta[symbol] = {
+        name: context.name as string,
+        path: options.path,
         type: options.type,
         method: options.method,
-        path: options.path,
-        name: context.name as string,
-      } satisfies Spec;
+      };
     }
   };
 
@@ -41,7 +44,8 @@ export namespace RouteNs {
   export const put = (path: string) => route({ path, method: HttpMethod.Put, type: "http" });
   export const del = (path: string) => route({ path, method: HttpMethod.Delete, type: "http" });
   export const patch = (path: string) => route({ path, method: HttpMethod.Patch, type: "http" });
-  export const is = (value: any): value is Route => !!value.route;
-
   export const ws = (path: string) => route({ path, type: "ws" });
+
+  export const is = (value: any): value is Meta => !!value[symbol];
+  export const meta = (value: Meta): Spec => value[symbol];
 }
