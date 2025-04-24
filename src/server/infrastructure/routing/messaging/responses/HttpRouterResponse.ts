@@ -1,4 +1,4 @@
-import { HttpJsonResponse } from "@server/infrastructure/messaging/http/responses/HttpJsonResponse.ts";
+import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
 export namespace HttpRouterResponse {
   interface MissingParams {

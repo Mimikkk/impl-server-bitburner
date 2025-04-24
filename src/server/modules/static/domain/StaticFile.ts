@@ -1,4 +1,4 @@
-import { FileReader } from "@server/infrastructure/files/FileReader.ts";
+import { FileReader } from "@server/infrastructure/readers/FileReader.ts";
 
 export interface StaticFile<
   C extends StaticFile.Content = StaticFile.Content,

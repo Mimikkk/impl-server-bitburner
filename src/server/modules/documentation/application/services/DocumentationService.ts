@@ -1,5 +1,5 @@
-import { DocumentationResourceProvider } from "@server/modules/documentation/infrastructure/DocumentationResourceProvider.ts";
-import { DocumentationResourceUrl } from "@server/modules/documentation/infrastructure/DocumentationResourceUrl.ts";
+import { DocumentationAssetProvider } from "../../infrastructure/DocumentationAssetProvider.ts";
+import { DocumentationAssetUrl } from "../../infrastructure/DocumentationAssetUrl.ts";
 
 export class DocumentationService {
   static create(): DocumentationService {
@@ -7,10 +7,10 @@ export class DocumentationService {
   }
 
   private constructor(
-    private readonly provider = DocumentationResourceProvider.create(),
+    private readonly provider = DocumentationAssetProvider.create(),
   ) {}
 
-  read<Url extends DocumentationResourceUrl>(url: Url) {
+  read<Url extends DocumentationAssetUrl>(url: Url) {
     return this.provider.read(url);
   }
 }
