@@ -1,6 +1,6 @@
-import { RpcJsonResponse } from "@server/infrastructure/messaging/responses/RpcJsonResponse.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { Log } from "@shared/logging/log.ts";
+import { RpcJsonResponse } from "../../../../infrastructure/messaging/responses/rpc/RpcJsonResponse.ts";
 import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
 
 export class ConnectionService {

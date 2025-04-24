@@ -1,8 +1,8 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/application/http/messaging/responses/HttpStaticFileResponse.ts";
 import { StaticResourceUrl } from "@server/modules/static/infrastructure/StaticResourceUrl.ts";
-import { HttpStaticFileResponse } from "../../infrastructure/messaging/responses/HttpStaticFileResponse.ts";
 import { StaticService } from "../services/StaticService.ts";
 
 @ControllerNs.controller({ name: "Static Assets", group: "static" })
@@ -26,13 +26,13 @@ export class HttpStaticController {
     return this.read(path);
   }
 
-  private async read(url: StaticResourceUrl) {
-    const file = await this.service.read(url);
+  private async read(path: StaticResourceUrl) {
+    const file = await this.service.read(path);
 
     if (file === undefined) {
-      return HttpStaticFileResponse.missing(url);
+      return HttpStaticFileResponse.missing({ path });
     }
 
-    return HttpStaticFileResponse.found(file);
+    return HttpStaticFileResponse.content(file);
   }
 }

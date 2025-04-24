@@ -1,9 +1,9 @@
-import { HttpJsonResponseNs } from "@server/infrastructure/messaging/responses/HttpJsonResponseNs.ts";
+import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { DocumentationService } from "@server/modules/documentation/application/services/DocumentationService.ts";
 import { DocumentationResourceUrl } from "@server/modules/documentation/infrastructure/DocumentationResourceUrl.ts";
-import { HttpStaticFileResponse } from "@server/modules/static/infrastructure/messaging/responses/HttpStaticFileResponse.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/application/http/messaging/responses/HttpStaticFileResponse.ts";
 import { DocumentationGenerator } from "../../../infrastructure/DocumentationGenerator.ts";
 
 @ControllerNs.controller({ name: "Documentation", group: "docs" })
@@ -22,18 +22,24 @@ export class HttpDocumentationController {
 
   @RouteNs.get("")
   async index() {
-    const url = DocumentationResourceUrl.Index;
-    const file = await this.service.read(url);
+    const path = DocumentationResourceUrl.Index;
+    const file = await this.service.read(path);
 
     if (file === undefined) {
-      return HttpStaticFileResponse.missing(url);
+      return HttpStaticFileResponse.missing({ path });
     }
 
-    return HttpStaticFileResponse.found(file);
+    return HttpStaticFileResponse.content(file);
   }
 
   @RouteNs.get("openapi-spec.json")
   spec() {
-    return HttpJsonResponseNs.success(this.generator.generate());
+    return content(this.generator.generate());
   }
 }
+
+export const [Content, content] = HttpJsonResponse.content({
+  example: DocumentationGenerator.initial,
+  description: "The OpenAPI specification",
+  name: "OpenAPI Specification",
+});

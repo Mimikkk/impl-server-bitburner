@@ -1,9 +1,9 @@
 import { Infer, Schema } from "@server/infrastructure/validators/Schema.ts";
+import { Validator } from "@server/infrastructure/validators/Validator.ts";
 import { CommandRequestEntity } from "@server/modules/commands/entities/CommandRequestEntity.ts";
 import { CommandRequestFactory } from "@server/modules/commands/infrastructure/factories/CommandRequestFactory.ts";
-import { VolatileCommandRequestRepository } from "@server/modules/commands/reposiories/VolatileCommandRequestRepository.ts";
-import { Validator } from "../../../infrastructure/validators/Validator.ts";
-import { CommandRequestRepository } from "../reposiories/CommandRequestRepository.ts";
+import { CommandRequestRepository } from "@server/modules/commands/repositories/CommandRequestRepository.ts";
+import { VolatileCommandRequestRepository } from "@server/modules/commands/repositories/VolatileCommandRequestRepository.ts";
 
 export class CommandModel<
   M extends PropertyKey = PropertyKey,

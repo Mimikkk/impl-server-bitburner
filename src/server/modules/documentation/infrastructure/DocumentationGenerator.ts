@@ -3,6 +3,15 @@ import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../../../infrastructure/routing/controllers/ControllerStore.ts";
 
 export class DocumentationGenerator {
+  static readonly initial: OpenAPIObject = {
+    info: {
+      title: "Bitburner API Documentation",
+      version: "1.0.0",
+      description: "API documentation for the Bitburner server",
+    },
+    openapi: "3.1.1",
+    tags: OpenApiTags,
+  };
   static create(controllers: ControllerStore = ControllerStore.instance) {
     return new DocumentationGenerator(controllers);
   }
@@ -12,31 +21,7 @@ export class DocumentationGenerator {
   ) {}
 
   generate(): OpenAPIObject {
-    const builder = OpenApiBuilder.create({
-      openapi: "3.1.1",
-      info: {
-        title: "Bitburner API Documentation",
-        version: "1.0.0",
-        description: "API documentation for the Bitburner server",
-        license: {
-          name: "MIT",
-          url: "https://opensource.org/licenses/MIT",
-          identifier: "MIT",
-        },
-      },
-      tags: OpenApiTags,
-      // components: {
-      //   links: {},
-      //   responses: {
-      //     "200": {
-      //       description: "OK",
-      //       content: {
-      //         "text/html": { schema: { type: "string" } },
-      //       },
-      //     },
-      //   },
-      // },
-    });
+    const builder = OpenApiBuilder.create(DocumentationGenerator.initial);
 
     // const controllers = Array
     //   .from(this.controllers.keys())

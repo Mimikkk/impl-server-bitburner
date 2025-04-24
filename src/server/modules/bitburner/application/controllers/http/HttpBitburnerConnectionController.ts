@@ -1,7 +1,6 @@
-import { HttpJsonResponseNs } from "@server/infrastructure/messaging/responses/HttpJsonResponseNs.ts";
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
-import { ConnectionResource } from "@server/modules/bitburner/application/resources/ConnectionResource.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
+import { HttpBitburnerConnectionResponse } from "../../messaging/responses/HttpBitburnerConnectionResponse.ts";
 import { BitburnerConnectionService } from "../../services/BitburnerConnectionService.ts";
 
 export class HttpBitburnerConnectionController {
@@ -18,16 +17,16 @@ export class HttpBitburnerConnectionController {
   index(): Response {
     const connections = Array.from(this.connections.all());
 
-    return HttpJsonResponseNs.success({ connections: ConnectionResource.fromConnections(connections) });
+    return HttpBitburnerConnectionResponse.multiple(connections);
   }
 
   show({ parameters: { values: { connectionId } } }: RouteRequestContext<{ connectionId: number }>): Response {
     const connection = this.connections.find(connectionId);
 
     if (connection === undefined) {
-      return HttpJsonResponseNs.notFound({ connectionId, message: "Connection not found" });
+      return HttpBitburnerConnectionResponse.missing(connectionId);
     }
 
-    return HttpJsonResponseNs.success({ connection: ConnectionResource.fromConnection(connection) });
+    return HttpBitburnerConnectionResponse.single(connection);
   }
 }

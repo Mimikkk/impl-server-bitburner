@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
 import { Log } from "@shared/logging/log.ts";
-import { HttpJsonResponseNs } from "../messaging/responses/HttpJsonResponseNs.ts";
+import { HttpJsonResponse } from "../messaging/responses/http/HttpJsonResponse.ts";
 import { EnvironmentConfiguration } from "./EnvironmentConfiguration.ts";
 
 export const ServerConfiguration: Deno.ServeTcpOptions = {
@@ -15,6 +15,6 @@ export const ServerConfiguration: Deno.ServeTcpOptions = {
   },
   onError(error) {
     Log.error("Server failed to start:", error);
-    return HttpJsonResponseNs.internal(error);
+    return HttpJsonResponse.internal(error);
   },
 };
