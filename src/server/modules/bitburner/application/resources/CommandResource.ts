@@ -1,4 +1,4 @@
-import { CommandModel } from "../../../../commands/models/CommandModel.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 
 export type CommandResource = {
   name: string;

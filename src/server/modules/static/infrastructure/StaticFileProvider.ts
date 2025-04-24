@@ -38,7 +38,7 @@ export class StaticFileProvider {
   }
 
   private fromUrl<U extends StaticResourceUrl>(url: U): U {
-    return resolve(this.directory, "../application/http/assets", url) as U;
+    return resolve(this.directory, "../application/assets", url) as U;
   }
 
   private readonly url = new URL(import.meta.dirname!);

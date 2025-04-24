@@ -1,7 +1,7 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
+import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/application/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
+import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
-import { HttpBitburnerConnectionResponse } from "../../messaging/responses/HttpBitburnerConnectionResponse.ts";
-import { BitburnerConnectionService } from "../../services/BitburnerConnectionService.ts";
 
 export class HttpBitburnerConnectionController {
   static create(

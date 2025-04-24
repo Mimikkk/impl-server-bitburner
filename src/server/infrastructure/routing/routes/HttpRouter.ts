@@ -2,7 +2,7 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import "@server/modules/bitburner/application/controllers/http/HttpBitburnerCommandController.ts";
 import "@server/modules/bitburner/application/controllers/http/HttpBitburnerConnectionController.ts";
 import "@server/modules/documentation/application/controllers/http/HttpDocumentationController.ts";
-import "@server/modules/instruction/application/controllers/http/HttpInstructionController.ts";
+import "../../../modules/instruction/application/http/HttpInstructionController.ts";
 import "@server/modules/static/application/http/HttpStaticController.ts";
 import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.ts";
 

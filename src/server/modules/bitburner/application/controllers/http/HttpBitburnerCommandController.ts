@@ -1,6 +1,6 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
-import { HttpBitburnerCommandResponse } from "../../messaging/responses/HttpBitburnerCommandResponse.ts";
-import { BitburnerCommandService } from "../../services/BitburnerCommandService.ts";
+import { HttpBitburnerCommandResponse } from "@server/modules/bitburner/application/messaging/http/responses/HttpBitburnerCommandResponse.ts";
+import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 
 export class HttpBitburnerCommandController {
   static create(

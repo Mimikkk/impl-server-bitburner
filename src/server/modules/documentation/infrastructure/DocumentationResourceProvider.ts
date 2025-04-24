@@ -16,7 +16,7 @@ export class DocumentationResourceProvider {
   }
 
   private path<Url extends DocumentationResourceUrl>(url: Url): Url {
-    return resolve(this.directory, "resources", url) as Url;
+    return resolve(this.directory, "../application/assets", url) as Url;
   }
 
   private readonly url = new URL(import.meta.dirname!);

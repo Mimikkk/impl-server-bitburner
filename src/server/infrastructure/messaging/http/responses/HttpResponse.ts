@@ -1,4 +1,3 @@
-import { IResponse } from "@server/infrastructure/messaging/responses/IResponse.ts";
 import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
 
@@ -10,7 +9,7 @@ export namespace HttpResponse {
   }
 }
 
-export class HttpResponse implements IResponse {
+export class HttpResponse {
   static create(content: BodyInit, status: number, headers: HeadersInit): HttpResponse {
     return new HttpResponse(new Response(content, { headers, status }));
   }
@@ -25,7 +24,7 @@ export class HttpResponse implements IResponse {
     const response = content instanceof Function ? content : () => content;
 
     @OpenApiNs.response(spec)
-    class Class implements IResponse {
+    class Class {
       static create(...params: Parameters<ContentFn>) {
         return new Class(HttpResponse.create(response(...params), spec.status, headers));
       }

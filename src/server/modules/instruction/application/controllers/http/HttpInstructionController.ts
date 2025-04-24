@@ -1,11 +1,11 @@
+import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/http/HttpHtmlResponse.ts";
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
+import { InstructionService } from "@server/modules/instruction/application/services/InstructionService.ts";
 import { InstructionResourceUrl } from "@server/modules/instruction/infrastructure/InstructionResourceUrl.ts";
-import { HttpStaticFileResponse } from "@server/modules/static/infrastructure/messaging/responses/HttpStaticFileResponse.ts";
-import { HttpHtmlResponse } from "../../../../../infrastructure/messaging/responses/http/HttpHtmlResponse.ts";
-import { InstructionService } from "../../services/InstructionService.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/application/messaging/http/responses/HttpStaticFileResponse.ts";
 
 @ControllerNs.controller({ name: "Instruction" })
 export class HttpInstructionController {

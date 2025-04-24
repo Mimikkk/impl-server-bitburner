@@ -1,7 +1,7 @@
 import { Schema } from "@server/infrastructure/validators/Schema.ts";
 import { ValueValidator } from "@server/infrastructure/validators/ValueValidator.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 import { Some } from "@shared/types/common.ts";
-import { CommandModel } from "../../models/CommandModel.ts";
 
 export class CommandBuilder<N, D, M, P, T> {
   static create(): ValidatedBuilder<CommandBuilder<null, null, null, null, null>> {

@@ -3,7 +3,7 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { DocumentationService } from "@server/modules/documentation/application/services/DocumentationService.ts";
 import { DocumentationResourceUrl } from "@server/modules/documentation/infrastructure/DocumentationResourceUrl.ts";
-import { HttpStaticFileResponse } from "@server/modules/static/application/http/messaging/responses/HttpStaticFileResponse.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/application/messaging/http/responses/HttpStaticFileResponse.ts";
 import { DocumentationGenerator } from "../../../infrastructure/DocumentationGenerator.ts";
 
 @ControllerNs.controller({ name: "Documentation", group: "docs" })

@@ -1,4 +1,4 @@
-import { HttpResponse } from "@server/infrastructure/messaging/responses/http/HttpResponse.ts";
+import { HttpResponse } from "@server/infrastructure/messaging/http/responses/HttpResponse.ts";
 
 export namespace HttpHtmlResponse {
   export const headers = { "Content-Type": "text/html" } as const;

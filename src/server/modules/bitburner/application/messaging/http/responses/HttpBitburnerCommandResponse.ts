@@ -1,6 +1,6 @@
 import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
-import { CommandResourceNs } from "../resources/CommandResource.ts";
-import { CommandModel } from "@server/modules/commands/models/CommandModel.ts";
+import { CommandResourceNs } from "@server/modules/bitburner/application/resources/CommandResource.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 
 export namespace HttpBitburnerCommandResponse {
   export const [Multiple, multiple] = HttpJsonResponse.custom({

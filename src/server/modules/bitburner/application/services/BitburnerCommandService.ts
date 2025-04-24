@@ -1,5 +1,5 @@
-import { CommandModel } from "../../../commands/models/CommandModel.ts";
-import { BitburnerCommands } from "../../domain/BitburnerCommands.ts";
+import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 
 export class BitburnerCommandService {
   static create() {

@@ -1,9 +1,9 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { HttpStaticFileResponse } from "@server/modules/static/application/http/messaging/responses/HttpStaticFileResponse.ts";
+import { HttpStaticFileResponse } from "@server/modules/static/application/messaging/http/responses/HttpStaticFileResponse.ts";
+import { StaticService } from "@server/modules/static/application/services/StaticService.ts";
 import { StaticResourceUrl } from "@server/modules/static/infrastructure/StaticResourceUrl.ts";
-import { StaticService } from "../services/StaticService.ts";
 
 @ControllerNs.controller({ name: "Static Assets", group: "static" })
 export class HttpStaticController {
