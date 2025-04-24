@@ -1,5 +1,5 @@
-import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
-import { ConnectionResource } from "../resources/ConnectionResource.ts";
+import { HttpJsonResponse } from "@server/infrastructure/messaging/http/responses/HttpJsonResponse.ts";
+import { ConnectionResource } from "@server/modules/bitburner/application/resources/ConnectionResource.ts";
 import { ConnectionEntity } from "@server/modules/connections/domain/entities/ConnectionEntity.ts";
 
 export namespace HttpBitburnerConnectionResponse {

@@ -1,20 +1,20 @@
-import { HttpHtmlResponse } from "@server/infrastructure/messaging/responses/http/HttpHtmlResponse.ts";
+import { HttpHtmlResponse } from "@server/infrastructure/messaging/http/responses/HttpHtmlResponse.ts";
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { InstructionService } from "@server/modules/instruction/application/services/InstructionService.ts";
-import { InstructionResourceUrl } from "@server/modules/instruction/infrastructure/InstructionResourceUrl.ts";
 import { HttpStaticFileResponse } from "@server/modules/static/application/messaging/http/responses/HttpStaticFileResponse.ts";
+import { InstructionAssetUrl } from "../../../domain/InstructionAssetUrl.ts";
+import { InstructionAssetService } from "../../services/InstructionAssetService.ts";
 
 @ControllerNs.controller({ name: "Instruction" })
 export class HttpInstructionController {
-  static create(instruction: InstructionService = InstructionService.create()) {
+  static create(instruction: InstructionAssetService = InstructionAssetService.create()) {
     return new HttpInstructionController(instruction);
   }
 
   private constructor(
-    private readonly service: InstructionService,
+    private readonly service: InstructionAssetService,
   ) {}
 
   @RouteNs.get("")
@@ -25,7 +25,7 @@ export class HttpInstructionController {
     responses: [HttpHtmlResponse.Content],
   })
   async index() {
-    const path = InstructionResourceUrl.Index;
+    const path = InstructionAssetUrl.Index;
     const file = await this.service.read(path);
 
     if (file === undefined) {

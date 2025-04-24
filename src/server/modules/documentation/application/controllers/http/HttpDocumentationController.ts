@@ -1,4 +1,4 @@
-import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
+import { HttpJsonResponse } from "@server/infrastructure/messaging/http/responses/HttpJsonResponse.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { DocumentationService } from "@server/modules/documentation/application/services/DocumentationService.ts";

@@ -1,5 +1,5 @@
 import { colors } from "@cliffy/ansi/colors";
-import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
+import { HttpJsonResponse } from "@server/infrastructure/messaging/http/responses/HttpJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 import { EnvironmentConfiguration } from "./EnvironmentConfiguration.ts";
 

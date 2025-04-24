@@ -1,4 +1,4 @@
-import { HttpJsonResponse } from "@server/infrastructure/messaging/responses/http/HttpJsonResponse.ts";
+import { HttpJsonResponse } from "@server/infrastructure/messaging/http/responses/HttpJsonResponse.ts";
 import { CommandResourceNs } from "@server/modules/bitburner/application/resources/CommandResource.ts";
 import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 
