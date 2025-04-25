@@ -13,7 +13,7 @@ export class StaticFileProvider {
     private readonly assets = StaticAssetProvider.create(),
   ) {}
 
-  read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FileFromPath<P> | undefined> {
+  read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
     if (StaticAssetNs.isUrl(path)) {
       return this.assets.read(path);
     }

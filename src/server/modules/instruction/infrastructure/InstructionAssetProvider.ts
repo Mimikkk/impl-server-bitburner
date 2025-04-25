@@ -7,13 +7,10 @@ export class InstructionAssetProvider {
   }
 
   private constructor(
-    private readonly reader = FileSystemAssetReader.create(InstructionAssetProvider.directory),
+    private readonly reader = FileSystemAssetReader.fromMeta(import.meta),
   ) {}
 
   read<Url extends InstructionAssetUrl>(url: Url) {
     return this.reader.read(url);
   }
-
-  private static readonly url = new URL(import.meta.dirname!);
-  private static readonly directory = InstructionAssetProvider.url.pathname;
 }

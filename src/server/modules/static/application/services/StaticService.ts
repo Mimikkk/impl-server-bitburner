@@ -1,3 +1,4 @@
+import { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 import { StaticFileProvider } from "../../infrastructure/StaticFileProvider.ts";
 
 export class StaticService {
@@ -9,7 +10,7 @@ export class StaticService {
     private readonly provider = StaticFileProvider.create(),
   ) {}
 
-  read = function (this: StaticService, url) {
-    return this.provider.read(url);
-  } as StaticFileProvider["read"];
+  read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
+    return this.provider.read(path);
+  }
 }

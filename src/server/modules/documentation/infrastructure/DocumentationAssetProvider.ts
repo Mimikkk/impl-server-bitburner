@@ -1,5 +1,4 @@
-import { StaticService } from "@server/modules/static/application/services/StaticService.ts";
-import { resolve } from "@std/path/resolve";
+import { FileSystemAssetReader } from "@server/infrastructure/readers/FileSystemAssetReader.ts";
 import { DocumentationAssetUrl } from "./DocumentationAssetUrl.ts";
 
 export class DocumentationAssetProvider {
@@ -8,17 +7,10 @@ export class DocumentationAssetProvider {
   }
 
   private constructor(
-    private readonly staticService = StaticService.create(),
+    private readonly reader = FileSystemAssetReader.fromMeta(import.meta),
   ) {}
 
   read<Url extends DocumentationAssetUrl>(url: Url) {
-    return this.staticService.read(this.path(url));
+    return this.reader.read(url);
   }
-
-  private path<Url extends DocumentationAssetUrl>(url: Url): Url {
-    return resolve(this.directory, "assets", url) as Url;
-  }
-
-  private readonly url = new URL(import.meta.dirname!);
-  private readonly directory = this.url.pathname;
 }

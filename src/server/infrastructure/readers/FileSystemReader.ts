@@ -12,7 +12,7 @@ export class FileSystemReader {
     private readonly reader = FileReader.create(),
   ) {}
 
-  async read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FileFromPath<P> | undefined> {
+  async read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
     path = resolve(this.path, path) as P;
 
     const extensionIndex = path.lastIndexOf(".");
@@ -26,6 +26,6 @@ export class FileSystemReader {
     if (content === undefined) return undefined;
 
     const mime = StaticFileNs.MimeMap[extension] ?? StaticFileNs.fallback;
-    return { content, mime } as StaticFileNs.FileFromPath<P>;
+    return { content, mime } as StaticFileNs.FromPath<P>;
   }
 }

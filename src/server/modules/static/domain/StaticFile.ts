@@ -33,7 +33,7 @@ export namespace StaticFileNs {
     : never;
 
   // @ts-expect-error - type inference is not deep enough
-  export type FileFromPath<P extends Path> = StaticFile<TypeFromPath<P>, MimeFromPath<P>>;
+  export type FromPath<P extends Path> = StaticFile<TypeFromPath<P>, MimeFromPath<P>>;
 
   export const TypeMap = {
     [Extension.Html]: "string",

@@ -7,13 +7,10 @@ export class StaticAssetProvider {
   }
 
   private constructor(
-    private readonly reader: FileSystemAssetReader = FileSystemAssetReader.create(StaticAssetProvider.directory),
+    private readonly reader: FileSystemAssetReader = FileSystemAssetReader.fromMeta(import.meta),
   ) {}
 
   async read<U extends StaticAssetUrl>(url: U) {
     return await this.reader.read(url);
   }
-
-  private static readonly url = new URL(import.meta.dirname!);
-  private static readonly directory = StaticAssetProvider.url.pathname;
 }

@@ -11,7 +11,14 @@ export class FileSystemAssetReader {
     private readonly reader = FileSystemReader.create(path + "/assets"),
   ) {}
 
-  read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FileFromPath<P> | undefined> {
+  read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
     return this.reader.read(path);
+  }
+
+  static fromMeta(meta: ImportMeta): FileSystemAssetReader {
+    const url = new URL(meta.dirname!);
+    const path = url.pathname;
+
+    return new FileSystemAssetReader(path);
   }
 }
