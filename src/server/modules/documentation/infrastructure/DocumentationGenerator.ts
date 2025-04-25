@@ -57,6 +57,7 @@ export class DocumentationGenerator {
             summary: openapi.summary,
             deprecated: openapi.deprecated,
             description: openapi.description,
+            parameters: openapi.parameters.map((p) => p.toObject()),
             responses,
           },
         });

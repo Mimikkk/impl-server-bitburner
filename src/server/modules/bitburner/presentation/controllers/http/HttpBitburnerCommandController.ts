@@ -4,6 +4,7 @@ import { RouteRequestContext } from "@server/infrastructure/routing/routers/rout
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
+import { HttpBitburnerParameter } from "@server/modules/bitburner/presentation/messaging/http/parameters/HttpBitburnerParameter.ts";
 import { HttpBitburnerCommandResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerCommandResponse.ts";
 
 @ControllerNs.controller({ name: "HTTP Bitburner command", group: "commands" })
@@ -31,12 +32,13 @@ export class HttpBitburnerCommandController {
     return HttpBitburnerCommandResponse.multiple(commands);
   }
 
-  @RouteNs.get("{name:string}")
+  @RouteNs.get(HttpBitburnerParameter.CommandName)
   @OpenApiNs.route({
     description: "Get a command by name",
     summary: "Get a command by name",
     tags: [OpenApiTag.Commands],
     responses: [HttpBitburnerCommandResponse.Single, HttpBitburnerCommandResponse.Missing],
+    parameters: [HttpBitburnerParameter.CommandName],
   })
   show({ parameters: { values: { name } } }: RouteRequestContext<{ name: string }>): Response {
     const command = this.commands.find(name);

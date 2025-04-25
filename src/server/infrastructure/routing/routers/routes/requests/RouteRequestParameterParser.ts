@@ -2,7 +2,7 @@ import { ParameterType } from "@server/infrastructure/routing/routers/routes/Rou
 
 export class RouteRequestParameterParser {
   static parse(type: ParameterType, value: string): any {
-    if (type === "number") {
+    if (type === "number" || type === "integer") {
       return +value;
     }
 

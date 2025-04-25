@@ -4,7 +4,7 @@ import { ConnectionEntity } from "../../../connections/domain/entities/Connectio
 import { BitburnerCommands } from "../../domain/BitburnerCommands.ts";
 
 export class BitburnerConnectionService {
-  static create(connections: ConnectionRepository) {
+  static create(connections: ConnectionRepository = ConnectionRepository.instance) {
     return new BitburnerConnectionService(ConnectionService.create(connections));
   }
 

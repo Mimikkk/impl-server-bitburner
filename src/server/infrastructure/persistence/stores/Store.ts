@@ -1,13 +1,13 @@
 export interface Store<K, V> {
-  find(id: K): V | undefined;
+  find(key: K): V | undefined;
 
   keys(): IterableIterator<K>;
 
   values(): IterableIterator<V>;
 
-  has(id: K): boolean;
+  has(key: K): boolean;
 
-  set(id: K, value: V): void;
+  set(key: K, value: V): void;
 
-  delete(id: K): boolean;
+  delete(key: K): boolean;
 }

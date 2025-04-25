@@ -1,5 +1,6 @@
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
+import { PathParameter } from "@server/presentation/messaging/http/parameters/PathParameter.ts";
 
 export namespace OpenApiRouteNs {
   const symbol = Symbol("OpenapiRouteMeta");
@@ -16,6 +17,7 @@ export namespace OpenApiRouteNs {
     tags: OpenApiTag[];
     responses: OpenApiResponseNs.Meta[];
     deprecated: boolean;
+    parameters: PathParameter[];
   }
 
   export interface Options {
@@ -24,15 +26,18 @@ export namespace OpenApiRouteNs {
     tags: OpenApiTag[];
     responses: OpenApiResponseNs.Meta[];
     deprecated?: boolean;
+    parameters?: PathParameter[];
   }
 
-  export const decorate = ({ summary, description, tags, responses, deprecated }: Options) => (target: any) => {
-    target[symbol] = {
-      summary,
-      description,
-      tags,
-      responses,
-      deprecated: deprecated ?? false,
-    } satisfies Spec;
-  };
+  export const decorate =
+    ({ summary, description, tags, responses, deprecated, parameters }: Options) => (target: any) => {
+      target[symbol] = {
+        summary,
+        description,
+        tags,
+        responses,
+        deprecated: deprecated ?? false,
+        parameters: parameters ?? [],
+      } satisfies Spec;
+    };
 }

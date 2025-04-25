@@ -13,8 +13,8 @@ export class VolatileStore<K, V> implements Store<K, V> {
     return this.map.get(key);
   }
 
-  has(id: K): boolean {
-    return this.map.has(id);
+  has(key: K): boolean {
+    return this.map.has(key);
   }
 
   keys(): IterableIterator<K> {
