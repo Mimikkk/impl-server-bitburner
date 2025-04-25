@@ -5,6 +5,7 @@ export enum OpenApiTag {
   Documentation = "Documentation",
   Connections = "Connections",
   Commands = "Commands",
+  Static = "Static",
 }
 
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
@@ -23,5 +24,9 @@ export const OpenApiTags = new Map<OpenApiTag, TagObject>([
   [OpenApiTag.Commands, {
     name: OpenApiTag.Commands,
     description: "bitburner commands",
+  }],
+  [OpenApiTag.Static, {
+    name: OpenApiTag.Static,
+    description: "static files",
   }],
 ]);
