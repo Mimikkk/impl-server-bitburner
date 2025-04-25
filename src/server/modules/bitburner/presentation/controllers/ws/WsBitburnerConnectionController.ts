@@ -1,8 +1,10 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
+import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 
+@ControllerNs.controller({ name: "WS Bitburner connection" })
 export class WsBitburnerConnectionController {
   static create(
     connections: BitburnerConnectionService = BitburnerConnectionService.create(

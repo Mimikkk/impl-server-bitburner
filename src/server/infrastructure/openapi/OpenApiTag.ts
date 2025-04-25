@@ -3,6 +3,8 @@ import { TagObject } from "openapi3-ts/oas31";
 export enum OpenApiTag {
   Instruction = "Instruction",
   Documentation = "Documentation",
+  Connections = "Connections",
+  Commands = "Commands",
 }
 
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
@@ -13,5 +15,13 @@ export const OpenApiTags = new Map<OpenApiTag, TagObject>([
   [OpenApiTag.Documentation, {
     name: OpenApiTag.Documentation,
     description: "documentation for the server api.",
+  }],
+  [OpenApiTag.Connections, {
+    name: OpenApiTag.Connections,
+    description: "bitburner connections.",
+  }],
+  [OpenApiTag.Commands, {
+    name: OpenApiTag.Commands,
+    description: "bitburner commands.",
   }],
 ]);

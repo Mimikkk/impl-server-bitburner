@@ -28,12 +28,6 @@ export class ConnectionModel {
     return new Promise((resolve, reject) => {
       entity.listeners.add((response) => {
         const result = this.entities.resolve(response);
-        console.log({
-          request,
-          response,
-          entity,
-          result,
-        });
 
         if (result) {
           resolve(result);
