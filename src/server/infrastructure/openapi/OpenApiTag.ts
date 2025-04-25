@@ -5,13 +5,13 @@ export enum OpenApiTag {
   Documentation = "Documentation",
 }
 
-export const OpenApiTags: TagObject[] = [
-  {
+export const OpenApiTags = new Map<OpenApiTag, TagObject>([
+  [OpenApiTag.Instruction, {
     name: OpenApiTag.Instruction,
     description: "instructions to setup the server connection.",
-  },
-  {
+  }],
+  [OpenApiTag.Documentation, {
     name: OpenApiTag.Documentation,
     description: "documentation for the server api.",
-  },
-];
+  }],
+]);

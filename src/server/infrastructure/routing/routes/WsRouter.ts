@@ -5,13 +5,12 @@ import { WsRouterBuilder } from "../routers/protocols/ws/WsRouterBuilder.ts";
 const builder = WsRouterBuilder.create();
 
 for (const Controller of ControllerNs.list) {
-  const { group, routes } = ControllerNs.meta(Controller);
+  const { routes } = ControllerNs.meta(Controller);
 
   for (const route of routes) {
     if (route.type !== "ws") continue;
 
-    const path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
-    builder.ws({ path, Controller, handler: route.name });
+    builder.ws({ path: route.path, Controller, handler: route.name });
   }
 }
 

@@ -1,8 +1,10 @@
 import { HttpResponse } from "@server/presentation/messaging/http/responses/HttpResponse.ts";
+import { Str } from "@shared/utils/strings.ts";
+import { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpHtmlResponse {
-  export const headers = { "Content-Type": "text/html" } as const;
-  export const schema = { type: "string" } as const;
+  export const headers = { "Content-Type": "text/html" } satisfies HeadersInit;
+  export const schema = { type: "string", format: "html-text" } satisfies SchemaObject;
 
   export interface CustomOptions<Fn extends (...args: any[]) => string> {
     content: Fn;
@@ -26,14 +28,14 @@ export namespace HttpHtmlResponse {
 
   export const [Content, content] = custom({
     content: (content: string) => content,
-    example: `
+    example: Str.trimlines`
     <!DOCTYPE html>
     <html>
       <head>
-        <title>Success</title>
+        <title>Content title</title>
       </head>
       <body>
-        <h1>Success</h1>
+        Content body
       </body>
     </html>
     `,

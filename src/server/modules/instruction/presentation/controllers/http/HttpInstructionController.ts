@@ -4,8 +4,8 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { InstructionAssetService } from "@server/modules/instruction/application/services/InstructionAssetService.ts";
 import { HttpStaticFileResponse } from "@server/modules/static/presentation/messaging/http/responses/HttpStaticFileResponse.ts";
-import { InstructionAssetUrl } from "../../../domain/InstructionAssetUrl.ts";
 import { HttpHtmlResponse } from "@server/presentation/messaging/http/responses/HttpHtmlResponse.ts";
+import { InstructionAssetUrl } from "../../../domain/InstructionAssetUrl.ts";
 
 @ControllerNs.controller({ name: "Instruction" })
 export class HttpInstructionController {

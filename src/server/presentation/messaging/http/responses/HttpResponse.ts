@@ -44,7 +44,7 @@ export class HttpResponse {
 
     Object.defineProperty(Class, "name", { value: name, writable: false });
 
-    return [Class, Class.toResponse] as const;
+    return [Class, Class.toResponse] as [(typeof Class) & OpenApiResponseNs.Meta, typeof Class.toResponse];
   }
 
   toResponse(): Response {

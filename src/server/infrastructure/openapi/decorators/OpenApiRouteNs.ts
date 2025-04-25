@@ -1,4 +1,5 @@
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
 
 export namespace OpenApiRouteNs {
   const symbol = Symbol("OpenapiRouteMeta");
@@ -6,13 +7,14 @@ export namespace OpenApiRouteNs {
     [symbol]: Spec;
   }
   export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
-  export const get = (value: Meta): Spec => value[symbol];
+  export const meta = (value: Meta): Spec => value[symbol];
+  export const get = (value: any): Spec | undefined => is(value) ? meta(value) : undefined;
 
   export interface Spec {
     summary: string;
     description: string;
     tags: OpenApiTag[];
-    responses: any[];
+    responses: OpenApiResponseNs.Meta[];
     deprecated: boolean;
   }
 
@@ -20,7 +22,7 @@ export namespace OpenApiRouteNs {
     summary: string;
     description: string;
     tags: OpenApiTag[];
-    responses: any[];
+    responses: OpenApiResponseNs.Meta[];
     deprecated?: boolean;
   }
 

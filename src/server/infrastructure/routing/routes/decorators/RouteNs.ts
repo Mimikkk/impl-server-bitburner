@@ -14,7 +14,7 @@ export namespace RouteNs {
     );
 
   export type Spec =
-    & { path: string; name: string }
+    & { path: string; name: string; self: Meta }
     & (
       | { type: "ws" }
       | { type: "http"; method: HttpMethod }
@@ -28,6 +28,7 @@ export namespace RouteNs {
         name: context.name as string,
         path: options.path,
         type: options.type,
+        self: target,
       };
     } else {
       meta[symbol] = {
@@ -35,6 +36,7 @@ export namespace RouteNs {
         path: options.path,
         type: options.type,
         method: options.method,
+        self: target,
       };
     }
   };

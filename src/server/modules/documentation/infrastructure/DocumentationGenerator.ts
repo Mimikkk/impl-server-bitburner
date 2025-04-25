@@ -1,5 +1,8 @@
-import { OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
-import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts/oas31";
+import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
+import { OpenApiRouteNs } from "@server/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
+import { OpenApiTag, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
+import { OpenApiBuilder, OpenAPIObject, ResponseObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../../../infrastructure/routing/controllers/ControllerStore.ts";
 
 export class DocumentationGenerator {
@@ -10,7 +13,6 @@ export class DocumentationGenerator {
       description: "API documentation for the Bitburner server",
     },
     openapi: "3.1.1",
-    tags: OpenApiTags,
   };
   static create(controllers: ControllerStore = ControllerStore.instance) {
     return new DocumentationGenerator(controllers);
@@ -23,44 +25,57 @@ export class DocumentationGenerator {
   generate(): OpenAPIObject {
     const builder = OpenApiBuilder.create(DocumentationGenerator.initial);
 
-    // const controllers = Array
-    //   .from(this.controllers.keys())
-    //   .filter(OpenApiControllerNs.is) as unknown as OpenApiControllerNs.Controller[];
+    const controllers = Array.from(this.controllers.keys()).filter(ControllerNs.is) as unknown as ControllerNs.Meta[];
 
-    // const http = controllers.filter((c) => c.openapi.type === "http");
+    const usedTags: OpenApiTag[] = [];
+    for (const controller of controllers) {
+      const meta = ControllerNs.meta(controller);
 
-    // for (const { prototype } of http) {
-    //   const names = Object.getOwnPropertyNames(prototype);
-    //   const methods = names.map((m) => prototype[m]);
-    //   const routes = methods.filter((m) => OpenApiRouteNs.is(m) && RouteNs.is(m));
+      for (const route of meta.routes) {
+        if (route.type === "ws") continue;
 
-    //   for (const { openapi, route } of routes) {
-    //     builder.addPath(route.path, {
-    //       [route.method.toLowerCase() as "get"]: {
-    //         tags: openapi.tags,
-    //         summary: openapi.summary,
-    //         deprecated: openapi.deprecated,
-    //         description: openapi.description,
-    //         responses: {
-    //           200: {
-    //             description: "OK",
-    //             content: { "text/html": { schema: { type: "string" } } },
-    //             headers: {
-    //               "Content-Type": {
-    //                 description: "The MIME type of the body of the response",
-    //                 example: "text/html",
-    //                 schema: { type: "string", example: "text/html" },
-    //               },
-    //             },
-    //           } satisfies ResponseObject,
-    //         },
-    //       },
-    //     });
-    //   }
-    // }
+        const openapi = OpenApiRouteNs.get(route.self);
+        if (openapi === undefined) continue;
 
-    // const _ws = controllers.filter((c) => c.openapi.type === "ws");
+        for (const tag of openapi.tags) {
+          if (usedTags.includes(tag)) continue;
+          usedTags.push(tag);
+        }
+
+        const responses = Object.fromEntries(
+          openapi.responses
+            .map(OpenApiResponseNs.meta)
+            .map((r) => [r.status, {
+              description: r.description,
+              content: r.content,
+            } as ResponseObject]),
+        );
+
+        builder.addPath(route.path, {
+          [route.method.toLowerCase() as "get"]: {
+            tags: openapi.tags,
+            summary: openapi.summary,
+            deprecated: openapi.deprecated,
+            description: openapi.description,
+            responses,
+          },
+        });
+      }
+    }
+
+    this.addTags(builder, usedTags);
 
     return builder.getSpec();
+  }
+
+  private addTags(builder: OpenApiBuilder, tags: OpenApiTag[]): OpenApiBuilder {
+    for (const tag of tags) {
+      const object = OpenApiTags.get(tag);
+      if (object === undefined) continue;
+
+      builder.addTag(object);
+    }
+
+    return builder;
   }
 }

@@ -9,7 +9,7 @@ export namespace ControllerNs {
 
   export type Options = { name: string; group?: string };
 
-  export type Spec = { name: string; group: string; routes: RouteNs.Spec[] };
+  export type Spec = { name: string; group: string; routes: RouteNs.Spec[]; self: Meta };
 
   export const controller = (options: Options) => (target: any) => {
     const meta = target as ControllerClass & Meta;
@@ -21,10 +21,17 @@ export namespace ControllerNs {
       .filter(RouteNs.is)
       .map(RouteNs.meta);
 
+    const group = options.group ?? "";
+
+    for (const route of routes) {
+      route.path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
+    }
+
     meta[symbol] = {
       name: options.name,
-      group: options.group ?? "",
+      group,
       routes,
+      self: target,
     };
 
     list.push(meta);

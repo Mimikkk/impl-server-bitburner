@@ -6,7 +6,8 @@ export namespace OpenApiResponseNs {
     [symbol]: Spec;
   }
   export const is = (value: any): value is Meta => Object.hasOwn(value, symbol);
-  export const get = (value: Meta): Spec => value[symbol];
+  export const meta = (value: Meta): Spec => value[symbol];
+  export const get = (value: any): Spec | undefined => is(value) ? meta(value) : undefined;
 
   export interface Spec {
     status: number;

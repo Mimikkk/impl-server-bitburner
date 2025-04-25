@@ -9,13 +9,12 @@ import { HttpRouterBuilder } from "../routers/protocols/http/HttpRouterBuilder.t
 const builder = HttpRouterBuilder.create();
 
 for (const Controller of ControllerNs.list) {
-  const { group, routes } = ControllerNs.meta(Controller);
+  const { routes } = ControllerNs.meta(Controller);
 
   for (const route of routes) {
     if (route.type !== "http") continue;
 
-    const path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
-    builder.add({ Controller, method: route.method, path, handler: route.name });
+    builder.add({ Controller, method: route.method, path: route.path, handler: route.name });
   }
 }
 
