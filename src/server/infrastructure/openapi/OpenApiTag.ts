@@ -10,18 +10,18 @@ export enum OpenApiTag {
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
   [OpenApiTag.Instruction, {
     name: OpenApiTag.Instruction,
-    description: "instructions to setup the server connection.",
+    description: "instructions to setup the server connection",
   }],
   [OpenApiTag.Documentation, {
     name: OpenApiTag.Documentation,
-    description: "documentation for the server api.",
+    description: "documentation for the server api",
   }],
   [OpenApiTag.Connections, {
     name: OpenApiTag.Connections,
-    description: "bitburner connections.",
+    description: "bitburner connections",
   }],
   [OpenApiTag.Commands, {
     name: OpenApiTag.Commands,
-    description: "bitburner commands.",
+    description: "bitburner commands",
   }],
 ]);

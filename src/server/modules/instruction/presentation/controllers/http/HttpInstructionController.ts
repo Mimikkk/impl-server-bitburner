@@ -19,7 +19,7 @@ export class HttpInstructionController {
 
   @RouteNs.get("")
   @OpenApiNs.route({
-    summary: "Get the instruction for the server connection.",
+    summary: "Get the instruction for the server connection",
     description: "Get the instruction for the server connection.",
     tags: [OpenApiTag.Instruction],
     responses: [HttpHtmlResponse.Content],

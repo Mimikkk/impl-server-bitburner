@@ -6,10 +6,36 @@
     <meta name="description" content="SwaggerUI" />
     <title>API Documentation</title>
     <link rel="stylesheet" type="text/css" href="/static/node_modules/swagger-ui-dist/swagger-ui.css" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      .opblock-trace {
+        .opblock-summary-method {
+          color: transparent !important;
+          position: relative;
+
+          &::before {
+            content: "WS";
+            position: absolute;
+            color: white;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+
+        :is(.opblock-section, .execute-wrapper, .responses-wrapper) {
+          display: none !important;
+        }
+      }
+    </style>
     <script src="/static/node_modules/swagger-ui-dist/swagger-ui-bundle.js"></script>
     <script src="/static/node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
   </head>
-  <body style="margin: 0; padding: 0">
+  <body>
     <div id="openapi-ui"></div>
     <script type="module" defer>
       window.ui = SwaggerUIBundle({

@@ -32,8 +32,6 @@ export class DocumentationGenerator {
       const meta = ControllerNs.meta(controller);
 
       for (const route of meta.routes) {
-        if (route.type === "ws") continue;
-
         const openapi = OpenApiRouteNs.get(route.self);
         if (openapi === undefined) continue;
 
@@ -51,8 +49,10 @@ export class DocumentationGenerator {
             } as ResponseObject]),
         );
 
+        const method = route.type === "ws" ? "trace" : route.method.toLowerCase() as "get";
+
         builder.addPath(route.path, {
-          [route.method.toLowerCase() as "get"]: {
+          [method]: {
             tags: openapi.tags,
             summary: openapi.summary,
             deprecated: openapi.deprecated,
