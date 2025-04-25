@@ -1,6 +1,6 @@
 import { EntityFactory } from "@server/infrastructure/persistence/entities/factories/EntityFactory.ts";
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
-import { CommandRequest } from "@server/modules/commands/application/messaging/http/requests/CommandRequest.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
 import { CommandRequestEntity } from "@server/modules/commands/domain/entities/CommandRequestEntity.ts";
 
 export class CommandRequestEntityFactory implements EntityFactory<CommandRequestEntity> {

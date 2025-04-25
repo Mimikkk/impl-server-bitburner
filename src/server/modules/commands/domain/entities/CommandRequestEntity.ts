@@ -1,7 +1,7 @@
 import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
 import { Entity } from "@server/infrastructure/persistence/entities/Entity.ts";
-import { CommandRequest } from "@server/modules/commands/application/messaging/http/requests/CommandRequest.ts";
-import { CommandResponse } from "@server/modules/commands/application/messaging/http/responses/CommandResponse.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
+import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 
 export class CommandRequestEntity implements Entity<number, CommandRequest> {
   static create(id: number, request: CommandRequest): CommandRequestEntity {

@@ -1,5 +1,5 @@
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
-import { CommandRequest } from "@server/modules/commands/application/messaging/http/requests/CommandRequest.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
 import { RpcJsonRequest } from "@server/presentation/messaging/rpc/requests/RpcJsonRequest.ts";
 
 export class CommandRequestFactory {

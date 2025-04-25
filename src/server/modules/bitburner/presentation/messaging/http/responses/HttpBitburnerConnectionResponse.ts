@@ -9,6 +9,12 @@ export namespace HttpBitburnerConnectionResponse {
     name: "Multiple connections",
     description: "Multiple connections",
     status: 200,
+    schema: {
+      type: "object",
+      properties: {
+        connections: { type: "array", items: { type: "object", properties: { id: { type: "number" } } } },
+      },
+    },
   });
 
   export const [Single, single] = HttpJsonResponse.custom({
@@ -17,6 +23,12 @@ export namespace HttpBitburnerConnectionResponse {
     name: "Single connection",
     description: "Single connection",
     status: 200,
+    schema: {
+      type: "object",
+      properties: {
+        connection: { type: "object", properties: { id: { type: "number" } } },
+      },
+    },
   });
 
   export const [Missing, missing] = HttpJsonResponse.custom({
@@ -25,5 +37,12 @@ export namespace HttpBitburnerConnectionResponse {
     name: "Missing connection",
     description: "Connection not found",
     status: 404,
+    schema: {
+      type: "object",
+      properties: {
+        connectionId: { type: "number" },
+        message: { type: "string" },
+      },
+    },
   });
 }

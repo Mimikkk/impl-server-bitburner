@@ -1,8 +1,8 @@
-import { CommandRequest } from "@server/modules/commands/application/messaging/http/requests/CommandRequest.ts";
-import { CommandResponse } from "@server/modules/commands/application/messaging/http/responses/CommandResponse.ts";
 import { CommandRequestEntity } from "@server/modules/commands/domain/entities/CommandRequestEntity.ts";
 import { CommandRequestRepository } from "@server/modules/commands/infrastructure/repositories/CommandRequestRepository.ts";
 import { VolatileCommandRequestRepository } from "@server/modules/commands/infrastructure/repositories/VolatileCommandRequestRepository.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
+import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 
 export class ConnectionModel {
   static create(socket: WebSocket) {
