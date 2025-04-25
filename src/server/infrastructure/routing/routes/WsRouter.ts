@@ -10,7 +10,7 @@ for (const Controller of ControllerNs.list) {
   for (const route of routes) {
     if (route.type !== "ws") continue;
 
-    const path = route.path.startsWith("/") ? `${group}/${route.path}` : route.path;
+    const path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
     builder.ws({ path, Controller, handler: route.name });
   }
 }

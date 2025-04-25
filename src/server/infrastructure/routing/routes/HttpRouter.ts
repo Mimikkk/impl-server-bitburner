@@ -15,7 +15,6 @@ for (const Controller of ControllerNs.list) {
     if (route.type !== "http") continue;
 
     const path = route.path.startsWith("/") ? route.path : route.path ? `/${group}/${route.path}` : `/${group}`;
-
     builder.add({ Controller, method: route.method, path, handler: route.name });
   }
 }
