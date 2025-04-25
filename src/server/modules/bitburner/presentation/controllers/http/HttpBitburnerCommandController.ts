@@ -32,7 +32,7 @@ export class HttpBitburnerCommandController {
     return HttpBitburnerCommandResponse.multiple(commands);
   }
 
-  @RouteNs.get(HttpBitburnerParameter.CommandName)
+  @RouteNs.post(HttpBitburnerParameter.CommandName)
   @OpenApiNs.route({
     description: "Get a command by name",
     summary: "Get a command by name",
