@@ -1,8 +1,8 @@
 import { HttpResponse } from "@server/presentation/messaging/http/responses/HttpResponse.ts";
+import { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpJsonResponse {
   export const headers = { "Content-Type": "application/json" } as const;
-  export const schema = { type: "object" } as const;
 
   export interface CustomOptions<Fn extends (...args: any[]) => any> {
     content: Fn;
@@ -10,12 +10,14 @@ export namespace HttpJsonResponse {
     name: string;
     status: number;
     description: string;
+    schema: SchemaObject;
   }
 
   export const custom = <const Fn extends (...args: any[]) => any>({
     content,
     example,
     description,
+    schema,
     status,
   }: CustomOptions<Fn>) =>
     HttpResponse.custom({
@@ -37,6 +39,7 @@ export namespace HttpJsonResponse {
       example: options.example,
       name: options.name,
       description: options.description,
+      schema: options.schema,
       status: 200,
     });
 
@@ -44,6 +47,7 @@ export namespace HttpJsonResponse {
     example: { message: "this is a response of unknown shape" } as any,
     name: "Shapeless",
     description: "A response of unknown shape",
+    schema: { type: "object", properties: { message: { type: "string" } } },
   });
 
   export const [Success, success] = custom({
@@ -51,6 +55,7 @@ export namespace HttpJsonResponse {
     example: { message: "The request was successful", status: 200 },
     name: "Success",
     description: "The request was successful",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 200,
   });
 
@@ -59,6 +64,7 @@ export namespace HttpJsonResponse {
     example: { message: "The resource was created successfully", status: 201 },
     name: "Created",
     description: "The resource was created successfully",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 201,
   });
 
@@ -67,6 +73,7 @@ export namespace HttpJsonResponse {
     example: { message: "The request was invalid", status: 400 },
     name: "Failure",
     description: "The request was invalid",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 400,
   });
 
@@ -75,6 +82,7 @@ export namespace HttpJsonResponse {
     example: { message: "The resource was not found", status: 404 },
     name: "NotFound",
     description: "The resource was not found",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 404,
   });
 
@@ -83,6 +91,7 @@ export namespace HttpJsonResponse {
     example: { message: "An unknown error occurred", status: 500 },
     name: "Unknown",
     description: "An unknown error occurred",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 500,
   });
 
@@ -91,6 +100,7 @@ export namespace HttpJsonResponse {
     example: { message: "The request is not implemented", status: 501 },
     name: "Unimplemented",
     description: "The request is not implemented",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 501,
   });
 
@@ -99,6 +109,7 @@ export namespace HttpJsonResponse {
     example: { message: "The service is unavailable", status: 503 },
     name: "Unavailable",
     description: "The service is unavailable",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 503,
   });
 
@@ -107,6 +118,7 @@ export namespace HttpJsonResponse {
     example: { message: "Internal server error", status: 500, error: "Unknown error" },
     name: "Internal",
     description: "Internal server error",
+    schema: { type: "object", properties: { error: { type: "string" } } },
     status: 500,
   });
 }

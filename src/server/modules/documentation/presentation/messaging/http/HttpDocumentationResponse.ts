@@ -6,5 +6,6 @@ export namespace HttpDocumentationResponse {
     example: DocumentationGenerator.initial,
     description: "The OpenAPI specification",
     name: "OpenAPI Specification",
+    schema: { type: "object" },
   });
 }

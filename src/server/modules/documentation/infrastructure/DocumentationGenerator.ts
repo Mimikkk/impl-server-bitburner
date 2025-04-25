@@ -23,7 +23,7 @@ export class DocumentationGenerator {
   ) {}
 
   generate(): OpenAPIObject {
-    const builder = OpenApiBuilder.create(DocumentationGenerator.initial);
+    const builder = OpenApiBuilder.create(structuredClone(DocumentationGenerator.initial));
 
     const controllers = Array.from(this.controllers.keys()).filter(ControllerNs.is) as unknown as ControllerNs.Meta[];
 

@@ -12,6 +12,7 @@ export namespace HttpStaticFileResponse {
   export const [Missing, missing] = HttpJsonResponse.custom({
     content: ({ path }: NoFileParams) => ({ message: "File not found", path }),
     example: { message: "File not found", path: "path/to/file" },
+    schema: { type: "object", properties: { message: { type: "string" }, path: { type: "string" } } },
     name: "NoFile",
     description: "File not found",
     status: 404,
