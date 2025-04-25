@@ -8,7 +8,7 @@ export const ServerConfiguration: Deno.ServeTcpOptions = {
   hostname: EnvironmentConfiguration.hostname,
   onListen({ hostname, port, transport }) {
     Log.info(
-      `Server is running on ${colors.yellow(hostname)}:${colors.yellow(port.toString())} using ${
+      `Server is running on ${colors.yellow(`http://${hostname}`)}:${colors.yellow(port.toString())} using ${
         colors.yellow(transport)
       }`,
     );
