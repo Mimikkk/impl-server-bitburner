@@ -22,7 +22,6 @@ export class WsBitburnerConnectionController {
     summary: "Connect to the bitburner server",
     description: "Connect to the bitburner server via websocket.",
     tags: [OpenApiTag.Connections],
-    responses: [],
   })
   index({ request: { original } }: RouteRequestContext): Response {
     const { socket, response } = Deno.upgradeWebSocket(original);

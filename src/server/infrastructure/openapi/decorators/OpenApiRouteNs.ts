@@ -24,7 +24,7 @@ export namespace OpenApiRouteNs {
     summary: string;
     description: string;
     tags: OpenApiTag[];
-    responses: OpenApiResponseNs.Meta[];
+    responses?: OpenApiResponseNs.Meta[];
     deprecated?: boolean;
     parameters?: PathParameter[];
   }
@@ -35,7 +35,7 @@ export namespace OpenApiRouteNs {
         summary,
         description,
         tags,
-        responses,
+        responses: responses ?? [],
         deprecated: deprecated ?? false,
         parameters: parameters ?? [],
       } satisfies Spec;
