@@ -22,7 +22,7 @@ export class HttpInstructionController {
     summary: "Get the instruction for the server connection",
     description: "Get the instruction for the server connection.",
     tags: [OpenApiTag.Instruction],
-    responses: [HttpHtmlResponse.Content],
+    responses: [HttpStaticFileResponse.Missing, HttpHtmlResponse.Content],
   })
   async index() {
     const path = InstructionAssetUrl.Index;
