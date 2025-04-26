@@ -5,7 +5,7 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
-import { HttpBitburnerParameter } from "../../messaging/http/parameters/HttpBitburnerParameter.ts";
+import { HttpBitburnerRequestParameter } from "../../messaging/http/requests/HttpBitburnerRequestParameter.ts";
 
 @ControllerNs.controller({ name: "HTTP Bitburner connection", group: "connections" })
 export class HttpBitburnerConnectionController {
@@ -32,13 +32,13 @@ export class HttpBitburnerConnectionController {
     return HttpBitburnerConnectionResponse.multiple(connections);
   }
 
-  @RouteNs.get(HttpBitburnerParameter.ConnectionId)
+  @RouteNs.get(HttpBitburnerRequestParameter.ConnectionId)
   @OpenApiNs.route({
     description: "Get a connection by id",
     summary: "Get a connection by id",
     tags: [OpenApiTag.Connections],
     responses: [HttpBitburnerConnectionResponse.Single, HttpBitburnerConnectionResponse.Missing],
-    parameters: [HttpBitburnerParameter.ConnectionId],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
   })
   show({ parameters: { values: { connectionId } } }: RouteRequestContext<{ connectionId: number }>): Response {
     const connection = this.connections.find(connectionId);

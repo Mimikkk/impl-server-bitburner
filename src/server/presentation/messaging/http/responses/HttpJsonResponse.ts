@@ -1,3 +1,4 @@
+import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { HttpResponse } from "@server/presentation/messaging/http/responses/HttpResponse.ts";
 import { SchemaObject } from "openapi3-ts/oas31";
 
@@ -74,6 +75,23 @@ export namespace HttpJsonResponse {
     name: "Failure",
     description: "The request was invalid",
     schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    status: 400,
+  });
+
+  export const [Validation, validation] = custom({
+    content: (errors: ValidationError[]) => ({ errors }),
+    example: {
+      errors: [
+        {
+          field: "field",
+          path: "path",
+          messages: ["error 1", "error 2"],
+        },
+      ],
+    },
+    name: "Validation errors",
+    description: "Validation errors",
+    schema: { type: "object", properties: { errors: { type: "array", items: { type: "string" } } } },
     status: 400,
   });
 

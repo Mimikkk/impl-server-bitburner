@@ -1,4 +1,5 @@
 import { Infer, Schema } from "@server/infrastructure/validators/Schema.ts";
+import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { Validator } from "@server/infrastructure/validators/Validator.ts";
 import { CommandRequestEntity } from "@server/modules/commands/domain/entities/CommandRequestEntity.ts";
 import { CommandRequestFactory } from "@server/modules/commands/infrastructure/factories/CommandRequestFactory.ts";
@@ -40,8 +41,11 @@ export class CommandModel<
     private readonly factory: CommandRequestFactory,
   ) {}
 
-  request(params: Infer<RQ>): CommandRequestEntity {
-    this.requestValidator.validate(params);
+  request(params: Infer<RQ>): CommandRequestEntity | ValidationError[] {
+    const errors = this.requestValidator.validate(params);
+    if (ValidationError.is(errors)) {
+      return errors;
+    }
 
     const request = this.factory.create(this.method, params);
 
