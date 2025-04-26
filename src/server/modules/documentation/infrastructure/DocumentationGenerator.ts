@@ -2,6 +2,7 @@ import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/Ope
 import { OpenApiRouteNs } from "@server/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
 import { OpenApiTag, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
+import { Str } from "@shared/utils/strings.ts";
 import { OpenApiBuilder, OpenAPIObject, ResponseObject } from "openapi3-ts/oas31";
 import { ControllerStore } from "../../../infrastructure/routing/controllers/ControllerStore.ts";
 
@@ -10,7 +11,14 @@ export class DocumentationGenerator {
     info: {
       title: "Bitburner API Documentation",
       version: "1.0.0",
-      description: "API documentation for the Bitburner server",
+      description: Str.trimlines`
+      <div>
+        API documentation for the Bitburner server.
+      </div>
+      <div>
+        <a href='/'>Game connection setup instruction</a>.
+      </div>
+      `,
     },
     openapi: "3.1.1",
   };
