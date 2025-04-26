@@ -1,4 +1,3 @@
-import { Awaitable } from "@shared/types/common.ts";
 import { HttpRouterResponse } from "../../../presentation/messaging/http/responses/HttpRouterResponse.ts";
 import { RequestContext } from "./requests/RequestContext.ts";
 import { RouteRequestContext } from "./routes/requests/RouteRequestContext.ts";
