@@ -17,6 +17,7 @@ export class ConnectionModel {
   send(request: CommandRequest): CommandRequestEntity {
     const entity = this.entities.persist(request);
 
+    console.log({ request });
     this.socket.send(JSON.stringify(request));
 
     return entity;

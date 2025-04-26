@@ -9,7 +9,7 @@ export namespace HttpBitburnerRequestParameter {
 
   const options = Array.from(BitburnerCommands.all.list()).map((command) => command.name);
   export const CommandName = PathParameter.string({
-    name: "name",
+    name: "commandName",
     description: "The name of the command",
     example: BitburnerCommands.definition.name,
     options,
