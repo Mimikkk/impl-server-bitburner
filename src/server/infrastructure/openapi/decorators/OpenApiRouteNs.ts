@@ -1,5 +1,6 @@
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
+import { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
 import { PathParameter } from "@server/presentation/messaging/http/parameters/PathParameter.ts";
 
 export namespace OpenApiRouteNs {
@@ -18,6 +19,7 @@ export namespace OpenApiRouteNs {
     responses: OpenApiResponseNs.Meta[];
     deprecated: boolean;
     parameters: PathParameter[];
+    content?: RequestContent;
   }
 
   export interface Options {
@@ -27,10 +29,11 @@ export namespace OpenApiRouteNs {
     responses?: OpenApiResponseNs.Meta[];
     deprecated?: boolean;
     parameters?: PathParameter[];
+    content?: RequestContent;
   }
 
   export const decorate =
-    ({ summary, description, tags, responses, deprecated, parameters }: Options) => (target: any) => {
+    ({ summary, description, tags, responses, deprecated, parameters, content }: Options) => (target: any) => {
       target[symbol] = {
         summary,
         description,
@@ -38,6 +41,7 @@ export namespace OpenApiRouteNs {
         responses: responses ?? [],
         deprecated: deprecated ?? false,
         parameters: parameters ?? [],
+        content,
       } satisfies Spec;
     };
 }

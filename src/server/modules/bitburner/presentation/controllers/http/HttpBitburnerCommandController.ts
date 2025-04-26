@@ -6,6 +6,7 @@ import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteN
 import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { HttpBitburnerParameter } from "@server/modules/bitburner/presentation/messaging/http/parameters/HttpBitburnerParameter.ts";
 import { HttpBitburnerCommandResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerCommandResponse.ts";
+import { RequestContent } from "@server/presentation/messaging/http/content/RequestContent.ts";
 
 @ControllerNs.controller({ name: "HTTP Bitburner command", group: "commands" })
 export class HttpBitburnerCommandController {
@@ -32,7 +33,7 @@ export class HttpBitburnerCommandController {
     return HttpBitburnerCommandResponse.multiple(commands);
   }
 
-  @RouteNs.post(HttpBitburnerParameter.CommandName)
+  @RouteNs.get(HttpBitburnerParameter.CommandName)
   @OpenApiNs.route({
     description: "Get a command by name",
     summary: "Get a command by name",
@@ -41,6 +42,42 @@ export class HttpBitburnerCommandController {
     parameters: [HttpBitburnerParameter.CommandName],
   })
   show({ parameters: { values: { name } } }: RouteRequestContext<{ name: string }>): Response {
+    const command = this.commands.find(name);
+
+    if (command === undefined) {
+      return HttpBitburnerCommandResponse.missing(name);
+    }
+
+    return HttpBitburnerCommandResponse.single(command);
+  }
+
+  @RouteNs.post(HttpBitburnerParameter.CommandName)
+  @OpenApiNs.route({
+    description: "Run a command by name",
+    summary: "Run a command by name",
+    tags: [OpenApiTag.Commands],
+    responses: [HttpBitburnerCommandResponse.Single, HttpBitburnerCommandResponse.Missing],
+    parameters: [HttpBitburnerParameter.CommandName],
+    content: RequestContent.create({
+      name: "command",
+      example: {
+        name: "test",
+      },
+      description: "The body of the command",
+      properties: {
+        name: {
+          type: "string",
+        },
+      },
+    }),
+  })
+  run(
+    { parameters: { values: { name } }, content }: RouteRequestContext<
+      { name: string },
+      { values: object }
+    >,
+  ): Response {
+    console.log(content);
     const command = this.commands.find(name);
 
     if (command === undefined) {

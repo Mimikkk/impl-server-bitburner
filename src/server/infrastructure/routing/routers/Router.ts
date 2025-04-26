@@ -11,7 +11,7 @@ export class Router<R extends Route[] = Route[]> {
 
   private constructor(public readonly routes: R) {}
 
-  dispatch(request: Request): Awaitable<Response> {
+  async dispatch(request: Request): Promise<Response> {
     const context = RequestContext.fromRequest(request);
 
     const route = this.routes.find((route) => route.matcher.matches(context));
@@ -20,6 +20,6 @@ export class Router<R extends Route[] = Route[]> {
       return HttpRouterResponse.missing({ path: context.url.pathname, method: context.method });
     }
 
-    return route.handler.handle(RouteRequestContext.fromRequestRoute(context, route));
+    return route.handler.handle(await RouteRequestContext.fromRequestRoute(context, route));
   }
 }

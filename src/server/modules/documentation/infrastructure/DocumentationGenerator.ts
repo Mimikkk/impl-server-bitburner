@@ -60,12 +60,13 @@ export class DocumentationGenerator {
         const method = route.type === "ws" ? "trace" : route.method.toLowerCase() as "get";
 
         builder.addPath(route.path, {
-          [method]: {
+          [method as "get"]: {
             tags: openapi.tags,
             summary: openapi.summary,
             deprecated: openapi.deprecated,
             description: openapi.description,
             parameters: openapi.parameters.map((p) => p.toObject()),
+            requestBody: openapi.content?.toObject(),
             responses,
           },
         });
