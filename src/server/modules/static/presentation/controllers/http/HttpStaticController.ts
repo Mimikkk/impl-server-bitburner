@@ -18,17 +18,6 @@ export class HttpStaticController {
     private readonly service: StaticService,
   ) {}
 
-  @RouteNs.get("/favicon.ico")
-  @OpenApiNs.route({
-    summary: "Get the favicon",
-    description: "Get the favicon",
-    tags: [OpenApiTag.Static],
-    responses: [HttpStaticFileResponse.Missing],
-  })
-  favicon() {
-    return this.read(StaticAssetUrl.Favicon);
-  }
-
   @RouteNs.get(HttpStaticParameter.Path)
   @OpenApiNs.route({
     summary: "Get a static file",
