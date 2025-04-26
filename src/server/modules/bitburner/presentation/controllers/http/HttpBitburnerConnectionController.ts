@@ -6,9 +6,13 @@ import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteN
 import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
+import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
 import { HttpBitburnerRequestContent } from "@server/modules/bitburner/presentation/messaging/http/requests/HttpBitburnerRequestContent.ts";
 import { HttpBitburnerCommandResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerCommandResponse.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
+import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { HttpBitburnerRequestParameter } from "../../messaging/http/requests/HttpBitburnerRequestParameter.ts";
 
@@ -57,7 +61,9 @@ export class HttpBitburnerConnectionController {
     return HttpBitburnerConnectionResponse.single(connection);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}`)
+  @RouteNs.post(
+    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}/async`,
+  )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
     summary: "Dispatch a command to a connection",
@@ -71,29 +77,100 @@ export class HttpBitburnerConnectionController {
     parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
     content: HttpBitburnerRequestContent.Command,
   })
-  dispatch(
+  dispatchAsync(
     { parameters: { values: { connectionId, commandName: name } }, content }: RouteRequestContext<
       { connectionId: number; commandName: string },
       { values: object }
     >,
   ): Response {
+    const result = this.tryConnectionCommand(connectionId, name, content.values);
+    if (result instanceof Response) {
+      return result;
+    }
+
+    const { connection, request } = result;
+    connection.send(request);
+
+    return HttpJsonResponse.created();
+  }
+  @RouteNs.post(
+    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}/sync`,
+  )
+  @OpenApiNs.route({
+    description: "Dispatch a command to a connection",
+    summary: "Dispatch a command to a connection",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpJsonResponse.Created,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
+    content: HttpBitburnerRequestContent.Command,
+  })
+  async dispatchSync(
+    { parameters: { values: { connectionId, commandName: name } }, content }: RouteRequestContext<
+      { connectionId: number; commandName: string },
+      { values: object }
+    >,
+  ): Promise<Response> {
+    const result = this.tryConnectionCommand(connectionId, name, content.values);
+    if (result instanceof Response) {
+      return result;
+    }
+
+    const { connection, request } = result;
+    const response = await connection.promise(request);
+
+    return HttpBitburnerCommandResponse.resolved(response);
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
+  @OpenApiNs.route({
+    description: "Read bitburner namespace definition",
+    summary: "Read bitburner namespace definition",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Resolved,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Command,
+  })
+  definitionSync(
+    context: RouteRequestContext<{ connectionId: number; commandName: string }, { values: object }>,
+  ): Promise<Response> {
+    context.parameters.values.commandName = BitburnerCommands.definition.name;
+    return this.dispatchSync(context);
+  }
+  private tryConnectionCommand(
+    connectionId: number,
+    commandName: string,
+    payload: object,
+  ): Response | { connection: ConnectionModel; command: CommandModel; request: CommandRequest } {
     const connection = this.connections.find(connectionId);
+
     if (connection === undefined) {
       return HttpBitburnerConnectionResponse.missing(connectionId);
     }
 
-    const command = this.commands.find(name);
+    const command = this.commands.find(commandName);
     if (command === undefined) {
-      return HttpBitburnerCommandResponse.missing(name);
+      return HttpBitburnerCommandResponse.missing(commandName);
     }
 
-    const request = command.request(content.values);
+    const request = command.request(payload);
     if (ValidationError.is(request)) {
       return HttpJsonResponse.validation(request);
     }
 
-    connection.value.send(request.value);
-
-    return HttpJsonResponse.created();
+    return {
+      connection: connection.value,
+      request: request.value,
+      command,
+    };
   }
 }

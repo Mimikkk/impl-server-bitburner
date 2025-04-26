@@ -1,10 +1,10 @@
 import { IntGenerator } from "@server/infrastructure/persistence/identifiers/IntGenerator.ts";
 import { Repository } from "@server/infrastructure/persistence/repositories/Repository.ts";
 import { VolatileRepository } from "@server/infrastructure/persistence/repositories/VolatileRepository.ts";
-import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
-import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 import { CommandRequestEntity } from "@server/modules/commands/domain/entities/CommandRequestEntity.ts";
 import { CommandRequestEntityFactory } from "@server/modules/commands/infrastructure/factories/CommandRequestEntityFactory.ts";
+import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
+import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 import { CommandRequestRepository } from "./CommandRequestRepository.ts";
 
 export class VolatileCommandRequestRepository implements CommandRequestRepository {

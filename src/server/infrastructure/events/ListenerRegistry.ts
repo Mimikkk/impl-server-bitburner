@@ -17,9 +17,7 @@ export class ListenerRegistry<V> {
     const index = this.listeners.indexOf(listener);
 
     if (index === -1) return false;
-
     this.listeners.splice(index, 1);
-
     return true;
   }
 

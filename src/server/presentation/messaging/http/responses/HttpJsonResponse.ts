@@ -132,11 +132,20 @@ export namespace HttpJsonResponse {
   });
 
   export const [Internal, internal] = custom({
-    content: (error: unknown) => ({ message: "Internal server error", status: 500, error }),
+    content: (error: Error) => ({ message: "Internal server error", status: 500, error: error?.message }),
     example: { message: "Internal server error", status: 500, error: "Unknown error" },
     name: "Internal",
     description: "Internal server error",
     schema: { type: "object", properties: { error: { type: "string" } } },
     status: 500,
+  });
+
+  export const [Timeout, timeout] = custom({
+    content: () => ({ message: "Request timeout", status: 504 }),
+    example: { message: "Request timeout", status: 504 },
+    name: "Timeout",
+    description: "Request timeout",
+    schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
+    status: 504,
   });
 }

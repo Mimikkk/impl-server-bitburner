@@ -1,8 +1,5 @@
-import { Awaitable } from "@shared/types/common.ts";
 import { HttpRouter } from "./routes/HttpRouter.ts";
 import { WsRouter } from "./routes/WsRouter.ts";
-
-export type Middleware = (request: Request) => Awaitable<Response | undefined>;
 
 export class RouteDispatcher {
   static create() {
@@ -11,7 +8,7 @@ export class RouteDispatcher {
 
   private constructor() {}
 
-  dispatch(request: Request): Awaitable<Response> {
+  dispatch(request: Request): Promise<Response> {
     if (request.headers.get("upgrade") === "websocket") {
       return WsRouter.dispatch(request);
     }
