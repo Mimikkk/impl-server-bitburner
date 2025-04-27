@@ -1,6 +1,7 @@
 import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteRequestParameters } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestParameters.ts";
+import { Merge } from "@shared/types/common.ts";
 import { RouteRequestContent } from "./RouteRequestContent.ts";
 
 export class RouteRequestContext<
@@ -27,5 +28,10 @@ export class RouteRequestContext<
       RouteRequestParameters.fromUrls(route.url, request.url),
       await RouteRequestContent.fromRequestContext(request),
     );
+  }
+
+  withParameters<P extends Record<string, any>>(parameters: P): RouteRequestContext<Merge<Parameters, P>, Content> {
+    Object.assign(this.parameters.values, parameters);
+    return this as RouteRequestContext<Merge<Parameters, P>, Content>;
   }
 }

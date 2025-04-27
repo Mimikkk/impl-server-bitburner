@@ -11,37 +11,38 @@ export class ConnectionModel {
 
   private constructor(
     private readonly socket: WebSocket,
-    private readonly entities: CommandRequestRepository,
+    private readonly requests: CommandRequestRepository,
   ) {}
 
   send(request: CommandRequest): CommandRequestEntity {
-    const entity = this.entities.persist(request);
+    const entity = this.requests.persist(request);
 
     this.socket.send(JSON.stringify(request));
 
     return entity;
   }
 
-  promise(request: CommandRequest): Promise<CommandRequestEntity | undefined> {
-    const entity = this.entities.persist(request);
+  promise(request: CommandRequest): Promise<CommandResponse | undefined> {
+    const entity = this.requests.persist(request);
 
-    return new Promise((resolve, reject) => {
-      entity.listeners.add((response) => {
-        const result = this.entities.resolve(response);
+    return new Promise((resolve) => {
+      const remove = entity.listeners.add((response) => {
+        const request = this.requests.find(response.id);
 
-        if (result) {
-          resolve(result);
+        if (request) {
+          remove();
+          resolve(response);
         } else {
-          reject(undefined);
+          resolve(undefined);
         }
       });
 
-      // this.socket.send(JSON.stringify(request));
+      this.socket.send(JSON.stringify(request));
     });
   }
 
-  receive(response: CommandResponse): CommandRequestEntity | undefined {
-    return this.entities.resolve(response);
+  resolve(response: CommandResponse): CommandRequestEntity | undefined {
+    return this.requests.resolve(response);
   }
 
   close(): void {

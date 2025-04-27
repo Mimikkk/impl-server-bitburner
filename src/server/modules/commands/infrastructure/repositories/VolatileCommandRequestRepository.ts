@@ -22,7 +22,6 @@ export class VolatileCommandRequestRepository implements CommandRequestRepositor
     const entity = this.entities.find(response.id);
 
     if (entity === undefined) return;
-
     entity.listeners.notify(response);
     this.delete(entity.id);
 

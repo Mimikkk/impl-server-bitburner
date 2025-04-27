@@ -1,7 +1,7 @@
 import { CommandResourceNs } from "@server/modules/bitburner/application/resources/CommandResource.ts";
 import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
-import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
+import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
 export namespace HttpBitburnerCommandResponse {
   export const [Multiple, multiple] = HttpJsonResponse.custom({
@@ -73,7 +73,7 @@ export namespace HttpBitburnerCommandResponse {
 
   export const [Resolved, resolved] = HttpJsonResponse.custom({
     content: (response: CommandResponse) => ({ response: response }),
-    example: { response: { id: 1 } },
+    example: { response: { id: 1, jsonrpc: "2.0", result: "example result" } },
     name: "Resolved command",
     description: "Command resolved",
     status: 200,

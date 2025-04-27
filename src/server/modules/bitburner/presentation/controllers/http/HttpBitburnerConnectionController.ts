@@ -62,7 +62,7 @@ export class HttpBitburnerConnectionController {
   }
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}/async`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
@@ -77,13 +77,13 @@ export class HttpBitburnerConnectionController {
     parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
     content: HttpBitburnerRequestContent.Command,
   })
-  dispatchAsync(
+  dispatch(
     { parameters: { values: { connectionId, commandName: name } }, content }: RouteRequestContext<
       { connectionId: number; commandName: string },
-      { values: object }
+      { values: object } | null
     >,
   ): Response {
-    const result = this.tryConnectionCommand(connectionId, name, content.values);
+    const result = this.tryConnectionCommand(connectionId, name, content?.values);
     if (result instanceof Response) {
       return result;
     }
@@ -109,24 +109,27 @@ export class HttpBitburnerConnectionController {
     parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
     content: HttpBitburnerRequestContent.Command,
   })
-  async dispatchSync(
+  async read(
     { parameters: { values: { connectionId, commandName: name } }, content }: RouteRequestContext<
       { connectionId: number; commandName: string },
-      { values: object }
+      { values: object } | null
     >,
   ): Promise<Response> {
-    const result = this.tryConnectionCommand(connectionId, name, content.values);
+    const result = this.tryConnectionCommand(connectionId, name, content?.values);
     if (result instanceof Response) {
       return result;
     }
 
     const { connection, request } = result;
     const response = await connection.promise(request);
+    if (response === undefined) {
+      return HttpJsonResponse.failure();
+    }
 
     return HttpBitburnerCommandResponse.resolved(response);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/read/${BitburnerCommands.definition.name}`)
   @OpenApiNs.route({
     description: "Read bitburner namespace definition",
     summary: "Read bitburner namespace definition",
@@ -138,18 +141,32 @@ export class HttpBitburnerConnectionController {
       HttpBitburnerCommandResponse.Resolved,
     ],
     parameters: [HttpBitburnerRequestParameter.ConnectionId],
-    content: HttpBitburnerRequestContent.Command,
   })
-  definitionSync(
-    context: RouteRequestContext<{ connectionId: number; commandName: string }, { values: object }>,
-  ): Promise<Response> {
-    context.parameters.values.commandName = BitburnerCommands.definition.name;
-    return this.dispatchSync(context);
+  readDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Promise<Response> {
+    return this.read(context.withParameters({ commandName: BitburnerCommands.definition.name }));
   }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
+  @OpenApiNs.route({
+    description: "dispatch bitburner namespace definition command asynchronously",
+    summary: "dispatch bitburner namespace definition command asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Resolved,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+  })
+  dispatchDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.definition.name }));
+  }
+
   private tryConnectionCommand(
     connectionId: number,
     commandName: string,
-    payload: object,
+    payload: object | null,
   ): Response | { connection: ConnectionModel; command: CommandModel; request: CommandRequest } {
     const connection = this.connections.find(connectionId);
 

@@ -1,7 +1,7 @@
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
+import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
-import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
 
 export class ConnectionService {
   static create(connections: ConnectionRepository) {
@@ -39,14 +39,7 @@ export class ConnectionService {
         return;
       }
 
-      const request = connection.receive(response);
-
-      if (request === undefined) {
-        Log.error("failed to resolve message data from connection", id, event);
-        return;
-      }
-
-      request.listeners.notify(response);
+      connection.resolve(response);
     });
 
     socket.addEventListener("error", (event) => {
