@@ -93,8 +93,26 @@ export class HttpBitburnerConnectionController {
 
     return HttpJsonResponse.created();
   }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
+  @OpenApiNs.route({
+    description: "dispatch bitburner namespace definition command asynchronously",
+    summary: "dispatch bitburner namespace definition command asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Resolved,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+  })
+  dispatchDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.definition.name }));
+  }
+
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}/sync`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/read/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
@@ -144,23 +162,6 @@ export class HttpBitburnerConnectionController {
   })
   readDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Promise<Response> {
     return this.read(context.withParameters({ commandName: BitburnerCommands.definition.name }));
-  }
-
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
-  @OpenApiNs.route({
-    description: "dispatch bitburner namespace definition command asynchronously",
-    summary: "dispatch bitburner namespace definition command asynchronously",
-    tags: [OpenApiTag.Connections],
-    responses: [
-      HttpBitburnerConnectionResponse.Missing,
-      HttpBitburnerCommandResponse.Missing,
-      HttpJsonResponse.Validation,
-      HttpBitburnerCommandResponse.Resolved,
-    ],
-    parameters: [HttpBitburnerRequestParameter.ConnectionId],
-  })
-  dispatchDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Response {
-    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.definition.name }));
   }
 
   private tryConnectionCommand(
