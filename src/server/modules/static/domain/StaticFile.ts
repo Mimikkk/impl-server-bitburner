@@ -51,5 +51,6 @@ export namespace StaticFileNs {
     [Extension.Json]: "application/json",
   } as const satisfies Record<Extension, string>;
 
-  export const fallback = "application/octet-stream";
+  export const mimeFallback = "application/octet-stream";
+  export const typeFallback = "string";
 }

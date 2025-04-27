@@ -54,6 +54,7 @@ export class PathParameter {
       description: this.description,
       schema: { type: this.type, format: this.format, enum: this.options },
       in: "path",
+      required: true,
     };
   }
 }

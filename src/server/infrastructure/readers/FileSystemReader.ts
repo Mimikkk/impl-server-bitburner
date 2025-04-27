@@ -1,5 +1,5 @@
 import { FileReader } from "@server/infrastructure/readers/FileReader.ts";
-import { resolve } from "@std/path/resolve";
+import { extname, resolve } from "@std/path";
 import { StaticFileNs } from "../../modules/static/domain/StaticFile.ts";
 
 export class FileSystemReader {
@@ -15,17 +15,14 @@ export class FileSystemReader {
   async read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
     path = resolve(this.path, path) as P;
 
-    const extensionIndex = path.lastIndexOf(".");
-    if (extensionIndex === -1) return undefined;
+    const extension = extname(path).slice(1) as StaticFileNs.Extension;
+    if (!extension) return undefined;
 
-    const extension = path.substring(extensionIndex + 1) as StaticFileNs.Extension;
-    const type = StaticFileNs.TypeMap[extension];
-    if (type === undefined) return undefined;
-
+    const type = StaticFileNs.TypeMap[extension] ?? StaticFileNs.typeFallback;
     const content = await this.reader.read(path, type);
     if (content === undefined) return undefined;
 
-    const mime = StaticFileNs.MimeMap[extension] ?? StaticFileNs.fallback;
+    const mime = StaticFileNs.MimeMap[extension] ?? StaticFileNs.mimeFallback;
     return { content, mime } as StaticFileNs.FromPath<P>;
   }
 }

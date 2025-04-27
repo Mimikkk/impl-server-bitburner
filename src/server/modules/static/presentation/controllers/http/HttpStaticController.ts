@@ -27,7 +27,8 @@ export class HttpStaticController {
     parameters: [HttpStaticParameter.Path],
   })
   file({ parameters: { values: { path } } }: RouteRequestContext<{ path: StaticAssetUrl }>) {
-    path = path.replace(/:/g, "/") as StaticAssetUrl;
+    path = decodeURIComponent(path).replace(/:/g, "/") as StaticAssetUrl;
+    console.log(path);
     return this.read(path);
   }
 

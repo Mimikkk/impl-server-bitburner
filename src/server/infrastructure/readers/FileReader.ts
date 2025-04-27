@@ -12,8 +12,8 @@ export class FileReader {
       }
 
       return await Deno.readFile(path) as FileReader.FileMap[T];
-    } catch {
-      Log.error(`Failed to read file ${path}.`);
+    } catch (error: unknown) {
+      Log.error(`Failed to read file ${path}.`, { error });
 
       return undefined;
     }
