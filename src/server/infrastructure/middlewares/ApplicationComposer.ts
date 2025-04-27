@@ -1,15 +1,15 @@
 import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 
-export class MiddlewareComposer {
-  static create(middlewares: Middleware[]): MiddlewareComposer {
-    return new MiddlewareComposer(middlewares);
+export class ApplicationComposer {
+  static create(middlewares: Middleware[]): ApplicationComposer {
+    return new ApplicationComposer(middlewares);
   }
 
   private constructor(private readonly middlewares: Middleware[]) {}
 
   static of(middlewares: Middleware[]): Dispatch {
-    return MiddlewareComposer.create(middlewares).compose();
+    return ApplicationComposer.create(middlewares).compose();
   }
 
   compose(): Dispatch {
