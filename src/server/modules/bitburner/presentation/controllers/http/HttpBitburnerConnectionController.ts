@@ -62,7 +62,7 @@ export class HttpBitburnerConnectionController {
   }
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
@@ -94,7 +94,7 @@ export class HttpBitburnerConnectionController {
     return HttpJsonResponse.created();
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.definition.name}`)
   @OpenApiNs.route({
     description: "Dispatch a bitburner namespace definition command",
     summary: "Dispatch a bitburner namespace definition command asynchronously",
@@ -112,7 +112,7 @@ export class HttpBitburnerConnectionController {
   }
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/execute/${HttpBitburnerRequestParameter.CommandName}`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Execute a command",
@@ -147,7 +147,7 @@ export class HttpBitburnerConnectionController {
     return HttpBitburnerCommandResponse.resolved(response);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.definition.name}`)
   @OpenApiNs.route({
     description: "Execute bitburner namespace definition",
     summary: "Executes a bitburner namespace definition command and waits for the result",
