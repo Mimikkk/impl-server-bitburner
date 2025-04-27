@@ -115,8 +115,8 @@ export class HttpBitburnerConnectionController {
     `${HttpBitburnerRequestParameter.ConnectionId}/read/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
-    description: "Dispatch a command to a connection",
-    summary: "Dispatch a command to a connection",
+    description: "Read a command response from a connection",
+    summary: "Read a command response from a connection",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
