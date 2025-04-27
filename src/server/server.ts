@@ -5,8 +5,10 @@ import { ApplicationComposer } from "./infrastructure/middlewares/ApplicationCom
 import { MiddlewareNs } from "./infrastructure/middlewares/MiddlewareNs.ts";
 
 export const app = ApplicationComposer.of([
-  MiddlewareNs.faviconRedirect(),
-  MiddlewareNs.internalBarrier(),
+  MiddlewareNs.redirect({
+    redirects: [{ from: "/favicon.ico", to: "/static/favicon.ico" }],
+  }),
+  MiddlewareNs.barrier(),
   MiddlewareNs.timeout({ timeoutMs: 500 }),
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);

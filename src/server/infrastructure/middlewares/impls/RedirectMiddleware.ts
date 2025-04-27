@@ -2,22 +2,23 @@ import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middlew
 import { Awaitable } from "@shared/types/common.ts";
 
 export interface RedirectMiddlewareOptions {
-  from: string;
-  to: string;
+  redirects: { from: string; to: string }[];
 }
 
 export class RedirectMiddleware implements Middleware {
-  static create({ from, to }: RedirectMiddlewareOptions): RedirectMiddleware {
-    return new RedirectMiddleware(from, to);
+  static create({ redirects }: RedirectMiddlewareOptions): RedirectMiddleware {
+    const map = new Map(redirects.map(({ from, to }) => [from, to]));
+    return new RedirectMiddleware(map);
   }
 
-  private constructor(private readonly from: string, private readonly to: string) {}
+  private constructor(private readonly redirects: Map<string, string>) {}
 
   handle(request: Request, next: Dispatch): Awaitable<Response> {
     const url = new URL(request.url);
 
-    if (url.pathname === this.from) {
-      request = new Request(`${url.origin}${this.to}`, request);
+    const to = this.redirects.get(url.pathname);
+    if (to) {
+      request = new Request(`${url.origin}${to}`, request);
     }
 
     return next(request);

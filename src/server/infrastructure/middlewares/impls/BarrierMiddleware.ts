@@ -2,9 +2,9 @@ import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middlew
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
 import { Awaitable } from "@shared/types/common.ts";
 
-export class InternalBarrierMiddleware implements Middleware {
-  static create(): InternalBarrierMiddleware {
-    return new InternalBarrierMiddleware();
+export class BarrierMiddleware implements Middleware {
+  static create(): BarrierMiddleware {
+    return new BarrierMiddleware();
   }
 
   private constructor() {}
