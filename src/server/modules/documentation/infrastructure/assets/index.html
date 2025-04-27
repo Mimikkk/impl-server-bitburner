@@ -38,8 +38,10 @@
   <body>
     <div id="openapi-ui"></div>
     <script type="module" defer>
+      const host = new URL(window.location.href).host;
+
       SwaggerUIBundle({
-        url: "http://127.0.0.1:8080/docs/openapi-spec.json",
+        url: `http://${host}/docs/openapi-spec.json`,
         dom_id: "#openapi-ui",
         presets: [
           SwaggerUIBundle.presets.apis,

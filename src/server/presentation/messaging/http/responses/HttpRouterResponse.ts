@@ -11,6 +11,15 @@ export namespace HttpRouterResponse {
     example: { message: "Route not found", path: "path/to/route", method: "GET" },
     name: "MissingRoute",
     description: "Route not found",
+    schema: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+        path: { type: "string" },
+        method: { type: "string" },
+      },
+      required: ["message", "path", "method"],
+    },
     status: 501,
   });
 }

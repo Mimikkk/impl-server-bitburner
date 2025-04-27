@@ -16,9 +16,7 @@ export class FileSystemAssetReader {
   }
 
   static fromMeta(meta: ImportMeta): FileSystemAssetReader {
-    const url = new URL(meta.dirname!);
-    const path = url.pathname;
-
+    const path = meta.dirname!;
     return new FileSystemAssetReader(path);
   }
 }

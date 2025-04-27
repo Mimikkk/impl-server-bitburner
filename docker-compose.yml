@@ -1,0 +1,14 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      - DENO_ENV=production
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
+    restart: unless-stopped

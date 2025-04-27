@@ -16,8 +16,8 @@
   },
   "tasks": {
     "server": {
-      "description": "Run the server",
-      "command": "deno run --allow-net --allow-read --allow-write --allow-env --env-file=.env --watch ./src/server/server.ts"
+      "description": "Run the development server",
+      "command": "deno run -A --env-file=.env --watch ./src/server/server.ts"
     },
     "test": {
       "description": "Run the tests",
@@ -35,8 +35,5 @@
     "@std/path": "jsr:@std/path",
     "openapi3-ts": "npm:openapi3-ts@^4.4.0",
     "swagger-ui-dist": "npm:swagger-ui-dist@^5.11.0"
-  },
-  "compilerOptions": {
-    "types": ["./declarations"]
   }
 }
