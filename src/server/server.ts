@@ -1,67 +1,107 @@
 import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
 import { RouteDispatcher } from "@server/infrastructure/routing/RouteDispatcher.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
+import { Awaitable } from "@shared/types/common.ts";
+
+interface Middleware {
+  handle(request: Request, next: (request: Request) => Awaitable<Response>): Awaitable<Response>;
+}
+
+class FaviconRedirectMiddleware implements Middleware {
+  static create() {
+    return new FaviconRedirectMiddleware();
+  }
+
+  private constructor() {}
+
+  handle(request: Request, next: (request: Request) => Awaitable<Response>): Awaitable<Response> {
+    const url = new URL(request.url);
+
+    if (url.pathname === "/favicon.ico") {
+      request = new Request(`${url.origin}/static/favicon.ico`, request);
+    }
+
+    return next(request);
+  }
+}
+
+class InternalBarrierMiddleware implements Middleware {
+  static create() {
+    return new InternalBarrierMiddleware();
+  }
+
+  private constructor() {}
+
+  handle(request: Request, next: (request: Request) => Awaitable<Response>): Awaitable<Response> {
+    try {
+      return next(request);
+    } catch (error) {
+      return HttpJsonResponse.internal(error as Error);
+    }
+  }
+}
 
 interface TimeoutMiddlewareOptions {
   timeoutMs: number;
 }
 
-const dispatcher = RouteDispatcher.create();
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const redirectFavicon = (request: Request) => {
-  if (request.url.endsWith(`${new URL(request.url).origin}/favicon.ico`)) {
-    return new Request(`${new URL(request.url).origin}/static/favicon.ico`, request);
+class TimeoutMiddleware implements Middleware {
+  static create({ timeoutMs }: TimeoutMiddlewareOptions) {
+    return new TimeoutMiddleware(timeoutMs);
   }
 
-  return request;
-};
+  private constructor(private readonly timeoutMs: number) {}
 
-const InternalBarrierMiddleware: Middleware = async (request, next) => {
-  try {
-    return await next(request);
-  } catch (error) {
-    return HttpJsonResponse.internal(error as Error);
+  handle(request: Request, next: (request: Request) => Promise<Response>): Awaitable<Response> {
+    const timeout = new Promise<Response>((resolve) =>
+      setTimeout(() => resolve(HttpJsonResponse.timeout()), this.timeoutMs)
+    );
+    return Promise.race([next(request), timeout]);
   }
-};
+}
 
-const TimeoutMiddleware = ({ timeoutMs }: TimeoutMiddlewareOptions): Middleware => (request, next) => {
-  const timeout = new Promise<Response>((resolve) => setTimeout(() => resolve(HttpJsonResponse.timeout()), timeoutMs));
+class MiddlewareComposer {
+  static create(middlewares: Middleware[]) {
+    return new MiddlewareComposer(middlewares);
+  }
 
-  return Promise.race([timeout, next(request)]);
-};
+  private constructor(private readonly middlewares: Middleware[]) {}
 
-type Middleware = (request: Request, next: (request: Request) => Promise<Response>) => Promise<Response>;
-
-const composeMiddleware = (...middlewares: Middleware[]) => {
-  return (request: Request, handler: (request: Request) => Promise<Response>): Promise<Response> => {
-    let index = -1;
-
-    const dispatch = (i: number, request: Request): Promise<Response> => {
-      if (i <= index) {
-        throw new Error("next() called multiple times");
-      }
-
-      index = i;
-
-      if (i === middlewares.length) {
-        return handler(request);
-      }
-
-      return middlewares[i](request, (request) => dispatch(i + 1, request));
+  handle(request: Request): Awaitable<Response> {
+    let current: (request: Request) => Awaitable<Response> = (req) => {
+      throw new Error("No dispatch middleware found in the stack.");
     };
 
-    return dispatch(0, request);
-  };
-};
+    for (let i = this.middlewares.length - 1; i >= 0; i--) {
+      const middleware = this.middlewares[i];
+      const next = current;
+      current = (request) => middleware.handle(request, next);
+    }
+
+    return current(request);
+  }
+}
+
+class DispatchMiddleware implements Middleware {
+  static create(handler: (request: Request) => Awaitable<Response>) {
+    return new DispatchMiddleware(handler);
+  }
+
+  private constructor(private readonly handler: (request: Request) => Awaitable<Response>) {}
+
+  handle(request: Request, _next: (request: Request) => Awaitable<Response>): Awaitable<Response> {
+    return this.handler(request);
+  }
+}
+
+const dispatcher = RouteDispatcher.create();
+const app = MiddlewareComposer.create([
+  FaviconRedirectMiddleware.create(),
+  InternalBarrierMiddleware.create(),
+  TimeoutMiddleware.create({ timeoutMs: 500 }),
+  DispatchMiddleware.create(dispatcher.dispatch),
+]);
 
 Deno.serve(ServerConfiguration, (request) => {
-  request = redirectFavicon(request);
-
-  const use = composeMiddleware(
-    InternalBarrierMiddleware,
-    TimeoutMiddleware({ timeoutMs: 500 }),
-  );
-
-  return use(request, dispatcher.dispatch);
+  return app.handle(request);
 });
