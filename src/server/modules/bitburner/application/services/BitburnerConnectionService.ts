@@ -1,8 +1,6 @@
-import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { ConnectionService } from "../../../connections/application/services/ConnectionService.ts";
 import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
-import { BitburnerCommands } from "../../domain/BitburnerCommands.ts";
 
 export class BitburnerConnectionService {
   static create(connections: ConnectionRepository = ConnectionRepository.instance) {
@@ -27,23 +25,5 @@ export class BitburnerConnectionService {
 
   find(id: number): ConnectionEntity | undefined {
     return this.connections.find(id);
-  }
-
-  updateDeclaration(): boolean {
-    const connection = this.any();
-    if (!connection) return false;
-
-    const command = BitburnerCommands.definition;
-
-    const request = command.request(undefined);
-    if (ValidationError.is(request)) return false;
-
-    request.listeners.add((response) => {
-      console.log({ request, response });
-    });
-
-    connection.value.send(request.value);
-
-    return true;
   }
 }
