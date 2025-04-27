@@ -66,7 +66,7 @@ export class HttpBitburnerConnectionController {
   )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
-    summary: "Dispatch a command to a connection",
+    summary: "Dispatch a command to a connection asynchronously",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
@@ -96,8 +96,8 @@ export class HttpBitburnerConnectionController {
 
   @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition.name}`)
   @OpenApiNs.route({
-    description: "dispatch bitburner namespace definition command asynchronously",
-    summary: "dispatch bitburner namespace definition command asynchronously",
+    description: "Dispatch a bitburner namespace definition command",
+    summary: "Dispatch a bitburner namespace definition command asynchronously",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
@@ -112,11 +112,11 @@ export class HttpBitburnerConnectionController {
   }
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/read/${HttpBitburnerRequestParameter.CommandName}`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/execute/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
-    description: "Read a command response from a connection",
-    summary: "Read a command response from a connection",
+    description: "Execute a command",
+    summary: "Executes a command and waits for the result",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
@@ -147,10 +147,10 @@ export class HttpBitburnerConnectionController {
     return HttpBitburnerCommandResponse.resolved(response);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/read/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.definition.name}`)
   @OpenApiNs.route({
-    description: "Read bitburner namespace definition",
-    summary: "Read bitburner namespace definition",
+    description: "Execute bitburner namespace definition",
+    summary: "Executes a bitburner namespace definition command and waits for the result",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
