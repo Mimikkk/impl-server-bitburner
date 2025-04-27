@@ -1,3 +1,4 @@
+import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { ConnectionService } from "../../../connections/application/services/ConnectionService.ts";
 import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
@@ -35,6 +36,7 @@ export class BitburnerConnectionService {
     const command = BitburnerCommands.definition;
 
     const request = command.request(undefined);
+    if (ValidationError.is(request)) return false;
 
     request.listeners.add((response) => {
       console.log({ request, response });
