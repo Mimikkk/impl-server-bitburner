@@ -132,7 +132,7 @@ export namespace HttpJsonResponse {
   });
 
   export const [Internal, internal] = custom({
-    content: (error: Error) => ({ message: "Internal server error", status: 500, error: error?.message }),
+    content: (error: unknown) => ({ message: "Internal server error", status: 500, error: (error as Error)?.message }),
     example: { message: "Internal server error", status: 500, error: "Unknown error" },
     name: "Internal",
     description: "Internal server error",
