@@ -41,6 +41,10 @@ export class CommandModel<
     private readonly factory: CommandRequestFactory,
   ) {}
 
+  toString(): string {
+    return this.name;
+  }
+
   request(params: Infer<RQ>): CommandRequestEntity | ValidationError[] {
     const errors = this.requestValidator.validate(params);
     if (ValidationError.is(errors)) {

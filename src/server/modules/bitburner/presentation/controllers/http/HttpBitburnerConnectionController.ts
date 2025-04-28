@@ -72,7 +72,7 @@ export class HttpBitburnerConnectionController {
       HttpBitburnerConnectionResponse.Missing,
       HttpBitburnerCommandResponse.Missing,
       HttpJsonResponse.Validation,
-      HttpJsonResponse.Created,
+      HttpBitburnerCommandResponse.Dispatched,
     ],
     parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
     content: HttpBitburnerRequestContent.Command,
@@ -89,26 +89,134 @@ export class HttpBitburnerConnectionController {
     }
 
     const { connection, request } = result;
-    connection.send(request);
+    const { id } = connection.send(request);
 
-    return HttpJsonResponse.created();
+    return HttpBitburnerCommandResponse.dispatched(id);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.definition}`)
   @OpenApiNs.route({
-    description: "Dispatch a bitburner namespace definition command",
-    summary: "Dispatch a bitburner namespace definition command asynchronously",
+    description: "Dispatch a command to send the namespace definition",
+    summary: "Dispatch a command to send the namespace definition asynchronously",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
       HttpBitburnerCommandResponse.Missing,
       HttpJsonResponse.Validation,
-      HttpBitburnerCommandResponse.Resolved,
+      HttpBitburnerCommandResponse.Dispatched,
     ],
     parameters: [HttpBitburnerRequestParameter.ConnectionId],
   })
   dispatchDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Response {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.definition.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.update.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to update a file on a server",
+    summary: "Dispatch a command to update a file on a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Update,
+  })
+  dispatchUpdate(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.update.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.remove.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to remove a file from a server",
+    summary: "Dispatch a command to remove a file from a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Remove,
+  })
+  dispatchRemove(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.remove.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.read.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to read a file from a server",
+    summary: "Dispatch a command to read a file from a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Read,
+  })
+  dispatchRead(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.read.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.list.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to list all files on a server",
+    summary: "Dispatch a command to list all files on a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.List,
+  })
+  dispatchList(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.list.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.names.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to list all file names on a server",
+    summary: "Dispatch a command to list all file names on a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Names,
+  })
+  dispatchNames(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.names.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.ram.name}`)
+  @OpenApiNs.route({
+    description: "Dispatch a command to calculate the RAM usage of a file on a server",
+    summary: "Dispatch a command to calculate the RAM usage of a file on a server asynchronously",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Dispatched,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Ram,
+  })
+  dispatchRam(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Response {
+    return this.dispatch(context.withParameters({ commandName: BitburnerCommands.ram.name }));
   }
 
   @RouteNs.post(
@@ -127,7 +235,7 @@ export class HttpBitburnerConnectionController {
     parameters: [HttpBitburnerRequestParameter.ConnectionId, HttpBitburnerRequestParameter.CommandName],
     content: HttpBitburnerRequestContent.Command,
   })
-  async read(
+  async execute(
     { parameters: { values: { connectionId, commandName: name } }, content }: RouteRequestContext<
       { connectionId: number; commandName: string },
       { values: object } | null
@@ -144,24 +252,114 @@ export class HttpBitburnerConnectionController {
       return HttpJsonResponse.failure();
     }
 
-    return HttpBitburnerCommandResponse.resolved(response);
+    return HttpBitburnerCommandResponse.command(response);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.definition.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.definition}`)
   @OpenApiNs.route({
-    description: "Execute bitburner namespace definition",
-    summary: "Executes a bitburner namespace definition command and waits for the result",
+    description: "Read the bitburner namespace definition",
+    summary: "Executes a command to read the bitburner namespace definition",
     tags: [OpenApiTag.Connections],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
       HttpBitburnerCommandResponse.Missing,
       HttpJsonResponse.Validation,
-      HttpBitburnerCommandResponse.Resolved,
+      HttpBitburnerCommandResponse.Definition,
     ],
     parameters: [HttpBitburnerRequestParameter.ConnectionId],
   })
   readDefinition(context: RouteRequestContext<{ connectionId: number }, null>): Promise<Response> {
-    return this.read(context.withParameters({ commandName: BitburnerCommands.definition.name }));
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.definition.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.update}`)
+  @OpenApiNs.route({
+    description: "Update a file on a server",
+    summary: "Execute a command to update a file on a server",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Update,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Update,
+  })
+  readUpdate(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Promise<Response> {
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.update.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.remove}`)
+  @OpenApiNs.route({
+    description: "Remove a file on a server",
+    summary: "Execute a command to remove a file on a server",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Remove,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Remove,
+  })
+  readRemove(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Promise<Response> {
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.remove.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.list}`)
+  @OpenApiNs.route({
+    description: "Read all files on a server",
+    summary: "Execute a command to read all files on a server",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.List,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.List,
+  })
+  readList(context: RouteRequestContext<{ connectionId: number }, null>): Promise<Response> {
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.list.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.names}`)
+  @OpenApiNs.route({
+    description: "Read all file names on a server",
+    summary: "Execute a command to read all file names on a server",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Names,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Names,
+  })
+  readNames(context: RouteRequestContext<{ connectionId: number }, null>): Promise<Response> {
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.names.name }));
+  }
+
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.ram}`)
+  @OpenApiNs.route({
+    description: "Read the RAM usage of a file on a server",
+    summary: "Execute a command to read the RAM usage of a file on a server",
+    tags: [OpenApiTag.Connections],
+    responses: [
+      HttpBitburnerConnectionResponse.Missing,
+      HttpBitburnerCommandResponse.Missing,
+      HttpJsonResponse.Validation,
+      HttpBitburnerCommandResponse.Ram,
+    ],
+    parameters: [HttpBitburnerRequestParameter.ConnectionId],
+    content: HttpBitburnerRequestContent.Ram,
+  })
+  readRam(context: RouteRequestContext<{ connectionId: number }, { values: object } | null>): Promise<Response> {
+    return this.execute(context.withParameters({ commandName: BitburnerCommands.ram.name }));
   }
 
   private tryConnectionCommand(

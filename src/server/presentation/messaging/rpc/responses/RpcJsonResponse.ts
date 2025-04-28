@@ -6,7 +6,7 @@ export interface RpcJsonResponseError {
   error: unknown;
 }
 
-export interface RpcJsonResponseResult<R> {
+export interface RpcJsonResponseResult<R = any> {
   jsonrpc: "2.0";
   id: number;
   result: R;

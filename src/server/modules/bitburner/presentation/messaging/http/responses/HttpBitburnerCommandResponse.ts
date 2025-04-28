@@ -2,6 +2,8 @@ import { CommandResourceNs } from "@server/modules/bitburner/application/resourc
 import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
+import { RpcJsonResponseResult } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
+import { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpBitburnerCommandResponse {
   export const [Multiple, multiple] = HttpJsonResponse.custom({
@@ -33,7 +35,7 @@ export namespace HttpBitburnerCommandResponse {
     },
     name: "Multiple commands",
     description: "Multiple commands",
-    status: 200,
+    status: 201,
   });
 
   export const [Single, single] = HttpJsonResponse.custom({
@@ -53,7 +55,7 @@ export namespace HttpBitburnerCommandResponse {
     },
     name: "Single command",
     description: "Single command",
-    status: 200,
+    status: 201,
   });
 
   export const [Missing, missing] = HttpJsonResponse.custom({
@@ -71,17 +73,94 @@ export namespace HttpBitburnerCommandResponse {
     status: 404,
   });
 
-  export const [Resolved, resolved] = HttpJsonResponse.custom({
-    content: (response: CommandResponse) => ({ response: response }),
-    example: { response: { id: 1, jsonrpc: "2.0", result: "example result" } },
-    name: "Resolved command",
-    description: "Command resolved",
-    status: 200,
-    schema: {
-      type: "object",
-      properties: {
-        response: { type: "object" },
-      },
-    },
+  export const [Dispatched, dispatched] = HttpJsonResponse.custom({
+    content: (requestId: number) => ({ requestId }),
+    example: { requestId: 1 },
+    name: "Dispatched command",
+    description: "Command dispatched successfully",
+    status: 201,
+    schema: { type: "object", properties: { requestId: { type: "number" } } },
+  });
+
+  const createContent = (response: CommandResponse) => ({
+    responseId: response.id,
+    result: (response as RpcJsonResponseResult).result,
+  });
+  const createExample = <T>(result: T) => ({ responseId: 1, result }) as const;
+  const createSchema = (result: SchemaObject): SchemaObject => ({
+    type: "object",
+    properties: { responseId: { type: "number" }, result },
+  });
+
+  export const [Command, command] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample("example result"),
+    name: "Command",
+    description: "Command response content",
+    status: 201,
+    schema: createSchema({ type: ["string", "array", "number", "object"] }),
+  });
+
+  export const [Update, update] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample("OK"),
+    name: "Update command",
+    description: "Command to update a file on a server",
+    status: 201,
+    schema: createSchema({ type: "string" }),
+  });
+
+  export const [Remove, remove] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample("OK"),
+    name: "Remove command",
+    description: "Command to remove a file on a server",
+    status: 201,
+    schema: createSchema({ type: "string" }),
+  });
+
+  export const [Read, read] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample("example result"),
+    name: "Read command",
+    description: "Command to read a file on a server",
+    status: 201,
+    schema: createSchema({ type: "string" }),
+  });
+
+  export const [List, list] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample(["example result"]),
+    name: "List command",
+    description: "Command to list all files on a server",
+    status: 201,
+    schema: createSchema({ type: "array", items: { type: "string" } }),
+  });
+
+  export const [Names, names] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample(["example result"]),
+    name: "Names command",
+    description: "Command to list all file names on a server",
+    status: 201,
+    schema: createSchema({ type: "array", items: { type: "string" } }),
+  });
+
+  export const [Ram, ram] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample(100),
+    name: "Ram command",
+    description: "Command to calculate the RAM usage of a file on a server",
+    status: 201,
+    schema: createSchema({ type: "number" }),
+  });
+
+  export const [Definition, definition] = HttpJsonResponse.custom({
+    content: createContent,
+    example: createExample("example result"),
+    name: "Definition command",
+    description: "Command to get the definition of a file on a server",
+    status: 201,
+    schema: createSchema({ type: "string" }),
   });
 }
