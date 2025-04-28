@@ -1,4 +1,5 @@
 import { Log } from "@shared/logging/log.ts";
+import { dirname } from "@std/path";
 
 export class FileWriter {
   static create(): FileWriter {
@@ -7,6 +8,16 @@ export class FileWriter {
 
   async write(path: string, content: string | Uint8Array): Promise<boolean> {
     try {
+      const directory = dirname(path);
+
+      if (directory) {
+        try {
+          await Deno.mkdir(directory, { recursive: true });
+        } catch {
+          return false;
+        }
+      }
+
       if (typeof content === "string") {
         await Deno.writeTextFile(path, content);
       } else {

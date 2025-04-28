@@ -3,23 +3,18 @@ import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
 import { HttpBitburnerRequestParameter } from "../../messaging/http/requests/HttpBitburnerRequestParameter.ts";
 
 @ControllerNs.controller({ name: "HTTP Bitburner connection", group: "connections" })
 export class HttpBitburnerConnectionController {
-  static create(
-    connections: BitburnerConnectionService = BitburnerConnectionService.create(),
-    commands: BitburnerCommandService = BitburnerCommandService.create(),
-  ) {
-    return new HttpBitburnerConnectionController(connections, commands);
+  static create() {
+    return new HttpBitburnerConnectionController();
   }
 
   private constructor(
-    private readonly connections: BitburnerConnectionService,
-    private readonly commands: BitburnerCommandService,
+    private readonly connections = BitburnerConnectionService.create(),
   ) {}
 
   @RouteNs.get("")

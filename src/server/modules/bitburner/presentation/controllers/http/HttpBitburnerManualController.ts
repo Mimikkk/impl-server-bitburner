@@ -10,7 +10,6 @@ import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCom
 import { HttpBitburnerRequestContent } from "@server/modules/bitburner/presentation/messaging/http/requests/HttpBitburnerRequestContent.ts";
 import { HttpBitburnerCommandResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerCommandResponse.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
-import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
 import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
@@ -335,7 +334,7 @@ export class HttpBitburnerManualController {
     connectionId: number,
     commandName: string,
     payload: object | null,
-  ): Response | { connection: ConnectionModel; command: CommandModel; request: CommandRequest } {
+  ): Response | { connection: ConnectionModel; request: CommandRequest } {
     const connection = this.connections.find(connectionId);
     if (connection === undefined) {
       return HttpBitburnerConnectionResponse.missing(connectionId);
@@ -351,10 +350,6 @@ export class HttpBitburnerManualController {
       return HttpJsonResponse.validation(request);
     }
 
-    return {
-      connection: connection.value,
-      request: request.value,
-      command,
-    };
+    return { connection: connection.value, request: request.value };
   }
 }

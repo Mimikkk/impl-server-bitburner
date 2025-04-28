@@ -4,7 +4,6 @@ import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/C
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
 import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { BitburnerClientService } from "@server/modules/bitburner/application/services/BitburnerClientService.ts";
-import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
@@ -13,18 +12,13 @@ import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/Rp
 
 @ControllerNs.controller({ name: "HTTP Bitburner client", group: "client" })
 export class HttpBitburnerClientController {
-  static create(
-    client: BitburnerClientService = BitburnerClientService.create(),
-    connections: BitburnerConnectionService = BitburnerConnectionService.create(),
-    commands: BitburnerCommandService = BitburnerCommandService.create(),
-  ) {
-    return new HttpBitburnerClientController(client, connections, commands);
+  static create() {
+    return new HttpBitburnerClientController();
   }
 
   private constructor(
-    private readonly client: BitburnerClientService,
-    private readonly connections: BitburnerConnectionService,
-    private readonly commands: BitburnerCommandService,
+    private readonly client = BitburnerClientService.create(),
+    private readonly connections = BitburnerConnectionService.create(),
   ) {}
 
   @RouteNs.post(`update-game-definition`)
@@ -56,6 +50,36 @@ export class HttpBitburnerClientController {
     }
 
     await this.client.updateTypeDefinitions(response);
+
+    return HttpJsonResponse.success();
+  }
+
+  @RouteNs.post("sync-server")
+  @OpenApiNs.route({
+    description: "Sync the server's game files. Will overwrite existing files.",
+    summary: "Sync the server's game files",
+    tags: [OpenApiTag.Serverwide],
+  })
+  async syncServer() {
+    const response = await this.client.syncServer();
+    if (response === "no-connection-available") {
+      return HttpBitburnerConnectionResponse.missingAny();
+    }
+
+    return HttpJsonResponse.success();
+  }
+
+  @RouteNs.post("sync-client")
+  @OpenApiNs.route({
+    description: "Sync the client's game files. Will overwrite existing files.",
+    summary: "Sync the client's game files",
+    tags: [OpenApiTag.Serverwide],
+  })
+  async syncClient() {
+    const response = await this.client.syncClient();
+    if (response === "no-connection-available") {
+      return HttpBitburnerConnectionResponse.missingAny();
+    }
 
     return HttpJsonResponse.success();
   }

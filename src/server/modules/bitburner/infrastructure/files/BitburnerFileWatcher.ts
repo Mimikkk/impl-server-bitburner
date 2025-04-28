@@ -38,7 +38,7 @@ export class BitburnerFileWatcher {
     return BitburnerFileWatcher.create(options).start();
   }
 
-  async start() {
+  start() {
     return this.watcher.start();
   }
 }

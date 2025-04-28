@@ -1,3 +1,4 @@
+import { BitburnerClientService } from "@server/modules/bitburner/application/services/BitburnerClientService.ts";
 import { Log } from "@shared/logging/log.ts";
 
 interface BitburnerFileSynchronizerOptions {
@@ -12,19 +13,24 @@ export class BitburnerFileSynchronizer {
   private constructor(
     private readonly syncMs: number,
     private timeoutId: number | null = null,
+    private readonly client = BitburnerClientService.create(),
   ) {
     this.schedule();
   }
 
   async sync() {
     try {
-      Log.event("synchronizing bitburner files...");
+      if (!this.client.canSync()) {
+        Log.warn("no connection available. skipping synchronization.");
+        return;
+      }
 
-      // to impl
+      Log.event("synchronizing files...");
+      await this.client.syncClient();
 
-      Log.event("synchronized bitburner files.");
+      Log.event("synchronized files.");
     } catch (error) {
-      Log.error("Failed to synchronize bitburner files:", error);
+      Log.error("Failed to synchronize files:", error);
     }
   }
 
