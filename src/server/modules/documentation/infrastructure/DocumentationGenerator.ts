@@ -1,6 +1,6 @@
 import { OpenApiResponseNs } from "@server/infrastructure/openapi/decorators/OpenApiResponseNs.ts";
 import { OpenApiRouteNs } from "@server/infrastructure/openapi/decorators/OpenApiRouteNs.ts";
-import { OpenApiTag, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
+import { OpenApiTag, OpenApiTagOrder, OpenApiTags } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { Str } from "@shared/utils/strings.ts";
 import { OpenApiBuilder, OpenAPIObject, ResponseObject } from "openapi3-ts/oas31";
@@ -79,7 +79,7 @@ export class DocumentationGenerator {
   }
 
   private addTags(builder: OpenApiBuilder, tags: OpenApiTag[]): OpenApiBuilder {
-    for (const tag of tags) {
+    for (const tag of tags.sort((a, b) => OpenApiTagOrder.get(a)! - OpenApiTagOrder.get(b)!)) {
       const object = OpenApiTags.get(tag);
       if (object === undefined) continue;
 

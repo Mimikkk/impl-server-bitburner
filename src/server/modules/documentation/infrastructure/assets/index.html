@@ -48,6 +48,36 @@
           SwaggerUIStandalonePreset,
         ],
         layout: "StandaloneLayout",
+        docExpansion: "none",
+        onComplete() {
+          const sections = document.querySelectorAll(".opblock-tag-section");
+          const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+              const tag = mutation.target;
+              const name = tag.dataset.tag;
+              const isOpen = tag.dataset.isOpen === "true";
+
+              if (isOpen) {
+                localStorage.setItem(name, "true");
+              } else {
+                localStorage.removeItem(name);
+              }
+            }
+          });
+
+          for (const section of sections) {
+            const tag = section.querySelector(".opblock-tag");
+            if (tag === null) continue;
+            const expander = section.querySelector(".expand-operation");
+            if (expander === null) continue;
+
+            observer.observe(tag, { attributes: true, attributeFilter: ["data-is-open"] });
+
+            const name = tag.dataset.tag;
+            const isOpen = localStorage.getItem(name) === "true";
+            if (isOpen) expander.click();
+          }
+        },
       });
     </script>
   </body>

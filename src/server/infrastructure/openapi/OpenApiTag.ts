@@ -1,18 +1,31 @@
 import { TagObject } from "openapi3-ts/oas31";
 
 export enum OpenApiTag {
-  Instruction = "Instruction",
-  Documentation = "Documentation",
+  Instruction = "Instruction (internal)",
+  Documentation = "Documentation (internal)",
+  Static = "Static (internal)",
   Connections = "Connections",
   Commands = "Commands",
-  Static = "Static",
-  Serverwide = "Serverwide",
+  Serverwide = "Serverwide commands",
+  Manual = "Manual commands",
 }
 
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
+  [OpenApiTag.Manual, {
+    name: OpenApiTag.Manual,
+    description: "manual commands",
+  }],
   [OpenApiTag.Serverwide, {
     name: OpenApiTag.Serverwide,
     description: "serverwide commands",
+  }],
+  [OpenApiTag.Connections, {
+    name: OpenApiTag.Connections,
+    description: "active bitburner connections",
+  }],
+  [OpenApiTag.Commands, {
+    name: OpenApiTag.Commands,
+    description: "available bitburner commands",
   }],
   [OpenApiTag.Instruction, {
     name: OpenApiTag.Instruction,
@@ -22,16 +35,17 @@ export const OpenApiTags = new Map<OpenApiTag, TagObject>([
     name: OpenApiTag.Documentation,
     description: "documentation for the server api",
   }],
-  [OpenApiTag.Connections, {
-    name: OpenApiTag.Connections,
-    description: "bitburner connections",
-  }],
-  [OpenApiTag.Commands, {
-    name: OpenApiTag.Commands,
-    description: "bitburner commands",
-  }],
   [OpenApiTag.Static, {
     name: OpenApiTag.Static,
     description: "static files",
   }],
 ]);
+export const OpenApiTagOrder = new Map<OpenApiTag, number>([
+  OpenApiTag.Manual,
+  OpenApiTag.Serverwide,
+  OpenApiTag.Connections,
+  OpenApiTag.Commands,
+  OpenApiTag.Instruction,
+  OpenApiTag.Documentation,
+  OpenApiTag.Static,
+].map((r, i) => [r, i]));
