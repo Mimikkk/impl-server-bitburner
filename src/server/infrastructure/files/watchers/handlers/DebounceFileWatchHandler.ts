@@ -1,4 +1,4 @@
-import { FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
+import { FileWatchHandle, FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
 
 export class DebounceFileWatchHandler implements FileWatchHandler {
   static create({ onEvent, debounceMs = 200 }: {
@@ -9,7 +9,7 @@ export class DebounceFileWatchHandler implements FileWatchHandler {
   }
 
   private constructor(
-    private readonly onEvent: (event: Deno.FsEvent) => void,
+    private readonly onEvent: FileWatchHandle,
     private readonly debounceMs: number,
     private readonly timeouts: Map<string, number>,
     private readonly events: Map<string, Deno.FsEvent>,
@@ -24,9 +24,9 @@ export class DebounceFileWatchHandler implements FileWatchHandler {
       clearTimeout(this.timeouts.get(path));
     }
 
-    const timeout = setTimeout(() => {
+    const timeout = setTimeout(async () => {
       const event = this.events.get(path)!;
-      this.onEvent(event);
+      await this.onEvent(event);
 
       this.timeouts.delete(path);
       this.events.delete(path);

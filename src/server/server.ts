@@ -1,14 +1,12 @@
 import { colors } from "@cliffy/ansi/colors";
 import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
-import { FileWatcherHandlers } from "@server/infrastructure/files/watchers/FileWatcherHandlers.ts";
 import { HttpRouter } from "@server/infrastructure/routing/routes/HttpRouter.ts";
 import { WsRouter } from "@server/infrastructure/routing/routes/WsRouter.ts";
+import { BitburnerFileWatcher } from "@server/modules/bitburner/infrastructure/files/BitburnerFileWatcher.ts";
 import { Log } from "@shared/logging/log.ts";
-import { FileWatch } from "./infrastructure/files/watchers/FileWatcher.ts";
 import { ApplicationComposer } from "./infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "./infrastructure/middlewares/MiddlewareNs.ts";
 
-const c = colors.yellow;
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
     redirects: [{ from: "/favicon.ico", to: "/static/favicon.ico" }],
@@ -18,33 +16,9 @@ export const server = ApplicationComposer.of([
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);
 
-const onEvent = (event: Deno.FsEvent) => {
-  const path = event.paths[0];
-  const kind = event.kind;
-
-  if (kind === "modify") {
-    Log.event(`File ${c(path)} was modified.`);
-  }
-
-  if (kind === "create") {
-    Log.event(`File ${c(path)} was created.`);
-  }
-
-  if (kind === "remove") {
-    Log.event(`File ${c(path)} was removed.`);
-  }
-
-  if (kind === "rename") {
-    Log.event(`File ${c(path)} was renamed.`);
-  }
-
-  if (kind === "access") {
-    Log.event(`File ${c(path)} was accessed.`);
-  }
-};
-
-FileWatch.start("src/client/servers", {
-  handlers: [FileWatcherHandlers.debounce({ onEvent, debounceMs: 200 })],
-});
-
+const c = colors.yellow;
+Log.info(`Starting bitburner file watcher... 
+       - Sychronizing every ${c("30 seconds")}.
+       - Debouncing events by ${c("200 ms")}.`);
+BitburnerFileWatcher.start({ syncMs: 30_000, debounceMs: 200 });
 Deno.serve(ServerConfiguration, server);

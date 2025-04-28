@@ -1,8 +1,4 @@
-import { colors } from "@cliffy/ansi/colors";
 import { FileWatchHandler } from "@server/infrastructure/files/watchers/handlers/FileWatchHandler.ts";
-import { Log } from "@shared/logging/log.ts";
-
-const c = colors.yellow;
 
 export interface FileWatcherOptions {
   handlers?: FileWatchHandler[];
@@ -24,8 +20,6 @@ export class FileWatch {
   ) {}
 
   async start() {
-    Log.info(`File watcher started for ${c(this.path)} directory.`);
-
     for await (const event of this.watcher) {
       for (const handler of this.handlers) {
         await handler.handle(event);
