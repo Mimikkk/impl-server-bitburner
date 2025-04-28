@@ -41,11 +41,11 @@ export const OpenApiTags = new Map<OpenApiTag, TagObject>([
   }],
 ]);
 export const OpenApiTagOrder = new Map<OpenApiTag, number>([
-  OpenApiTag.Manual,
   OpenApiTag.Serverwide,
+  OpenApiTag.Manual,
   OpenApiTag.Connections,
   OpenApiTag.Commands,
   OpenApiTag.Instruction,
   OpenApiTag.Documentation,
   OpenApiTag.Static,
-].map((r, i) => [r, i]));
+].map((item, index) => [item, index]));

@@ -31,7 +31,7 @@ export class HttpBitburnerManualController {
   ) {}
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${HttpBitburnerRequestParameter.CommandName}`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Dispatch a command to a connection",
@@ -63,7 +63,7 @@ export class HttpBitburnerManualController {
     return HttpBitburnerCommandResponse.dispatched(id);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.definition}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.definition}`)
   @OpenApiNs.route({
     description: "Dispatch a command to send the namespace definition",
     summary: "Dispatch a command to send the namespace definition asynchronously",
@@ -80,7 +80,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.definition.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.update.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.update.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to update a file on a server",
     summary: "Dispatch a command to update a file on a server asynchronously",
@@ -98,7 +98,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.update.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.remove.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.remove.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to remove a file from a server",
     summary: "Dispatch a command to remove a file from a server asynchronously",
@@ -116,7 +116,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.remove.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.read.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.read.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to read a file from a server",
     summary: "Dispatch a command to read a file from a server asynchronously",
@@ -134,7 +134,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.read.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.list.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.list.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to list all files on a server",
     summary: "Dispatch a command to list all files on a server asynchronously",
@@ -152,7 +152,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.list.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.names.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.names.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to list all file names on a server",
     summary: "Dispatch a command to list all file names on a server asynchronously",
@@ -170,7 +170,7 @@ export class HttpBitburnerManualController {
     return this.dispatch(context.withParameters({ commandName: BitburnerCommands.names.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/dispatch/${BitburnerCommands.ram.name}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/dispatch/${BitburnerCommands.ram.name}`)
   @OpenApiNs.route({
     description: "Dispatch a command to calculate the RAM usage of a file on a server",
     summary: "Dispatch a command to calculate the RAM usage of a file on a server asynchronously",
@@ -189,7 +189,7 @@ export class HttpBitburnerManualController {
   }
 
   @RouteNs.post(
-    `${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${HttpBitburnerRequestParameter.CommandName}`,
+    `${HttpBitburnerRequestParameter.ConnectionId}/execute/${HttpBitburnerRequestParameter.CommandName}`,
   )
   @OpenApiNs.route({
     description: "Execute a command",
@@ -224,7 +224,7 @@ export class HttpBitburnerManualController {
     return HttpBitburnerCommandResponse.command(response);
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.definition}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.definition}`)
   @OpenApiNs.route({
     description: "Read the bitburner namespace definition",
     summary: "Executes a command to read the bitburner namespace definition",
@@ -241,7 +241,7 @@ export class HttpBitburnerManualController {
     return this.execute(context.withParameters({ commandName: BitburnerCommands.definition.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.update}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.update}`)
   @OpenApiNs.route({
     description: "Update a file on a server",
     summary: "Execute a command to update a file on a server",
@@ -259,7 +259,7 @@ export class HttpBitburnerManualController {
     return this.execute(context.withParameters({ commandName: BitburnerCommands.update.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.remove}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.remove}`)
   @OpenApiNs.route({
     description: "Remove a file on a server",
     summary: "Execute a command to remove a file on a server",
@@ -277,7 +277,7 @@ export class HttpBitburnerManualController {
     return this.execute(context.withParameters({ commandName: BitburnerCommands.remove.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.list}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.list}`)
   @OpenApiNs.route({
     description: "Read all files on a server",
     summary: "Execute a command to read all files on a server",
@@ -295,7 +295,7 @@ export class HttpBitburnerManualController {
     return this.execute(context.withParameters({ commandName: BitburnerCommands.list.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.names}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.names}`)
   @OpenApiNs.route({
     description: "Read all file names on a server",
     summary: "Execute a command to read all file names on a server",
@@ -313,7 +313,7 @@ export class HttpBitburnerManualController {
     return this.execute(context.withParameters({ commandName: BitburnerCommands.names.name }));
   }
 
-  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/commands/execute/${BitburnerCommands.ram}`)
+  @RouteNs.post(`${HttpBitburnerRequestParameter.ConnectionId}/execute/${BitburnerCommands.ram}`)
   @OpenApiNs.route({
     description: "Read the RAM usage of a file on a server",
     summary: "Execute a command to read the RAM usage of a file on a server",
