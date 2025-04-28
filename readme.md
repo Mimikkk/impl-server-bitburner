@@ -12,7 +12,8 @@ of using the in-game editor.
 ## Features
 
 - Real-time file synchronization
-- WebSocket-based communication with Bitburner
+- Manual file actions
+- Definition update via server
 
 ## Prerequisites
 
