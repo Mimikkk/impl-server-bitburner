@@ -17,7 +17,7 @@ export class ConnectionModel {
   send(request: CommandRequest): CommandRequestEntity {
     const entity = this.requests.persist(request);
 
-    this.socket.send(JSON.stringify(request));
+    this.message(request);
 
     return entity;
   }
@@ -32,12 +32,10 @@ export class ConnectionModel {
         if (request) {
           remove();
           resolve(response);
-        } else {
-          resolve(undefined);
         }
       });
 
-      this.socket.send(JSON.stringify(request));
+      this.message(request);
     });
   }
 
@@ -47,5 +45,9 @@ export class ConnectionModel {
 
   close(): void {
     this.socket.close();
+  }
+
+  private message(request: CommandRequest): void {
+    this.socket.send(JSON.stringify(request));
   }
 }

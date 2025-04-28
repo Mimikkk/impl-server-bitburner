@@ -9,7 +9,7 @@ export const app = ApplicationComposer.of([
     redirects: [{ from: "/favicon.ico", to: "/static/favicon.ico" }],
   }),
   MiddlewareNs.barrier(),
-  MiddlewareNs.timeout({ timeoutMs: 500 }),
+  MiddlewareNs.timeout({ timeoutMs: 5000 }),
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);
 
