@@ -2,7 +2,7 @@ import { CommandResourceNs } from "@server/modules/bitburner/application/resourc
 import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { RpcJsonResponseResult } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
+import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
 import { SchemaObject } from "openapi3-ts/oas31";
 
 export namespace HttpBitburnerCommandResponse {
@@ -82,10 +82,13 @@ export namespace HttpBitburnerCommandResponse {
     schema: { type: "object", properties: { requestId: { type: "number" } } },
   });
 
-  const createContent = (response: CommandResponse) => ({
-    responseId: response.id,
-    result: (response as RpcJsonResponseResult).result,
-  });
+  const createContent = (response: CommandResponse) => {
+    if (RpcJsonResponse.isError(response)) {
+      return { responseId: response.id, error: response.error };
+    }
+
+    return { responseId: response.id, result: response.result };
+  };
   const createExample = <T>(result: T) => ({ responseId: 1, result }) as const;
   const createSchema = (result: SchemaObject): SchemaObject => ({
     type: "object",
