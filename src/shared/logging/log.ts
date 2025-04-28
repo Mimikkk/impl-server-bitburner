@@ -12,4 +12,8 @@ export namespace Log {
   export const warn: typeof console.warn = (...message) => {
     console.warn(colors.bold.yellow("[warn]"), ...message);
   };
+
+  export const event: typeof console.log = (...message) => {
+    console.log(colors.bold.green("[event]"), ...message);
+  };
 }
