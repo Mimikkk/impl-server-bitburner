@@ -4,12 +4,12 @@ import { Log } from "@shared/logging/log.ts";
 import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
 
 export class ConnectionService {
-  static create(connections: ConnectionRepository) {
-    return new ConnectionService(connections);
+  static create() {
+    return new ConnectionService();
   }
 
   private constructor(
-    private readonly connections: ConnectionRepository,
+    private readonly connections = ConnectionRepository.instance,
   ) {}
 
   list(): IterableIterator<ConnectionEntity> {

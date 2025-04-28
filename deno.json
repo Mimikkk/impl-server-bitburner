@@ -26,6 +26,7 @@
   },
   "vendor": true,
   "imports": {
+    "@bitburner": "./src/client/declaration.d.ts",
     "@server/": "./src/server/",
     "@client/": "./src/client/",
     "@shared/": "./src/shared/",

@@ -6,9 +6,14 @@ export enum OpenApiTag {
   Connections = "Connections",
   Commands = "Commands",
   Static = "Static",
+  Serverwide = "Serverwide",
 }
 
 export const OpenApiTags = new Map<OpenApiTag, TagObject>([
+  [OpenApiTag.Serverwide, {
+    name: OpenApiTag.Serverwide,
+    description: "serverwide commands",
+  }],
   [OpenApiTag.Instruction, {
     name: OpenApiTag.Instruction,
     description: "instructions to setup the server connection",

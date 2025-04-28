@@ -1,14 +1,15 @@
-import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
+import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { ConnectionService } from "../../../connections/application/services/ConnectionService.ts";
 import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
 
 export class BitburnerConnectionService {
-  static create(connections: ConnectionRepository = ConnectionRepository.instance) {
-    return new BitburnerConnectionService(ConnectionService.create(connections));
+  static create() {
+    return new BitburnerConnectionService();
   }
 
   private constructor(
-    private readonly connections: ConnectionService,
+    private readonly connections: ConnectionService = ConnectionService.create(),
+    private readonly commands: BitburnerCommandService = BitburnerCommandService.create(),
   ) {}
 
   attach(socket: WebSocket): void {

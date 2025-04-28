@@ -368,7 +368,6 @@ export class HttpBitburnerConnectionController {
     payload: object | null,
   ): Response | { connection: ConnectionModel; command: CommandModel; request: CommandRequest } {
     const connection = this.connections.find(connectionId);
-
     if (connection === undefined) {
       return HttpBitburnerConnectionResponse.missing(connectionId);
     }

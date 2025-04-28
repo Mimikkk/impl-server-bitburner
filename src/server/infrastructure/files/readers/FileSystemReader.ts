@@ -1,6 +1,6 @@
-import { FileReader } from "@server/infrastructure/readers/FileReader.ts";
+import { FileReader } from "@server/infrastructure/files/readers/FileReader.ts";
+import { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 import { extname, resolve } from "@std/path";
-import { StaticFileNs } from "../../modules/static/domain/StaticFile.ts";
 
 export class FileSystemReader {
   static create(path: string = "."): FileSystemReader {
@@ -8,12 +8,12 @@ export class FileSystemReader {
   }
 
   private constructor(
-    private readonly path: string,
+    private readonly location: string,
     private readonly reader = FileReader.create(),
   ) {}
 
   async read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
-    path = resolve(this.path, path) as P;
+    path = resolve(this.location, path) as P;
 
     const extension = extname(path).slice(1) as StaticFileNs.Extension;
     if (!extension) return undefined;

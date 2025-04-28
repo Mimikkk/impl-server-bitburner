@@ -1,4 +1,5 @@
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
+import "@server/modules/bitburner/presentation/controllers/http/HttpBitburnerClientController.ts";
 import "@server/modules/bitburner/presentation/controllers/http/HttpBitburnerCommandController.ts";
 import "@server/modules/bitburner/presentation/controllers/http/HttpBitburnerConnectionController.ts";
 import "@server/modules/documentation/presentation/controllers/http/HttpDocumentationController.ts";

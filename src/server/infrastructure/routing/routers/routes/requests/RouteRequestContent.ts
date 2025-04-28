@@ -12,7 +12,12 @@ export class RouteRequestContent<P extends object | null> {
   static async fromRequestContext<P extends Record<string, any>>(
     request: RequestContext,
   ): Promise<RouteRequestContent<P>> {
-    const values = request.original.body ? await request.original.json() : null;
+    let values: P;
+    try {
+      values = request.original.body ? await request.original.json() : {};
+    } catch {
+      values = {} as P;
+    }
 
     return RouteRequestContent.create(values);
   }

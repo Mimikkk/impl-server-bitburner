@@ -45,4 +45,18 @@ export namespace HttpBitburnerConnectionResponse {
       },
     },
   });
+
+  export const [MissingAny, missingAny] = HttpJsonResponse.custom({
+    content: () => ({ message: "No available connection found" }),
+    example: { message: "No available connection found" },
+    name: "Missing any connection",
+    description: "No available connection found",
+    status: 404,
+    schema: {
+      type: "object",
+      properties: {
+        message: { type: "string" },
+      },
+    },
+  });
 }

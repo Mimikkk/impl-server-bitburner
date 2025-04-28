@@ -1,4 +1,4 @@
-import { FileSystemAssetReader } from "@server/infrastructure/readers/FileSystemAssetReader.ts";
+import { FileSystemAssetReader } from "@server/infrastructure/files/readers/FileSystemAssetReader.ts";
 import { DocumentationAssetUrl } from "./DocumentationAssetUrl.ts";
 
 export class DocumentationAssetProvider {

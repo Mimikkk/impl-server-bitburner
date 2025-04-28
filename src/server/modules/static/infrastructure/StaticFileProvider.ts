@@ -1,5 +1,5 @@
 import { StaticAssetProvider } from "@server/modules/static/infrastructure/StaticAssetProvider.ts";
-import { FileSystemReader } from "../../../infrastructure/readers/FileSystemReader.ts";
+import { FileSystemReader } from "../../../infrastructure/files/readers/FileSystemReader.ts";
 import { StaticAssetNs } from "../domain/StaticAssetUrl.ts";
 import { StaticFileNs } from "../domain/StaticFile.ts";
 

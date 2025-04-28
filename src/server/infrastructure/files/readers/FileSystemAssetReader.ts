@@ -1,5 +1,5 @@
-import { FileSystemReader } from "@server/infrastructure/readers/FileSystemReader.ts";
-import { StaticFileNs } from "../../modules/static/domain/StaticFile.ts";
+import { FileSystemReader } from "@server/infrastructure/files/readers/FileSystemReader.ts";
+import { StaticFileNs } from "@server/modules/static/domain/StaticFile.ts";
 
 export class FileSystemAssetReader {
   static create(path: string): FileSystemAssetReader {
@@ -7,8 +7,8 @@ export class FileSystemAssetReader {
   }
 
   private constructor(
-    readonly path: string,
-    private readonly reader = FileSystemReader.create(path + "/assets"),
+    readonly location: string,
+    private readonly reader = FileSystemReader.create(location + "/assets"),
   ) {}
 
   read<P extends StaticFileNs.Path>(path: P): Promise<StaticFileNs.FromPath<P> | undefined> {
