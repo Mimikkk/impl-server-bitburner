@@ -1,8 +1,11 @@
+import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { CommandRequestEntity } from "@server/modules/commands/domain/entities/CommandRequestEntity.ts";
+import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
 import { CommandRequestRepository } from "@server/modules/commands/infrastructure/repositories/CommandRequestRepository.ts";
 import { VolatileCommandRequestRepository } from "@server/modules/commands/infrastructure/repositories/VolatileCommandRequestRepository.ts";
 import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
 import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
+import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
 
 export class ConnectionModel {
   static create(socket: WebSocket) {
@@ -37,6 +40,24 @@ export class ConnectionModel {
 
       this.message(request);
     });
+  }
+
+  async command<M extends CommandModel>(command: M, params: M["Request"]) {
+    const request = command.request(params);
+    if (ValidationError.is(request)) {
+      return "invalid-request";
+    }
+
+    const response = await this.promise(request.value);
+    if (response === undefined) {
+      return "invalid-response";
+    }
+
+    if (RpcJsonResponse.isError(response)) {
+      return "internal-error";
+    }
+
+    return response.result as M["Response"];
   }
 
   resolve(response: CommandResponse): CommandRequestEntity | undefined {

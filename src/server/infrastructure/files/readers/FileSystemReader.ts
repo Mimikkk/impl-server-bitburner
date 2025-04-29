@@ -25,4 +25,33 @@ export class FileSystemReader {
     const mime = StaticFileNs.MimeMap[extension] ?? StaticFileNs.mimeFallback;
     return { content, mime } as StaticFileNs.FromPath<P>;
   }
+
+  async readStr(path: string): Promise<string | undefined> {
+    return await this.reader.readStr(path);
+  }
+
+  async readU8(path: string): Promise<Uint8Array | undefined> {
+    return await this.reader.readU8(path);
+  }
+
+  async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {
+    async function traverse(paths: string[], path: string, recursive: boolean): Promise<string[]> {
+      for await (const entry of Deno.readDir(path)) {
+        const next = resolve(path, entry.name);
+        paths.push(next);
+
+        if (recursive && entry.isDirectory) {
+          const subPaths = await traverse(paths, next, recursive);
+
+          paths.push(...subPaths);
+        }
+      }
+
+      return paths;
+    }
+    const start = resolve(this.location, options.path ?? ".");
+    const paths = await traverse([], start, options.recursive ?? false);
+
+    return paths.map((path) => path.replace(start + "\\", ""));
+  }
 }

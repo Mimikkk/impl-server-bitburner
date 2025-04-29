@@ -56,8 +56,8 @@ export class HttpBitburnerClientController {
 
   @RouteNs.post("sync-server")
   @OpenApiNs.route({
-    description: "Sync the server's game files. Will overwrite existing files.",
     summary: "Sync the server's game files",
+    description: "<b>Will overwrite existing server files.</b> Sync the server's game files.",
     tags: [OpenApiTag.Serverwide],
   })
   async syncServer() {
@@ -66,19 +66,35 @@ export class HttpBitburnerClientController {
       return HttpBitburnerConnectionResponse.missingAny();
     }
 
+    if (response === "list-command-failed") {
+      return HttpJsonResponse.failure();
+    }
+
     return HttpJsonResponse.success();
   }
 
   @RouteNs.post("sync-client")
   @OpenApiNs.route({
-    description: "Sync the client's game files. Will overwrite existing files.",
     summary: "Sync the client's game files",
+    description: "<b>Will overwrite existing client files.</b> Sync the client's game files.",
     tags: [OpenApiTag.Serverwide],
   })
   async syncClient() {
     const response = await this.client.syncClient();
     if (response === "no-connection-available") {
       return HttpBitburnerConnectionResponse.missingAny();
+    }
+
+    if (response === "remove-command-failed") {
+      return HttpJsonResponse.failure();
+    }
+
+    if (response === "push-command-failed") {
+      return HttpJsonResponse.failure();
+    }
+
+    if (response === "name-command-failed") {
+      return HttpJsonResponse.failure();
     }
 
     return HttpJsonResponse.success();

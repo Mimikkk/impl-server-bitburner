@@ -1,3 +1,4 @@
+import { colors } from "@cliffy/ansi/colors";
 import { BitburnerClientService } from "@server/modules/bitburner/application/services/BitburnerClientService.ts";
 import { Log } from "@shared/logging/log.ts";
 
@@ -21,14 +22,15 @@ export class BitburnerFileSynchronizer {
   async sync() {
     try {
       if (!this.client.canSync()) {
-        Log.warn("no connection available. skipping synchronization.");
+        Log.warn(`${colors.gray("[skip]")} no connection available.`);
         return;
       }
 
-      Log.event("synchronizing files...");
+      Log.event("synchronizing client files...");
+
       await this.client.syncClient();
 
-      Log.event("synchronized files.");
+      Log.event("synchronized client files.");
     } catch (error) {
       Log.error("Failed to synchronize files:", error);
     }

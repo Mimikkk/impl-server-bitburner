@@ -17,7 +17,7 @@ export const server = ApplicationComposer.of([
 ]);
 
 const c = colors.yellow;
-Log.info(`Starting bitburner file watcher... 
+Log.info(`Started bitburner file watch.
        - Sychronizing every ${c("30 seconds")}.
        - Debouncing events by ${c("200 ms")}.`);
 BitburnerFileWatcher.start({ syncMs: 30_000, debounceMs: 200 });

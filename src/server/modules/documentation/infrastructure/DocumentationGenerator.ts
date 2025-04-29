@@ -52,7 +52,7 @@ export class DocumentationGenerator {
           openapi.responses
             .map(OpenApiResponseNs.meta)
             .map((r) => [r.status, {
-              description: r.description,
+              description: `<div>${r.description}</div>`,
               content: r.content,
             } as ResponseObject]),
         );
@@ -64,7 +64,7 @@ export class DocumentationGenerator {
             tags: openapi.tags,
             summary: openapi.summary,
             deprecated: openapi.deprecated,
-            description: openapi.description,
+            description: `<div>${openapi.description}</div>`,
             parameters: openapi.parameters.map((p) => p.toObject()),
             requestBody: openapi.content?.toObject(),
             responses,

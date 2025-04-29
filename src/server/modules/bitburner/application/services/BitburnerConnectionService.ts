@@ -1,4 +1,3 @@
-import { BitburnerCommandService } from "@server/modules/bitburner/application/services/BitburnerCommandService.ts";
 import { ConnectionService } from "../../../connections/application/services/ConnectionService.ts";
 import { ConnectionEntity } from "../../../connections/domain/entities/ConnectionEntity.ts";
 
@@ -9,7 +8,6 @@ export class BitburnerConnectionService {
 
   private constructor(
     private readonly connections: ConnectionService = ConnectionService.create(),
-    private readonly commands: BitburnerCommandService = BitburnerCommandService.create(),
   ) {}
 
   attach(socket: WebSocket): void {

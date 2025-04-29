@@ -1,4 +1,7 @@
 {
+  "compilerOptions": {
+    "types": ["./src/client/global.d.ts"]
+  },
   "fmt": {
     "options": {
       "indentWidth": 2,

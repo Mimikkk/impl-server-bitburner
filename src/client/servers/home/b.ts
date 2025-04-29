@@ -1,9 +1,7 @@
-const sleep = (ms: number) => 
-  new Promise((resolve) =>  setTimeout(resolve, ms));
+import { sleep } from "./sleep.ts";
 
 export async function main(ns: NS) {
-  new Promise(() => {
-    sleep(30_000).then(() => console.log("B"));
-  })
-  console.log("A");
+  console.time("S");
+  await sleep(10);
+  console.timeEnd("S");
 }

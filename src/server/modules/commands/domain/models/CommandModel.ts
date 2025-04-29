@@ -11,6 +11,9 @@ export class CommandModel<
   RQ extends Schema = Schema,
   RS extends Schema = Schema,
 > {
+  declare Request: Infer<RQ>;
+  declare Response: Infer<RS>;
+
   static create<M extends PropertyKey, RQ extends Schema, RS extends Schema>(
     name: string,
     description: string,
