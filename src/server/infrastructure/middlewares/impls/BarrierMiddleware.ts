@@ -1,6 +1,6 @@
 import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 
 export class BarrierMiddleware implements Middleware {
   static create(): BarrierMiddleware {

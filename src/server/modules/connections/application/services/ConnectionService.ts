@@ -1,7 +1,7 @@
 import { ConnectionEventManager } from "@server/modules/connections/infrastructure/events/ConnectionEventManager.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
 import { ConnectionEvent } from "../../domain/events/ConnectionEvent.ts";
 

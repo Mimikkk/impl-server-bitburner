@@ -4,7 +4,7 @@ import { BitburnerFileWatcher } from "@server/modules/bitburner/infrastructure/f
 import { ConnectionEntity } from "@server/modules/connections/domain/entities/ConnectionEntity.ts";
 import { ConnectionEvent } from "@server/modules/connections/domain/events/ConnectionEvent.ts";
 import { ConnectionEventManager } from "@server/modules/connections/infrastructure/events/ConnectionEventManager.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 
 const c = colors.yellow;
 export class BitburnerConnectionEventManager {

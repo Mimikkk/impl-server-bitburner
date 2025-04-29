@@ -1,4 +1,4 @@
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 
 export interface ListenerRegistry<V> {
   subscribe(listener: ListenerRegistry.Listener<V>): ListenerRegistry.Unsubscribe;

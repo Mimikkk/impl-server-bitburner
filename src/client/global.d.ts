@@ -1,1 +1,1 @@
-declare type NS = import("@bitburner").NS;
+declare type NS = import("./declaration.d.ts").NS;

@@ -1,5 +1,5 @@
 import { PathParameter } from "@server/presentation/messaging/http/parameters/PathParameter.ts";
-import { HttpMethod } from "@shared/enums/HttpMethod.ts";
+import { HttpMethod } from "@server/shared/enums/HttpMethod.ts";
 
 export namespace RouteNs {
   const symbol = Symbol("RouteMeta");

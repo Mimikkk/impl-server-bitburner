@@ -1,5 +1,5 @@
 import { CommandModel } from "@server/modules/commands/domain/models/CommandModel.ts";
-import { KeyBy } from "@shared/types/common.ts";
+import { KeyBy } from "@server/shared/types/common.ts";
 
 export class CommandRegistry<Cs extends Record<PropertyKey, CommandModel> = {}> {
   declare type: Cs;

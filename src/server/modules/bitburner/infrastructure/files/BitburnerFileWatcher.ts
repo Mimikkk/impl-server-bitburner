@@ -4,7 +4,7 @@ import { FileWatcherHandlers } from "@server/infrastructure/files/watchers/FileW
 import { BitburnerFileEventHandler } from "@server/modules/bitburner/infrastructure/files/BitburnerFileEventHandler.ts";
 import { BitburnerFileSynchronizer } from "@server/modules/bitburner/infrastructure/files/BitburnerFileSynchronizer.ts";
 import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 
 interface BitburnerFileWatcherOptions {
   syncMs?: number;

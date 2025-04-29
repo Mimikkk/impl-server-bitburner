@@ -1,4 +1,4 @@
-import { Nil } from "@shared/types/common.ts";
+import { Nil } from "@server/shared/types/common.ts";
 
 export interface RpcJsonResponseError {
   jsonrpc: "2.0";

@@ -1,4 +1,4 @@
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 import { Controller, ControllerFn, ControllerKey } from "../../controllers/ControllerTypes.ts";
 import { RouteRequestContext } from "../routes/requests/RouteRequestContext.ts";
 import { RequestHandler } from "./RequestHandler.ts";

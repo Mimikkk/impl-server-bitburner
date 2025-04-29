@@ -1,6 +1,6 @@
 import { EventManager } from "@server/infrastructure/events/EventManager.ts";
 import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 import { VolatileListenerRegistry } from "./VolatileListenerRegistry.ts";
 
 export class VolatileEventManager<EventMap extends Record<string, unknown>> implements EventManager<EventMap> {

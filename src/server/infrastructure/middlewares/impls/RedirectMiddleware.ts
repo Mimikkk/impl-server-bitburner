@@ -1,5 +1,5 @@
 import { Dispatch, Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 
 export interface RedirectMiddlewareOptions {
   redirects: { from: string; to: string }[];

@@ -1,6 +1,6 @@
 import { Middleware } from "@server/infrastructure/middlewares/Middleware.ts";
 import { Router } from "@server/infrastructure/routing/routers/Router.ts";
-import { Awaitable } from "@shared/types/common.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
 
 export interface RouteMiddlewareOptions {
   http: Router;

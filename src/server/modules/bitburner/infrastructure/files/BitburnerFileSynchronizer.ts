@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
 import { BitburnerClientService } from "@server/modules/bitburner/application/services/BitburnerClientService.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 
 interface BitburnerFileSynchronizerOptions {
   syncMs: number;

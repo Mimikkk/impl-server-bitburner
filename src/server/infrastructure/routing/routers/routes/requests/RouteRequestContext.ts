@@ -1,7 +1,7 @@
 import { RequestContext } from "@server/infrastructure/routing/routers/requests/RequestContext.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteRequestParameters } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestParameters.ts";
-import { Merge } from "@shared/types/common.ts";
+import { Merge } from "@server/shared/types/common.ts";
 import { RouteRequestContent } from "./RouteRequestContent.ts";
 
 export class RouteRequestContext<

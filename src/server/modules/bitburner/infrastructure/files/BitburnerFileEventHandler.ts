@@ -2,7 +2,7 @@ import { colors } from "@cliffy/ansi/colors";
 import { BitburnerFileSystemClientManager } from "@server/modules/bitburner/infrastructure/files/BitburnerFileSystemClientManager.ts";
 import { BitburnerFileSystemServerManager } from "@server/modules/bitburner/infrastructure/files/BitburnerFileSystemServerManager.ts";
 import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 import { resolve } from "@std/path/resolve";
 
 const c = colors.yellow;

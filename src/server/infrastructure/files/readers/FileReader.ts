@@ -1,4 +1,4 @@
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 
 export class FileReader {
   static create(): FileReader {

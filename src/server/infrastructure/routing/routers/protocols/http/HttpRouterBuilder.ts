@@ -3,7 +3,7 @@ import { HttpRouteMatcher } from "@server/infrastructure/routing/routers/protoco
 import { Router } from "@server/infrastructure/routing/routers/Router.ts";
 import { Route } from "@server/infrastructure/routing/routers/routes/Route.ts";
 import { RouteUrl } from "@server/infrastructure/routing/routers/routes/RouteUrl.ts";
-import { HttpMethod } from "../../../../../../shared/enums/HttpMethod.ts";
+import { HttpMethod } from "../../../../../shared/enums/HttpMethod.ts";
 import { ControllerStore } from "../../../controllers/ControllerStore.ts";
 import { Controller, ControllerClass, ControllerKey } from "../../../controllers/ControllerTypes.ts";
 

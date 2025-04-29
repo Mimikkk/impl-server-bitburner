@@ -1,6 +1,6 @@
 import { RouteRequestContext } from "@server/infrastructure/routing/routers/routes/requests/RouteRequestContext.ts";
-import { Awaitable } from "@shared/types/common.ts";
-import { TypeKey } from "@shared/types/typedKey.ts";
+import { Awaitable } from "@server/shared/types/common.ts";
+import { TypeKey } from "@server/shared/types/typedKey.ts";
 
 export type ControllerFn<C extends RouteRequestContext = RouteRequestContext> = (
   context: C,

@@ -1,6 +1,6 @@
 import { colors } from "@cliffy/ansi/colors";
 import { ConnectionEventManager } from "@server/modules/connections/infrastructure/events/ConnectionEventManager.ts";
-import { Log } from "@shared/logging/log.ts";
+import { Log } from "@server/shared/logging/log.ts";
 import { ConnectionEvent } from "../../domain/events/ConnectionEvent.ts";
 
 const c = colors.yellow;
