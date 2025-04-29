@@ -23,9 +23,9 @@ export class VolatileListenerRegistry<V> implements ListenerRegistry<V> {
     return true;
   }
 
-  notify(value: V): void {
+  async notify(value: V): Promise<void> {
     for (let i = 0; i < this.listeners.length; ++i) {
-      this.listeners[i](value);
+      await this.listeners[i](value);
     }
   }
 }

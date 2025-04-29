@@ -53,4 +53,8 @@ export class BitburnerFileWatcher {
   stop() {
     return this.watcher.stop();
   }
+
+  sync() {
+    return this.synchronizer.sync();
+  }
 }

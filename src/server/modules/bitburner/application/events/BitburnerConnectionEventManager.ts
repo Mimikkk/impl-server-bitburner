@@ -15,6 +15,7 @@ export class BitburnerConnectionEventManager {
   private constructor(
     private watcher: BitburnerFileWatcher | undefined = undefined,
     private unsubscribe: ListenerRegistry.Unsubscribe | undefined = undefined,
+    private readonly manager = ConnectionEventManager.instance,
   ) {}
 
   static start() {
@@ -23,15 +24,14 @@ export class BitburnerConnectionEventManager {
   }
 
   start() {
-    const manager = ConnectionEventManager.instance;
     const handleConnection = this.handleConnection.bind(this);
     const handleDisconnection = this.handleDisconnection.bind(this);
 
-    manager.subscribe(ConnectionEvent.Connected, handleConnection);
-    manager.subscribe(ConnectionEvent.Disconnected, handleDisconnection);
+    this.manager.subscribe(ConnectionEvent.Connected, handleConnection);
+    this.manager.subscribe(ConnectionEvent.Disconnected, handleDisconnection);
     this.unsubscribe = () => {
-      manager.unsubscribe(ConnectionEvent.Connected, handleConnection);
-      manager.unsubscribe(ConnectionEvent.Disconnected, handleDisconnection);
+      this.manager.unsubscribe(ConnectionEvent.Connected, handleConnection);
+      this.manager.unsubscribe(ConnectionEvent.Disconnected, handleDisconnection);
     };
   }
 
@@ -39,13 +39,14 @@ export class BitburnerConnectionEventManager {
     this.unsubscribe?.();
   }
 
-  private handleConnection({ connection }: { connection: ConnectionEntity }) {
+  private async handleConnection({ connection }: { connection: ConnectionEntity }) {
     if (this.watcher) return;
 
     this.watcher = BitburnerFileWatcher.create(connection.value);
     this.watcher.start();
 
     Log.info(`Started bitburner file watcher for ${c(`${connection.id}`)}.`);
+    await this.watcher.sync();
   }
 
   private handleDisconnection({ connection }: { connection: ConnectionEntity }) {

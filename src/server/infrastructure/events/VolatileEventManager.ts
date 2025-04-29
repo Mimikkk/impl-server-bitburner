@@ -1,5 +1,6 @@
 import { EventManager } from "@server/infrastructure/events/EventManager.ts";
 import { ListenerRegistry } from "@server/infrastructure/events/ListenerRegistry.ts";
+import { Awaitable } from "@shared/types/common.ts";
 import { VolatileListenerRegistry } from "./VolatileListenerRegistry.ts";
 
 export class VolatileEventManager<EventMap extends Record<string, unknown>> implements EventManager<EventMap> {
@@ -13,14 +14,14 @@ export class VolatileEventManager<EventMap extends Record<string, unknown>> impl
     private readonly listeners = new Map<keyof EventMap, VolatileListenerRegistry<EventMap[keyof EventMap]>>(),
   ) {}
 
-  notify<const E extends keyof EventMap>(event: E, value: EventMap[E]): void {
+  notify<const E extends keyof EventMap>(event: E, value: EventMap[E]): Awaitable<void> {
     const listener = this.listeners.get(event);
 
     if (listener === undefined) {
       return;
     }
 
-    listener.notify(value);
+    return listener.notify(value);
   }
 
   subscribe<const E extends keyof EventMap>(event: E, listener: ListenerRegistry.Listener<EventMap[E]>): void {

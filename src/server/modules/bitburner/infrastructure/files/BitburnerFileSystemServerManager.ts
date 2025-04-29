@@ -38,6 +38,10 @@ export class BitburnerFileSystemServerManager {
     return await this.manager.write("declaration.d.ts", content);
   }
 
+  read(filename: string) {
+    return this.manager.readStr(`servers/home/${filename}`);
+  }
+
   update(filename: string, content: string) {
     return this.manager.write(`servers/home/${filename}`, content);
   }

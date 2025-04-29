@@ -1,9 +1,9 @@
 import { ServerConfiguration } from "@server/configurations/ServerConfiguration.ts";
 import { HttpRouter } from "@server/infrastructure/routing/routes/HttpRouter.ts";
 import { WsRouter } from "@server/infrastructure/routing/routes/WsRouter.ts";
+import { BitburnerConnectionEventManager } from "@server/modules/bitburner/application/events/BitburnerConnectionEventManager.ts";
 import { ApplicationComposer } from "./infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "./infrastructure/middlewares/MiddlewareNs.ts";
-import { BitburnerConnectionEventManager } from "@server/modules/bitburner/application/events/BitburnerConnectionEventManager.ts";
 
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
