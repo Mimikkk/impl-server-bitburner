@@ -25,5 +25,11 @@ export class FileWatch {
         await handler.handle(event);
       }
     }
+
+    return this;
+  }
+
+  stop() {
+    this.watcher.close();
   }
 }

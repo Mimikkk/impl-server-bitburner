@@ -1,5 +1,6 @@
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { ConnectionError } from "@server/modules/connections/domain/errors/ConnectionError.ts";
+import { ConnectionModel } from "@server/modules/connections/domain/models/ConnectionModel.ts";
 import { ConnectionCommandError } from "../../../connections/domain/errors/ConnectionCommandError.ts";
 import { BitburnerClientError } from "../../domain/errors/BitburnerClientError.ts";
 import { BitburnerFileSystemClientManager } from "../../infrastructure/files/BitburnerFileSystemClientManager.ts";
@@ -36,19 +37,24 @@ export class BitburnerClientService {
     return !!this.connections.any();
   }
 
-  async syncClient() {
-    const connectionResult = this.connections.any();
-    if (connectionResult === undefined) {
-      return ConnectionError.NoAvailable;
+  async syncClient(connection?: ConnectionModel) {
+    if (connection === undefined) {
+      const result = this.connections.any();
+
+      if (result === undefined) {
+        return ConnectionError.NoAvailable;
+      }
+
+      connection = result.value;
     }
 
-    const connection = connectionResult.value;
     const clientManager = BitburnerFileSystemClientManager.fromConnection(connection);
 
     const clientFileNamesResult = await clientManager.names();
     if (ConnectionCommandError.is(clientFileNamesResult)) {
       return BitburnerClientError.ListFailed;
     }
+
     const clientFileNames = clientFileNamesResult;
     const removeResult = await clientManager.removeMass(clientFileNames);
     if (ConnectionCommandError.is(removeResult)) {
@@ -64,12 +70,16 @@ export class BitburnerClientService {
     return "success";
   }
 
-  async syncServer() {
-    const connectionResult = this.connections.any();
-    if (connectionResult === undefined) {
-      return ConnectionError.NoAvailable;
+  async syncServer(connection?: ConnectionModel) {
+    if (connection === undefined) {
+      const result = this.connections.any();
+
+      if (result === undefined) {
+        return ConnectionError.NoAvailable;
+      }
+
+      connection = result.value;
     }
-    const connection = connectionResult.value;
 
     const clientManager = BitburnerFileSystemClientManager.fromConnection(connection);
     const filesResult = await clientManager.list();

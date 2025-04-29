@@ -3,6 +3,7 @@ import { HttpRouter } from "@server/infrastructure/routing/routes/HttpRouter.ts"
 import { WsRouter } from "@server/infrastructure/routing/routes/WsRouter.ts";
 import { ApplicationComposer } from "./infrastructure/middlewares/ApplicationComposer.ts";
 import { MiddlewareNs } from "./infrastructure/middlewares/MiddlewareNs.ts";
+import { BitburnerConnectionEventManager } from "@server/modules/bitburner/application/events/BitburnerConnectionEventManager.ts";
 
 export const server = ApplicationComposer.of([
   MiddlewareNs.redirect({
@@ -13,4 +14,5 @@ export const server = ApplicationComposer.of([
   MiddlewareNs.routes({ http: HttpRouter, ws: WsRouter }),
 ]);
 
+BitburnerConnectionEventManager.start();
 Deno.serve(ServerConfiguration, server);
