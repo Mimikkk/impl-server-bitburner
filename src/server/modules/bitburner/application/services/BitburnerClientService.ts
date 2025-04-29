@@ -1,11 +1,10 @@
-import { FileSystemReader } from "@server/infrastructure/files/readers/FileSystemReader.ts";
-import { FileSystemWriter } from "@server/infrastructure/files/writers/FileSystemWriter.ts";
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
 import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
-import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
-import { RpcJsonResponseResult } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
-import { resolve } from "@std/path/resolve";
-import { FileSystemManager } from "../../../../infrastructure/files/managers/FileSystemManager.ts";
+import { ConnectionError } from "@server/modules/connections/domain/errors/ConnectionError.ts";
+import { ConnectionCommandError } from "../../../connections/domain/errors/ConnectionCommandError.ts";
+import { BitburnerClientError } from "../../domain/errors/BitburnerClientError.ts";
+import { BitburnerFileSystemClientManager } from "../../infrastructure/files/BitburnerFileSystemClientManager.ts";
+import { BitburnerFileSystemServerManager } from "../../infrastructure/files/BitburnerFileSystemServerManager.ts";
 
 export class BitburnerClientService {
   static create() {
@@ -13,15 +12,25 @@ export class BitburnerClientService {
   }
 
   private constructor(
-    private readonly writer = FileSystemWriter.create("src/client"),
-    private readonly reader = FileSystemReader.create("src/client"),
     private readonly connections = BitburnerConnectionService.create(),
-    private readonly manager = FileSystemManager.create("src/client"),
+    private readonly serverManager = BitburnerFileSystemServerManager.create(),
   ) {}
 
-  async updateTypeDefinitions(response: CommandResponse): Promise<boolean> {
-    const content = (response as RpcJsonResponseResult<string>).result;
-    return await this.writer.write("declaration.d.ts", content);
+  async updateServerDefinition() {
+    const connectionResult = this.connections.any();
+    if (connectionResult === undefined) {
+      return ConnectionError.NoAvailable;
+    }
+
+    const definition = await BitburnerFileSystemClientManager
+      .fromConnection(connectionResult.value)
+      .readDefinition();
+
+    if (definition === undefined) {
+      return BitburnerClientError.DefinitionFailed;
+    }
+
+    return this.serverManager.updateDefinition(definition);
   }
 
   canSync() {
@@ -31,40 +40,26 @@ export class BitburnerClientService {
   async syncClient() {
     const connectionResult = this.connections.any();
     if (connectionResult === undefined) {
-      return "no-connection-available";
+      return ConnectionError.NoAvailable;
     }
-    const server = "home";
+
     const connection = connectionResult.value;
+    const clientManager = BitburnerFileSystemClientManager.fromConnection(connection);
 
-    const namesResult = await connection.command(BitburnerCommands.names, { server });
-    if (namesResult === "internal-error" || namesResult === "invalid-request" || namesResult === "invalid-response") {
-      return "name-command-failed";
+    const clientFileNamesResult = await clientManager.names();
+    if (ConnectionCommandError.is(clientFileNamesResult)) {
+      return BitburnerClientError.ListFailed;
     }
-    const clientFileNames = namesResult.map((filename) => filename);
-
-    const removeResults = await Promise.all(
-      clientFileNames.map((filename) => connection.command(BitburnerCommands.remove, { server, filename })),
-    );
-    for (const result of removeResults) {
-      if (result === "internal-error" || result === "invalid-request" || result === "invalid-response") {
-        return "remove-command-failed";
-      }
+    const clientFileNames = clientFileNamesResult;
+    const removeResult = await clientManager.removeMass(clientFileNames);
+    if (ConnectionCommandError.is(removeResult)) {
+      return BitburnerClientError.RemoveFailed;
     }
 
-    const serverFileNames = await this.manager.list({ path: "servers/home", recursive: true });
-    const contents = await Promise.all(
-      serverFileNames.map((filename) => this.reader.readStr(`src/client/servers/home/${filename}`)),
-    ) as string[];
-
-    const pushResults = await Promise.all(
-      serverFileNames.map((filename, index) =>
-        connection.command(BitburnerCommands.update, { server, filename, content: contents[index] })
-      ),
-    );
-    for (const result of pushResults) {
-      if (result === "internal-error" || result === "invalid-request" || result === "invalid-response") {
-        return "push-command-failed";
-      }
+    const serverFiles = await this.serverManager.list();
+    const updateMassResult = await clientManager.updateMass(serverFiles);
+    if (ConnectionCommandError.is(updateMassResult)) {
+      return BitburnerClientError.UpdateFailed;
     }
 
     return "success";
@@ -73,22 +68,17 @@ export class BitburnerClientService {
   async syncServer() {
     const connectionResult = this.connections.any();
     if (connectionResult === undefined) {
-      return "no-connection-available";
+      return ConnectionError.NoAvailable;
     }
     const connection = connectionResult.value;
 
     const filesResult = await connection.command(BitburnerCommands.list, { server: "home" });
-    if (filesResult === "internal-error" || filesResult === "invalid-request" || filesResult === "invalid-response") {
-      return "list-command-failed";
+    if (ConnectionCommandError.is(filesResult)) {
+      return BitburnerClientError.ListFailed;
     }
 
-    const directory = resolve("src/client/servers/home");
-    Deno.remove(directory, { recursive: true });
-    Deno.mkdir(directory, { recursive: true });
-
-    for (const file of filesResult) {
-      await this.writer.write(`src/client/servers/home/${file.filename}`, file.content);
-    }
+    await this.serverManager.clear();
+    await this.serverManager.updateMass(filesResult);
 
     return "success";
   }

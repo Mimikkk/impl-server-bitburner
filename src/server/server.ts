@@ -20,5 +20,7 @@ const c = colors.yellow;
 Log.info(`Started bitburner file watch.
        - Sychronizing every ${c("30 seconds")}.
        - Debouncing events by ${c("200 ms")}.`);
+
+Deno.mkdirSync("src/client/servers", { recursive: true });
 BitburnerFileWatcher.start({ syncMs: 30_000, debounceMs: 200 });
 Deno.serve(ServerConfiguration, server);

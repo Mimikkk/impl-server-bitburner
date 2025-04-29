@@ -148,4 +148,6 @@ export namespace HttpJsonResponse {
     schema: { type: "object", properties: { message: { type: "string" }, status: { type: "number" } } },
     status: 504,
   });
+
+  export const fromBoolean = (value: boolean) => value ? success() : failure();
 }

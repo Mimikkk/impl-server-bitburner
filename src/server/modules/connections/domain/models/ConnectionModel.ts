@@ -6,6 +6,7 @@ import { VolatileCommandRequestRepository } from "@server/modules/commands/infra
 import { CommandRequest } from "@server/modules/commands/presentation/messaging/rpc/requests/CommandRequest.ts";
 import { CommandResponse } from "@server/modules/commands/presentation/messaging/rpc/responses/CommandResponse.ts";
 import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
+import { ConnectionCommandError } from "../errors/ConnectionCommandError.ts";
 
 export class ConnectionModel {
   static create(socket: WebSocket) {
@@ -45,16 +46,16 @@ export class ConnectionModel {
   async command<M extends CommandModel>(command: M, params: M["Request"]) {
     const request = command.request(params);
     if (ValidationError.is(request)) {
-      return "invalid-request";
+      return ConnectionCommandError.InvalidRequest;
     }
 
     const response = await this.promise(request.value);
     if (response === undefined) {
-      return "invalid-response";
+      return ConnectionCommandError.InvalidResponse;
     }
 
     if (RpcJsonResponse.isError(response)) {
-      return "internal-error";
+      return ConnectionCommandError.Internal;
     }
 
     return response.result as M["Response"];

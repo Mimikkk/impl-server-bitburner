@@ -27,11 +27,11 @@ export class FileSystemReader {
   }
 
   async readStr(path: string): Promise<string | undefined> {
-    return await this.reader.readStr(path);
+    return await this.reader.readStr(resolve(this.location, path));
   }
 
   async readU8(path: string): Promise<Uint8Array | undefined> {
-    return await this.reader.readU8(path);
+    return await this.reader.readU8(resolve(this.location, path));
   }
 
   async list(options: { path?: string; recursive?: boolean }): Promise<string[]> {

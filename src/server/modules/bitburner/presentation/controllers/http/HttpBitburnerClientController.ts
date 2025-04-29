@@ -2,13 +2,11 @@ import { OpenApiNs } from "@server/infrastructure/openapi/decorators/OpenApiNs.t
 import { OpenApiTag } from "@server/infrastructure/openapi/OpenApiTag.ts";
 import { ControllerNs } from "@server/infrastructure/routing/routes/decorators/ControllerNs.ts";
 import { RouteNs } from "@server/infrastructure/routing/routes/decorators/RouteNs.ts";
-import { ValidationError } from "@server/infrastructure/validators/ValidationError.ts";
 import { BitburnerClientService } from "@server/modules/bitburner/application/services/BitburnerClientService.ts";
-import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
-import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
 import { HttpBitburnerConnectionResponse } from "@server/modules/bitburner/presentation/messaging/http/responses/HttpBitburnerConnectionResponse.ts";
+import { ConnectionError } from "@server/modules/connections/domain/errors/ConnectionError.ts";
 import { HttpJsonResponse } from "@server/presentation/messaging/http/responses/HttpJsonResponse.ts";
-import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
+import { BitburnerClientError } from "../../../domain/errors/BitburnerClientError.ts";
 
 @ControllerNs.controller({ name: "HTTP Bitburner client", group: "client" })
 export class HttpBitburnerClientController {
@@ -18,7 +16,6 @@ export class HttpBitburnerClientController {
 
   private constructor(
     private readonly client = BitburnerClientService.create(),
-    private readonly connections = BitburnerConnectionService.create(),
   ) {}
 
   @RouteNs.post(`update-game-definition`)
@@ -28,28 +25,20 @@ export class HttpBitburnerClientController {
     tags: [OpenApiTag.Serverwide],
     responses: [
       HttpBitburnerConnectionResponse.Missing,
-      HttpJsonResponse.Validation,
       HttpJsonResponse.Failure,
       HttpJsonResponse.Success,
     ],
   })
   async updateGameDefinition(): Promise<Response> {
-    const connection = this.connections.any();
-    if (connection === undefined) {
+    const result = await this.client.updateServerDefinition();
+
+    if (result === ConnectionError.NoAvailable) {
       return HttpBitburnerConnectionResponse.missingAny();
     }
 
-    const request = BitburnerCommands.definition.request(undefined);
-    if (ValidationError.is(request)) {
-      return HttpJsonResponse.validation(request);
-    }
-
-    const response = await connection.value.promise(request.value);
-    if (response === undefined || RpcJsonResponse.isError(response)) {
+    if (result === BitburnerClientError.DefinitionFailed) {
       return HttpJsonResponse.failure();
     }
-
-    await this.client.updateTypeDefinitions(response);
 
     return HttpJsonResponse.success();
   }
@@ -57,16 +46,23 @@ export class HttpBitburnerClientController {
   @RouteNs.post("sync-server")
   @OpenApiNs.route({
     summary: "Sync the server's game files",
-    description: "<b>Will overwrite existing server files.</b> Sync the server's game files.",
+    description:
+      "<b>Will overwrite existing SERVER files.</b> Sync the server's game files based on the client's game files.",
+    responses: [
+      HttpBitburnerConnectionResponse.MissingAny,
+      HttpJsonResponse.Failure,
+      HttpJsonResponse.Success,
+    ],
     tags: [OpenApiTag.Serverwide],
   })
   async syncServer() {
-    const response = await this.client.syncServer();
-    if (response === "no-connection-available") {
+    const result = await this.client.syncServer();
+
+    if (result === ConnectionError.NoAvailable) {
       return HttpBitburnerConnectionResponse.missingAny();
     }
 
-    if (response === "list-command-failed") {
+    if (result === BitburnerClientError.ListFailed) {
       return HttpJsonResponse.failure();
     }
 
@@ -76,24 +72,31 @@ export class HttpBitburnerClientController {
   @RouteNs.post("sync-client")
   @OpenApiNs.route({
     summary: "Sync the client's game files",
-    description: "<b>Will overwrite existing client files.</b> Sync the client's game files.",
+    description:
+      "<b>Will overwrite existing CLIENT files.</b> Sync the client's game files based on the server's game files.",
+    responses: [
+      HttpBitburnerConnectionResponse.MissingAny,
+      HttpJsonResponse.Failure,
+      HttpJsonResponse.Success,
+    ],
     tags: [OpenApiTag.Serverwide],
   })
   async syncClient() {
-    const response = await this.client.syncClient();
-    if (response === "no-connection-available") {
+    const result = await this.client.syncClient();
+
+    if (result === ConnectionError.NoAvailable) {
       return HttpBitburnerConnectionResponse.missingAny();
     }
 
-    if (response === "remove-command-failed") {
+    if (result === BitburnerClientError.ListFailed) {
       return HttpJsonResponse.failure();
     }
 
-    if (response === "push-command-failed") {
+    if (result === BitburnerClientError.UpdateFailed) {
       return HttpJsonResponse.failure();
     }
 
-    if (response === "name-command-failed") {
+    if (result === BitburnerClientError.RemoveFailed) {
       return HttpJsonResponse.failure();
     }
 
