@@ -1,7 +1,9 @@
+import { ConnectionEventManager } from "@server/modules/connections/infrastructure/events/ConnectionEventManager.ts";
 import { ConnectionRepository } from "@server/modules/connections/infrastructure/repositories/ConnectionRepository.ts";
 import { RpcJsonResponse } from "@server/presentation/messaging/rpc/responses/RpcJsonResponse.ts";
 import { Log } from "@shared/logging/log.ts";
 import { ConnectionEntity } from "../../domain/entities/ConnectionEntity.ts";
+import { ConnectionEvent } from "../../domain/events/ConnectionEvent.ts";
 
 export class ConnectionService {
   static create() {
@@ -26,29 +28,30 @@ export class ConnectionService {
     this.attachListeners(socket, connection);
   }
 
-  private attachListeners(socket: WebSocket, { value: connection, id }: ConnectionEntity): void {
-    socket.addEventListener("open", () => {
-      Log.info("socket opened for connection", id);
+  private attachListeners(socket: WebSocket, connection: ConnectionEntity): void {
+    socket.addEventListener("open", (event) => {
+      ConnectionEventManager.instance.notify(ConnectionEvent.Connected, { connection, event });
     });
 
     socket.addEventListener("message", (event) => {
       const response = RpcJsonResponse.tryFrom(event.data);
 
       if (response === undefined) {
-        Log.error("failed to parse message data from connection", id, event);
+        Log.error("failed to parse message data from connection", connection.id, event);
         return;
       }
 
-      connection.resolve(response);
+      connection.value.resolve(response);
     });
 
     socket.addEventListener("error", (event) => {
-      Log.error("socket provided an error from connection", id, event);
+      ConnectionEventManager.instance.notify(ConnectionEvent.Failed, { connection, event });
     });
 
-    socket.addEventListener("close", () => {
-      Log.info("socket closed for connection", id);
-      this.connections.delete(id);
+    socket.addEventListener("close", (event) => {
+      Log.info("socket closed for connection", connection.id);
+      this.connections.delete(connection.id);
+      ConnectionEventManager.instance.notify(ConnectionEvent.Disconnected, { connection, event });
     });
   }
 }

@@ -1,5 +1,4 @@
 import { BitburnerConnectionService } from "@server/modules/bitburner/application/services/BitburnerConnectionService.ts";
-import { BitburnerCommands } from "@server/modules/bitburner/domain/BitburnerCommands.ts";
 import { ConnectionError } from "@server/modules/connections/domain/errors/ConnectionError.ts";
 import { ConnectionCommandError } from "../../../connections/domain/errors/ConnectionCommandError.ts";
 import { BitburnerClientError } from "../../domain/errors/BitburnerClientError.ts";
@@ -72,7 +71,8 @@ export class BitburnerClientService {
     }
     const connection = connectionResult.value;
 
-    const filesResult = await connection.command(BitburnerCommands.list, { server: "home" });
+    const clientManager = BitburnerFileSystemClientManager.fromConnection(connection);
+    const filesResult = await clientManager.list();
     if (ConnectionCommandError.is(filesResult)) {
       return BitburnerClientError.ListFailed;
     }

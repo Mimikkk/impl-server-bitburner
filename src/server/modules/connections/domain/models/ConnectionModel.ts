@@ -30,7 +30,7 @@ export class ConnectionModel {
     const entity = this.requests.persist(request);
 
     return new Promise((resolve) => {
-      const remove = entity.listeners.add((response) => {
+      const remove = entity.listeners.subscribe((response) => {
         const request = this.requests.find(response.id);
 
         if (request) {
